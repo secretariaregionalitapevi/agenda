@@ -1,0 +1,2093 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Calendário CCB Regional Itapevi 2026</title>
+<style>
+:root{
+  --ink:#111;
+  --line:#222;
+  --red:#c81515;
+  --paper:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var(--ink)}
+.wrapper{max-width:980px;margin:0 auto;padding:12px;display:grid;gap:14px}
+.sheet{
+  background:var(--paper);
+  border:1px solid #d0d0d0;
+  border-radius:10px;
+  box-shadow:0 1px 2px rgba(0,0,0,.05);
+  padding:18px 18px 32px;
+  position:relative;
+}
+@media (min-width:900px){
+  /* aproximar proporção A4 na tela */
+  .sheet{padding:28px 34px 44px}
+}
+
+@media print{
+  body{background:#fff}
+  @page{ size: A5 portrait; margin: 8mm; }
+
+  .wrapper{max-width:none;padding:0;gap:0}
+  .controls{display:none !important}
+
+  .sheet{
+    width:148mm; height:210mm;
+    page-break-after:always;
+    border:none; border-radius:0; box-shadow:none;
+    padding:6mm 6mm 6mm;
+  }
+
+  /* imprimir somente o que está marcado para impressão */
+  .print-hide{ display:none !important; }
+
+  /* Ajustes para caber no A5 */
+  .month-name{ font-size:20px; letter-spacing:.8px; }
+  .r{ grid-template-columns: 64px 1fr; min-height:16px; }
+  .left{ padding:2px 6px; font-size:11px; gap:6px; }
+  .dw{ font-size:10px; }
+  .right{ padding:2px 8px; font-size:10px; gap:1px; }
+  .evt{ line-height:1.1; }
+  .page-no{ font-size:10px; bottom:3mm; }
+}
+
+  .wrapper{max-width:none;padding:0;gap:0}
+  .sheet{
+    width:210mm; height:297mm;
+    page-break-after:always;
+    border:none; border-radius:0; box-shadow:none;
+    padding:18mm 16mm 14mm;
+  }
+}
+
+/* page numbers */
+.page-no{
+  position:absolute; left:0; right:0; bottom:10px;
+  text-align:center; font-size:12px;
+}
+
+/* ===== YEAR PAGE ===== */
+.year-title{
+  text-align:center;
+  font-weight:700;
+  font-size:26px;
+  margin:6px 0 18px;
+}
+.year-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:14px 16px;
+}
+@media (max-width:780px){ .year-grid{grid-template-columns:repeat(2, minmax(0,1fr));} }
+@media (max-width:520px){ .year-grid{grid-template-columns:1fr;} }
+
+.mini{border:1px solid #999; padding:8px; border-radius:4px}
+.mini-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-weight:700}
+.mini-name{text-transform:capitalize;font-size:14px}
+.mini-year{font-size:12px}
+.mini-dow{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid #999;border-bottom:none}
+.mini-dow .d{font-size:10px;padding:3px 0;text-align:center;border-right:1px solid #999;font-weight:700;background:#fafafa}
+.mini-dow .d:last-child{border-right:none}
+.mini-dow .d.sun{color:var(--red)}
+.mini-grid{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid #999;border-top:none}
+.mday{height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;border-right:1px solid #999;border-top:1px solid #999}
+.mday:nth-child(7n){border-right:none}
+.mday.empty{color:transparent}
+.mday.sun{color:var(--red);font-weight:700}
+.mday.holiday{background:var(--red);color:#fff;font-weight:800}
+.year-holidays{margin-top:14px;font-size:12px;font-weight:700}
+
+/* ===== MONTH PAGES ===== */
+.month-head{
+  border-top:2px solid var(--line);
+  padding-top:6px;
+  margin-top:2px;
+}
+.month-name{
+  text-align:right;
+  font-size:26px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+.table{
+  margin-top:10px;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.r{
+  display:grid;
+  grid-template-columns: 92px 1fr;
+  border-top:1px solid var(--line);
+  min-height:24px;
+}
+.r:first-child{border-top:none}
+.left{
+  border-right:1px solid var(--line);
+  padding:3px 8px;
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;
+}
+.left.sun{color:var(--red);font-weight:800}
+.dd{min-width:26px;text-align:right;font-weight:700}
+.bar{opacity:.9}
+.dw{font-size:12px;font-weight:700}
+.right{
+  padding:3px 10px;
+  display:flex;flex-direction:column;gap:2px;
+  font-size:12px;
+}
+.evt{line-height:1.15;white-space:pre-wrap}
+.evt.red{color:var(--red);font-weight:800}
+
+/* ===== NOTES ===== */
+.notes-title{
+  text-align:center;
+  font-weight:800;
+  font-size:22px;
+  margin:8px 0 14px;
+}
+.notes-lines{border-top:1px solid var(--line)}
+.nline{height:24px;border-bottom:1px solid var(--line)}
+
+/* ===== CONTROLES ===== */
+.controls{
+  position:sticky; top:10px;
+  z-index:50;
+  background:#fff;
+  border:1px solid #d0d0d0;
+  border-radius:12px;
+  padding:10px 14px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:14px;
+  width:fit-content;
+  margin:10px auto 14px;
+}
+.controls label{font-weight:800;color:#333}
+.controls select{min-width:160px}
+
+.controls label{font-weight:700}
+.controls select, .controls button{
+  font:inherit;
+  border:1px solid #c8c8c8;
+  border-radius:10px;
+  padding:8px 10px;
+  background:#fff;
+}
+.controls button{font-weight:800}
+.ctrl-left{display:flex; align-items:center; gap:10px}
+.hidden{display:none !important}
+
+
+
+/* === PAGE MODEL: cada .sheet = 1 página A5 (frente/verso alinhado) === */
+.sheet{
+  margin: 0 auto 18px auto;
+}
+@media print{
+  .sheet{
+    page-break-after: always;
+    break-after: page;
+  }
+  .sheet:last-child{
+    page-break-after: auto;
+    break-after: auto;
+  }
+}
+/* Controles nunca entram na impressão */
+@media print{
+  .controls, .controles, .toolbar{ display:none !important; }
+}
+
+
+/* === NOTES SHEETS (linhas para anotações) === */
+.notes-inner{
+  padding: 14mm 10mm 12mm;
+}
+.cover-title{
+  font-family: Tahoma, Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: .5px;
+  text-align: center;
+  margin-bottom: 6mm;
+  font-size: 18px;
+}
+.notes-lines .line{
+  height: 0;
+  border-top: 1px solid #111;
+  margin: 0 0 7.2mm 0; /* espaçamento das linhas (ajustado para caber em A5) */
+}
+
+/* === DUPLEX: garantir páginas em A5 e quebras exatas === */
+@media print{
+  @page{ size: A5; margin: 8mm; }
+  .sheet{ page-break-after: always; break-after: page; }
+  .sheet:last-child{ page-break-after: auto; break-after: auto; }
+  /* sem sombras/fundos */
+  body{ background:#fff !important; }
+  .sheet{ box-shadow:none !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="controls" aria-label="Controles">
+    <div class="ctrl-left">
+      <label for="monthSelect">Escolher mês:</label>
+      <select id="monthSelect">
+        <option value="all">Todos</option>
+        <option value="2026-01">Janeiro</option>
+        <option value="2026-02">Fevereiro</option>
+        <option value="2026-03">Março</option>
+        <option value="2026-04">Abril</option>
+        <option value="2026-05">Maio</option>
+        <option value="2026-06">Junho</option>
+        <option value="2026-07">Julho</option>
+        <option value="2026-08">Agosto</option>
+        <option value="2026-09">Setembro</option>
+        <option value="2026-10">Outubro</option>
+        <option value="2026-11">Novembro</option>
+        <option value="2026-12">Dezembro</option>
+      </select>
+    </div>
+    <button id="printBtn" type="button">Imprimir / Salvar PDF</button>
+  </div>
+
+  
+<section class="sheet" data-kind="year">
+  <div class="year-title">Calendário 2026</div>
+  <div class="year-grid">
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Janeiro</span><span class="mini-year">2026</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday holiday" title="Confraternização Universal">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday sun">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday sun">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday sun">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday sun holiday" title="Aniversário de São Paulo">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Fevereiro</span><span class="mini-year">2026</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday sun">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday sun">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday sun">15</div><div class="mday">16</div><div class="mday holiday" title="Carnaval">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday sun">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Março</span><span class="mini-year">2026</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday sun">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday sun">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday sun">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday sun">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday sun">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Abril</span><span class="mini-year">2026</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday holiday" title="Sexta-feira Santa">3</div><div class="mday">4</div><div class="mday sun holiday" title="Domingo de Páscoa">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday sun">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday sun">19</div><div class="mday">20</div><div class="mday holiday" title="Tiradentes">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday sun">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Maio</span><span class="mini-year">2026</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday holiday" title="Dia do Trabalhador">1</div><div class="mday">2</div><div class="mday sun">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday sun">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday sun">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday sun">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday sun">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Junho</span><span class="mini-year">2026</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday sun">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday sun">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday holiday" title="Corpus Christi">20</div><div class="mday sun">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday sun">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Julho</span><span class="mini-year">2026</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday sun">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday holiday" title="Revolução Constitucionalista">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday sun">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday sun">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday sun">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Agosto</span><span class="mini-year">2026</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday sun">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday sun">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday sun">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday sun">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday sun">30</div><div class="mday">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Setembro</span><span class="mini-year">2026</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday sun">6</div><div class="mday holiday" title="Dia da Independência">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday sun">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday sun">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday sun">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Outubro</span><span class="mini-year">2026</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday sun">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday sun">11</div><div class="mday holiday" title="N. S. Aparecida">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday sun">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday sun">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Novembro</span><span class="mini-year">2026</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday sun">1</div><div class="mday holiday" title="Finados">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday sun">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday sun holiday" title="Proclamação da República">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday holiday" title="Consciência Negra">20</div><div class="mday">21</div><div class="mday sun">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday sun">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Dezembro</span><span class="mini-year">2026</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday sun">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday sun">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday sun">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday holiday" title="Natal">25</div><div class="mday">26</div><div class="mday sun">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    </div>
+  <div class="year-holidays">01/01 Confraternização Universal • 25/01 Aniversário de São Paulo • 17/02 Carnaval • 03/04 Sexta-feira Santa • 05/04 Domingo de Páscoa • 21/04 Tiradentes • 01/05 Dia do Trabalhador • 20/06 Corpus Christi • 09/07 Revolução Constitucionalista • 07/09 Dia da Independência • 12/10 N. S. Aparecida • 02/11 Finados • 15/11 Proclamação da República • 20/11 Consciência Negra • 25/12 Natal</div>
+  <div class="page-no">1</div>
+</section>
+
+  
+<section class="sheet" data-kind="month" data-month="2026-01">
+  <div class="month-head"><div class="month-name">JANEIRO</div></div>
+  <div class="table">
+    
+        <div class="r">
+          <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">04</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">19:30 - Reunião de Conselho dos Anciães - (Itapevi)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Vargem Grande)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Caucaia do Alto)</div><div class="evt">10:30 - Reunião para atendimento da Obra da Piedade - (Cotia)</div><div class="evt">08:00 - Visita Técnica - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">11</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:30 - Reunião dos Anciães, Diáconos e Administradores - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">19:30 - Reunião dos Anciães e Diáconos - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião do Conselho Gestor da Obra da Piedade e Conselho dos</div><div class="evt red">Diáconos - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Jandira)</div><div class="evt">08:00 - Visita Técnica - (Cotia)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">18</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:00 - Ensaio Regional - Central - (Itapevi)</div><div class="evt">09:00 - Ensaio Regional - Parque Laranjeira II - (Pirapora do Bom Jesus)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião da Parte Musical: Anciães, Encarregados Regionais e Examinadoras - (Regional -Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt red">13:00 - Reunião do Conselho Gestor - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">17:00 - Reunião dos Anciães e Diáconos - (Regional Itapevi)</div><div class="evt red">19:30 - RRM - Reunião Regional Ministerial - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">09:00</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">25</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">08:00 - Visita Técnica - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt red">14:00 - RRA - Reunião das Regionais Administrativas - VIRTUAL - (Brás)</div></div>
+        </div>
+  </div>
+  <div class="page-no">2</div>
+</section>
+
+<section class="sheet" data-kind="month" data-month="2026-02">
+  <div class="month-head"><div class="month-name">FEVEREIRO</div></div>
+  <div class="table">
+    
+        <div class="r">
+          <div class="left sun"><span class="dd">01</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">08:00 - Visita Técnica - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">08</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:30 - Reunião dos Anciães, Diáconos e Administradores - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião do Conselho Gestor da Obra da Piedade e Conselho dos</div><div class="evt red">Diáconos - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt red">08:30 - CNS - Reunião da Comissão de Negociadores de Suprimentos - Presencial + VIRTUAL (Brás)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Vargem Grande)</div><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Caucaia do Alto)</div><div class="evt">10:30 - Reunião para atendimento da Obra da Piedade - (Cotia)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">15</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">17:00 - Reunião dos Anciães e Diáconos - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Jandira)</div><div class="evt">19:30 - AGO - Assembleia Geral Ordinária - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">19:30 - AGO - Assembleia Geral Ordinária - (Jandira)</div><div class="evt red">09:00 - DARPE - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Jandira)</div><div class="evt">19:30 - AGO - Assembleia Geral Ordinária - (Cotia)</div><div class="evt">19:30 - AGO - Assembleia Geral Ordinária - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">22</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">09:00 - CAE - Conselho dos Anciães mais Antigos - Estado de São Paulo - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt red">14:00 - Reunião de Anciães - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Cotia)</div><div class="evt">08:30 - Reunião dos Anciães e Diáconos - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">10:00 - RMA - Reunião do Ministério e Administração - (Itapevi)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Santana de Parnaíba)</div></div>
+        </div>
+  </div>
+  <div class="page-no">4</div>
+</section>
+
+<section class="sheet" data-kind="month" data-month="2026-03">
+  <div class="month-head"><div class="month-name">MARÇO</div></div>
+  <div class="table">
+    
+        <div class="r">
+          <div class="left sun"><span class="dd">01</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">08</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:30 - Reunião dos Anciães, Diáconos e Administradores - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">19:30 - Reunião dos Anciães e Diáconos - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião do Conselho Gestor da Obra da Piedade e Conselho dos</div><div class="evt red">Diáconos - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Vargem Grande)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Caucaia do Alto)</div><div class="evt">10:30 - Reunião para atendimento da Obra da Piedade - (Cotia)</div><div class="evt">09:00 - Ensaio Regional - Central - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">15</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:00 - Ensaio Regional - Fazendinha - (Santana de Parnaíba)</div><div class="evt">09:00 - Ensaio Regional - Vila Monte Serrat/Central - (Cotia)</div><div class="evt">09:00 - Ensaio Regional - Central - (Caucaia do Alto)</div><div class="evt">09:00 - Ensaio Regional - Portão Vermelho/Central - (Vargem Grande)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião da Parte Musical: Anciães, Encarregados Regionais e Examinadoras - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt red">13:00 - Reunião do Conselho Gestor - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">17:00 - Reunião dos Anciães e Diáconos - (Regional Itapevi)</div><div class="evt red">19:30 - RRM - Reunião Regional Ministerial - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">22</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">29</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+  </div>
+  <div class="page-no">6</div>
+</section>
+
+<section class="sheet" data-kind="month" data-month="2026-04">
+  <div class="month-head"><div class="month-name">ABRIL</div></div>
+  <div class="table">
+    
+        <div class="r">
+          <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">05</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt red">09:00 - RGE - Reunião Geral Anual de Ensinamentos - VIRTUAL - Anciães, Diáconos,</div><div class="evt red">Cooperadores do Ofício Ministerial e Cooperadores de Jovens e Menores (Brasil e Exterior) - Brás</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião do Conselho Gestor da Obra da Piedade e Conselho dos</div><div class="evt red">Diáconos - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt red">08:30 - CNS - Reunião da Comissão de Negociadores de Suprimentos - Presencial + VIRTUAL (Brás)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Vargem Grande)</div><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Caucaia do Alto)</div><div class="evt">10:30 - Reunião para atendimento da Obra da Piedade - (Cotia)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">12</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:30 - Reunião dos Anciães, Diáconos e Administradores (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">17:00 - Reunião dos Anciães e Diáconos - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">19</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião de Ensinamentos da Obra da Piedade - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">09:00 - CAE - Conselho dos Anciães mais Antigos - Estado de São Paulo - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt red">14:00 - Reunião de Anciães - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Cotia)</div><div class="evt">08:30 - Reunião dos Anciães e Diáconos - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">10:00 - RMA - Reunião do Ministério e Administração - (Itapevi)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">26</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+  </div>
+  <div class="page-no">8</div>
+</section>
+
+<section class="sheet" data-kind="month" data-month="2026-05">
+  <div class="month-head"><div class="month-name">MAIO</div></div>
+  <div class="table">
+    
+        <div class="r">
+          <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt red">09:00 - Reunião de Ensinamentos da Obra da Piedade - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">03</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt red">09:30 - Reunião Anual da Parte Musical  - Virtual - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">19:30 - Reunião de Conselho dos Anciães - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">10</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:30 - Reunião dos Anciães, Diáconos e Administradores - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">19:30 - Reunião dos Anciões e Diáconos - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião do Conselho Gestor da Obra da Piedade e Conselho dos</div><div class="evt red">Diáconos - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Vargem Grande)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Caucaia do Alto)</div><div class="evt">10:30 - Reunião para atendimento da Obra da Piedade - (Cotia)</div><div class="evt">09:00 - Ensaio Regional - Central - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">17</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:00 - Ensaio Regional - Parque Laranjeira II - (Pirapora do Bom Jesus)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião da Parte Musical: Anciães, Encarregados Regionais e Examinadoras - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt red">13:00 - Reunião do Conselho Gestor - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">17:00 - Reunião dos Anciães e Diáconos - (Regional Itapevi)</div><div class="evt red">19:30 - RRM - Reunião Regional Ministerial - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">24</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt red">14:00 - RRA - Reunião das Regionais Administrativas - VIRTUAL - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">31</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+  </div>
+  <div class="page-no">10</div>
+</section>
+
+<section class="sheet" data-kind="month" data-month="2026-06">
+  <div class="month-head"><div class="month-name">JUNHO</div></div>
+  <div class="table">
+    
+        <div class="r">
+          <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt red">09:00 - DEPAC - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">07</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião do Conselho Gestor da Obra da Piedade e Conselho dos</div><div class="evt red">Diáconos - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt red">08:30 - CNS - Reunião da Comissão de Negociadores de Suprimentos - Presencial + VIRTUAL (Brás)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Vargem Grande)</div><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Caucaia do Alto)</div><div class="evt">10:30 - Reunião para atendimento da Obra da Piedade - (Cotia)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">14</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:30 - Reunião dos Anciães, Diáconos e Administradores - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">17:00 - Reunião dos Anciães e Diáconos - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">21</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">09:00 - CAE - Conselho dos Anciães mais Antigos - Estado de São Paulo - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt red">14:00 - Reunião de Anciães - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Cotia)</div><div class="evt">08:30 - Reunião dos Anciães e Diáconos - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">10:00 - RMA - Reunião Ministerial e Administrativa - (Itapevi)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Santana de Parnaíba)</div></div>
+        </div>
+  </div>
+  <div class="page-no">12</div>
+</section>
+
+<section class="sheet" data-kind="month" data-month="2026-07">
+  <div class="month-head"><div class="month-name">JULHO</div></div>
+  <div class="table">
+    
+        <div class="r">
+          <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">05</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião do Conselho Gestor da Obra da Piedade e Conselho dos</div><div class="evt red">Diáconos - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">19:30 - Reunião de Conselho para Anciães - (Itapevi)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Vargem Grande)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Caucaia do Alto)</div><div class="evt">10:30 - Reunião para atendimento da Obra da Piedade - (Cotia)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">12</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:30 - Reunião dos Anciães, Diáconos e Administradores (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">19:30 - Reunião dos Anciães e Diáconos - (Santana de Parnaíba)</div><div class="evt red">13:00 - Reunião do Conselho Gestor - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">17:00 - Reunião dos Anciães e Diáconos - (Regional Itapevi)</div><div class="evt red">19:30 - RRM - Reunião Regional Ministerial - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Jandira)</div><div class="evt">09:00 - Ensaio Regional - Central - (Jandira)</div><div class="evt">09:00 - Ensaio Regional - Fazendinha - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">19</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:00 - Ensaio Regional - Parque Alexandre - (Cotia)</div><div class="evt">09:00 - Ensaio Regional - Jardim Japão - (Caucaia do Alto)</div><div class="evt">09:00 - Ensaio Regional - Central - (Caucaia do Alto)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião da Parte Musical: Anciães, Encarregados Regionais e Examinadoras - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">26</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+  </div>
+  <div class="page-no">14</div>
+</section>
+
+<section class="sheet" data-kind="month" data-month="2026-08">
+  <div class="month-head"><div class="month-name">AGOSTO</div></div>
+  <div class="table">
+    
+        <div class="r">
+          <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">02</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt red">08:30 - CNS - Reunião da Comissão de Negociadores de Suprimentos - Presencial + VIRTUAL (Brás)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Vargem Grande)</div><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Caucaia do Alto)</div><div class="evt">10:30 - Reunião para atendimento da Obra da Piedade - (Cotia)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">09</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:30 - Reunião dos Anciães, Diáconos e Administradores - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião do Conselho Gestor da Obra da Piedade e Conselho dos</div><div class="evt red">Diáconos - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt red">09:00 - DARPE - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">16</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">17:00 - Reunião dos Anciães e Diáconos - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">08:30 - Reunião dos Anciães e Diáconos - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">10:00 - RMA - Reunião do Ministério e Administração - (Itapevi)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">23</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">09:00 - CAE - Conselho dos Anciães mais Antigos - Estado de São Paulo - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt red">14:00 - Reunião de Anciães - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Cotia)</div><div class="evt red">14:00 - RRA - Reunião das Regionais Administrativas - VIRTUAL - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">30</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+  </div>
+  <div class="page-no">16</div>
+</section>
+
+<section class="sheet" data-kind="month" data-month="2026-09">
+  <div class="month-head"><div class="month-name">SETEMBRO</div></div>
+  <div class="table">
+    
+        <div class="r">
+          <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">06</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião de Ensinamentos da Obra da Piedade - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">19:30 - Reunião dos Anciães e Diáconos - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião do Conselho Gestor da Obra da Piedade e Conselho dos</div><div class="evt red">Diáconos - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Vargem Grande)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Caucaia do Alto)</div><div class="evt">10:30 - Reunião para atendimento da Obra da Piedade - (Cotia)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">13</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:30 - Reunião dos Anciães, Diáconos e Administradores (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt red">13:00 - Reunião do Conselho Gestor - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">17:00 - Reunião dos Anciães e Diáconos - (Regional Itapevi)</div><div class="evt red">19:30 - RRM - Reunião Regional Ministerial - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Jandira)</div><div class="evt">09:00 - Ensaio Regional - Central - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">20</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:00 - Ensaio Regional - Parque Laranjeira II - (Pirapora do Bom Jesus)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião da Parte Musical: Anciães, Encarregados Regionais e Examinadoras - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">27</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt red">09:00 - RAM - Reunião de Aconselhamento ao Ministério - VIRTUAL - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+  </div>
+  <div class="page-no">18</div>
+</section>
+
+<section class="sheet" data-kind="month" data-month="2026-10">
+  <div class="month-head"><div class="month-name">OUTUBRO</div></div>
+  <div class="table">
+    
+        <div class="r">
+          <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">04</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">08:00 - Visita Técnica - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião Anual da Parte Musical - Presencial - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt red">08:30 - CNS - Reunião da Comissão de Negociadores de Suprimentos - Presencial + VIRTUAL (Brás)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Vargem Grande)</div><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Caucaia do Alto)</div><div class="evt">10:30 - Reunião para atendimento da Obra da Piedade - (Cotia)</div><div class="evt">08:00 - Visita Técnica - (Cotia)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">11</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:30 - Reunião dos Anciães, Diáconos e Administradores - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião do Conselho Gestor da Obra da Piedade e Conselho dos</div><div class="evt red">Diáconos - (Regional Itapevi)</div><div class="evt">17:00 - Reunião dos Anciães e Diáconos - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">18</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">08:00 - Visita Técnica - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">1 9:30 - Reunião dos Diáconos da Regional - (Regional Itapevi)</div><div class="evt red">09:00 - CAE - Conselho dos Anciões mais Antigos - Estado de São Paulo - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt red">14:00 - Reunião de Anciães - (Brás)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">08:30 - Reunião dos Anciães e Diáconos - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">10:00 - RMA -Reunião do Ministério e Administração - (Itapevi)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">25</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">08:00 - Visita Técnica - (Itapevi) -</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Cotia)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt red">14:00 - RRA - Reunião das Regionais Administrativas - VIRTUAL - (Brás)</div></div>
+        </div>
+  </div>
+  <div class="page-no">20</div>
+</section>
+
+<section class="sheet" data-kind="month" data-month="2026-11">
+  <div class="month-head"><div class="month-name">NOVEMBRO</div></div>
+  <div class="table">
+    
+        <div class="r">
+          <div class="left sun"><span class="dd">01</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">08</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:30 - Reunião dos Anciães, Diáconos e Administradores - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">19:30 - Reunião dos Anciães e Diáconos - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião do Conselho Gestor da Obra da Piedade e Conselho dos</div><div class="evt red">Diáconos - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">19:30 - Reunião de Conselhos para Anciães - (Itapevi)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Vargem Grande)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Caucaia do Alto)</div><div class="evt">10:30 - Reunião para atendimento da Obra da Piedade - (Cotia)</div><div class="evt red">09:00 - Reunião de Ensinamentos da Obra da Piedade - (Regional Itapevi)</div><div class="evt">09:00 - Ensaio Regional - Central -(Jandira)</div><div class="evt">09:00 - Ensaio Regional - Fazendinha - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">15</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:00 - Ensaio Regional - Vila Monte Serrat/Central - (Cotia)</div><div class="evt">09:00 - Ensaio Regional - Central - (Caucaia do Alto)</div><div class="evt">09:00 - Ensaio Regional - Portão Vermelho/Central - (Vargem Grande)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião da Parte Musical: Anciães, Encarregados Regionais e Examinadoras - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt red">13:00 - Reunião do Conselho Gestor - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">17:00 - Reunião dos Anciães e Diáconos - (Regional Itapevi)</div><div class="evt red">19:30 - RRM - Reunião Regional Ministerial - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">22</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">29</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+  </div>
+  <div class="page-no">22</div>
+</section>
+
+<section class="sheet" data-kind="month" data-month="2026-12">
+  <div class="month-head"><div class="month-name">DEZEMBRO</div></div>
+  <div class="table">
+    
+        <div class="r">
+          <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">06</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt red">09:00 - DEPAC - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt red">19:30 - Reunião do Conselho Gestor da Obra da Piedade e Conselho dos</div><div class="evt red">Diáconos - (Regional Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt red">08:30 - CNS - Reunião da Comissão de Negociadores de Suprimentos - Presencial + VIRTUAL (Brás)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Vargem Grande)</div><div class="evt">08:00 - Reunião para atendimento da Obra da Piedade - (Caucaia do Alto)</div><div class="evt">10:30 - Reunião para atendimento da Obra da Piedade - (Cotia)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">13</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">09:30 - Reunião dos Anciães, Diáconos e Administradores - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">17:00 - Reunião dos Anciães e Diáconos - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">17:00 - Reunião dos Anciães e Diáconos - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Jandira)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">20</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Sex</span></div>
+          <div class="right"><div class="evt">19:30 - RMA - Reunião do Ministério e Administração - (Cotia)</div><div class="evt">08:30 - Reunião dos Anciães e Diáconos - (Itapevi)</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+          <div class="right"><div class="evt">10:00 - RMA - Reunião do Ministério e Administração - (Itapevi)</div><div class="evt">09:00 - Reunião para atendimento da Obra da Piedade - (Santana de Parnaíba)</div></div>
+        </div>
+        <div class="r">
+          <div class="left sun"><span class="dd">27</span><span class="bar">|</span><span class="dw">Dom</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Seg</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Ter</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Qua</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+        <div class="r">
+          <div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">Qui</span></div>
+          <div class="right"><div class="evt">&nbsp;</div></div>
+        </div>
+  </div>
+  <div class="page-no">24</div>
+</section>
+
+  
+<section class="sheet" data-kind="notes">
+  <div class="notes-title">ANOTAÇÕES</div>
+  <div class="notes-lines">
+    <div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div>
+  </div>
+  <div class="page-no">26</div>
+</section>
+
+  
+<section class="sheet" data-kind="notes">
+  <div class="notes-title">ANOTAÇÕES</div>
+  <div class="notes-lines">
+    <div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div>
+  </div>
+  <div class="page-no">27</div>
+</section>
+
+  
+<section class="sheet">
+  <div class="year-title">Calendário 2027</div>
+  <div class="year-grid">
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Janeiro</span><span class="mini-year">2027</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday sun">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday sun">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday sun">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday sun">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday sun">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Fevereiro</span><span class="mini-year">2027</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday sun">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday sun">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday sun">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday sun">28</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Março</span><span class="mini-year">2027</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday sun">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday sun">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday sun">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday sun">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Abril</span><span class="mini-year">2027</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday sun">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday sun">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday sun">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday sun">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Maio</span><span class="mini-year">2027</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday sun">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday sun">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday sun">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday sun">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday sun">30</div><div class="mday">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Junho</span><span class="mini-year">2027</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday sun">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday sun">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday sun">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday sun">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Julho</span><span class="mini-year">2027</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday sun">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday sun">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday sun">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday sun">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Agosto</span><span class="mini-year">2027</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday sun">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday sun">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday sun">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday sun">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday sun">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Setembro</span><span class="mini-year">2027</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday sun">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday sun">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday sun">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday sun">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Outubro</span><span class="mini-year">2027</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday sun">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday sun">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday sun">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday sun">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday sun">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Novembro</span><span class="mini-year">2027</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday sun">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday sun">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday sun">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday sun">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+    </div>
+    
+    <div class="mini">
+      <div class="mini-head"><span class="mini-name">Dezembro</span><span class="mini-year">2027</span></div>
+      <div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+      <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday sun">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday sun">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday sun">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday sun">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div></div>
+    </div>
+    </div>
+  <div class="page-no">28</div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  const sel = document.getElementById("monthSelect");
+  const btn = document.getElementById("printBtn");
+  const sheets = Array.from(document.querySelectorAll(".sheet"));
+
+  function showOnly(month){
+    sheets.forEach(s=>{
+      const kind = s.getAttribute("data-kind") || "";
+      if(month === "all"){
+        s.classList.remove("hidden");
+        return;
+      }
+      // mostra somente a folha do mês escolhido
+      if(kind === "month" && s.getAttribute("data-month") === month){
+        s.classList.remove("hidden");
+      }else{
+        s.classList.add("hidden");
+      }
+    });
+  }
+
+  function markPrint(month){
+    // limpa marcações
+    sheets.forEach(s=>s.classList.remove("print-hide"));
+    if(month === "all"){
+      // imprime tudo
+      return;
+    }
+    // esconde tudo, exceto o mês escolhido
+    sheets.forEach(s=>{
+      const kind = s.getAttribute("data-kind") || "";
+      const ok = (kind === "month" && s.getAttribute("data-month") === month);
+      if(!ok) s.classList.add("print-hide");
+    });
+  }
+
+  // default: Janeiro (como seu PDF por padrão)
+  if(sel){
+    sel.value = "all";
+    showOnly(sel.value);
+
+    sel.addEventListener("change", ()=>{
+      showOnly(sel.value);
+    });
+  }
+
+  // imprimir apenas o mês selecionado
+  if(btn){
+    btn.addEventListener("click", ()=>{
+      const month = sel ? sel.value : "all";
+      markPrint(month);
+      window.print();
+    });
+  }
+
+  // garante limpeza após imprimir
+  window.addEventListener("afterprint", ()=>{
+    sheets.forEach(s=>s.classList.remove("print-hide"));
+  });
+})();
+</script>
+
+
+
+
+<div class="sheet cover-sheet">
+  <div class="notes-inner">
+    <div class="cover-title">ANOTAÇÕES</div>
+    <div class="notes-lines">
+      <div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
