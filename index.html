@@ -9,110 +9,235 @@
   --ink:#111;
   --line:#222;
   --red:#c81515;
+  --paper:#fff;
 }
 *{box-sizing:border-box}
 body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var(--ink)}
-
-/* barra de controles */
-.controls{
-  position:sticky; top:10px; z-index:50;
-  background:#fff;border:1px solid #d0d0d0;border-radius:12px;
-  padding:10px 14px;display:flex;gap:14px;
-  justify-content:center;align-items:center;
-  width:fit-content;margin:10px auto 14px;
-}
-.controls select,.controls button{
-  font:inherit;border:1px solid #c8c8c8;border-radius:10px;
-  padding:8px 10px;background:#fff;font-weight:700;
-}
-.controls button:disabled{opacity:.5; cursor:not-allowed}
-
-/* página (tela) */
+.wrapper{max-width:980px;margin:0 auto;padding:12px;display:grid;gap:14px}
 .sheet{
-  background:#fff;
-  width:210mm; min-height:297mm;
-  margin:0 auto 18px auto;
-  padding:18mm 16mm 14mm;
-  page-break-after:always;
+  background:var(--paper);
+  border:1px solid #d0d0d0;
+  border-radius:10px;
+  box-shadow:0 1px 2px rgba(0,0,0,.05);
+  padding:18px 18px 32px;
+  position:relative;
+}
+@media (min-width:900px){
+  /* aproximar proporção A4 na tela */
+  .sheet{padding:28px 34px 44px}
 }
 
-/* tabela */
+@media print{
+  body{background:#fff}
+  @page{ size: A5 portrait; margin: 8mm; }
+
+  .wrapper{max-width:none;padding:0;gap:0}
+  .controls{display:none !important}
+
+  .sheet{
+    width:148mm; height:210mm;
+    page-break-after:always;
+    border:none; border-radius:0; box-shadow:none;
+    padding:6mm 6mm 6mm;
+  }
+
+  /* imprimir somente o que está marcado para impressão */
+  .print-hide{ display:none !important; }
+
+  /* Ajustes para caber no A5 */
+  .month-name{ font-size:20px; letter-spacing:.8px; }
+  .r{ grid-template-columns: 64px 1fr; min-height:16px; }
+  .left{ padding:2px 6px; font-size:11px; gap:6px; }
+  .dw{ font-size:10px; }
+  .right{ padding:2px 8px; font-size:10px; gap:1px; }
+  .evt{ line-height:1.1; }
+  .page-no{ font-size:10px; bottom:3mm; }
+}
+
+  .wrapper{max-width:none;padding:0;gap:0}
+  .sheet{
+    width:210mm; height:297mm;
+    page-break-after:always;
+    border:none; border-radius:0; box-shadow:none;
+    padding:18mm 16mm 14mm;
+  }
+}
+
+/* page numbers */
+.page-no{
+  position:absolute; left:0; right:0; bottom:10px;
+  text-align:center; font-size:12px;
+}
+
+/* ===== YEAR PAGE ===== */
+.year-title{
+  text-align:center;
+  font-weight:700;
+  font-size:26px;
+  margin:6px 0 18px;
+}
+.year-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:14px 16px;
+}
+@media (max-width:780px){ .year-grid{grid-template-columns:repeat(2, minmax(0,1fr));} }
+@media (max-width:520px){ .year-grid{grid-template-columns:1fr;} }
+
+.mini{border:1px solid #999; padding:8px; border-radius:4px}
+.mini-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-weight:700}
+.mini-name{text-transform:capitalize;font-size:14px}
+.mini-year{font-size:12px}
+.mini-dow{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid #999;border-bottom:none}
+.mini-dow .d{font-size:10px;padding:3px 0;text-align:center;border-right:1px solid #999;font-weight:700;background:#fafafa}
+.mini-dow .d:last-child{border-right:none}
+.mini-dow .d.sun{color:var(--red)}
+.mini-grid{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid #999;border-top:none}
+.mday{height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;border-right:1px solid #999;border-top:1px solid #999}
+.mday:nth-child(7n){border-right:none}
+.mday.empty{color:transparent}
+.mday.sun{color:var(--red);font-weight:700}
+.mday.holiday{background:var(--red);color:#fff;font-weight:800}
+.year-holidays{margin-top:14px;font-size:11px;font-weight:700}
+
+/* ===== MONTH PAGES ===== */
+.month-head{
+  border-top:2px solid var(--line);
+  padding-top:6px;
+  margin-top:2px;
+}
 .month-name{
-  text-align:right;font-size:26px;font-weight:800;
-  border-top:2px solid var(--line);padding-top:6px;
+  text-align:right;
+  font-size:26px;
+  font-weight:800;
+  letter-spacing:1px;
 }
-.table{margin-top:10px;border-top:1px solid var(--line)}
-.r{
-  display:grid;grid-template-columns:92px 1fr;
+.table{
+  margin-top:10px;
+  border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
-  break-inside:avoid;
-  page-break-inside:avoid;
 }
+.r{
+  display:grid;
+  grid-template-columns: 92px 1fr;
+  border-top:1px solid var(--line);
+  min-height:24px;
+}
+.r:first-child{border-top:none}
 .left{
   border-right:1px solid var(--line);
-  padding:4px 8px;font-weight:700;
+  padding:3px 8px;
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;
 }
-.left.sun{color:var(--red)}
+.left.sun{color:var(--red);font-weight:800}
+.dd{min-width:26px;text-align:right;font-weight:700}
+.bar{opacity:.9}
+.dw{font-size:12px;font-weight:700}
 .right{
-  padding:4px 10px;
-  display:flex;flex-direction:column;
+  padding:3px 10px;
+  display:flex;flex-direction:column;gap:2px;
   font-size:12px;
 }
-.evt{line-height:1.15}
+.evt{line-height:1.15;white-space:pre-wrap}
 .evt.red{color:var(--red);font-weight:800}
 
-/* separador entre eventos do mesmo dia */
+/* separadores entre múltiplos eventos no mesmo dia */
 .right .evt + .evt{
   border-top:1px solid var(--line);
   margin-top:2px;
   padding-top:2px;
 }
 
-/* impressão A5 frente/verso */
+/* ===== NOTES ===== */
+.notes-title{
+  text-align:center;
+  font-weight:800;
+  font-size:22px;
+  margin:8px 0 14px;
+}
+.notes-lines{border-top:1px solid var(--line)}
+.nline{height:24px;border-bottom:1px solid var(--line)}
+
+/* ===== CONTROLES ===== */
+.controls{
+  position:sticky; top:10px;
+  z-index:50;
+  background:#fff;
+  border:1px solid #d0d0d0;
+  border-radius:12px;
+  padding:10px 14px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:14px;
+  width:fit-content;
+  margin:10px auto 14px;
+}
+.controls label{font-weight:800;color:#333}
+.controls select{min-width:160px}
+
+.controls label{font-weight:700}
+.controls select, .controls button{
+  font:inherit;
+  border:1px solid #c8c8c8;
+  border-radius:10px;
+  padding:8px 10px;
+  background:#fff;
+}
+.controls button{font-weight:800}
+.ctrl-left{display:flex; align-items:center; gap:10px}
+.hidden{display:none !important}
+
+
+
+/* === PAGE MODEL: cada .sheet = 1 página A5 (frente/verso alinhado) === */
+.sheet{
+  margin: 0 auto 18px auto;
+}
 @media print{
-  /* garante que as cores saiam iguais no PDF */
-  *{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
-  body{background:#fff}
-
-  /* A5 retrato */
-  @page{
-    size:A5 portrait;
-    margin:10mm;
-  }
-
-  /* remove controles e sobra de tela */
-  .controls{display:none!important}
-
-  /* cada mês vira 1 página A5 exata */
   .sheet{
-    width:148mm;
-    min-height:210mm;
-    margin:0;
-    padding:10mm;
-    border-radius:0;
-    box-shadow:none;
-    page-break-after:always;
+    page-break-after: always;
+    break-after: page;
+  }
+  .sheet:last-child{
+    page-break-after: auto;
+    break-after: auto;
   }
 }
-
-/* ====== PÁGINA DE ANOTAÇÕES (VERSO) ====== */
-.sheet.notes{ padding-top:12mm; }
-.notes-head{
-  display:flex; justify-content:space-between; align-items:flex-end;
-  border-top:2px solid var(--line);
-  padding-top:6px;
-  margin-bottom:6px;
-}
-.notes-title{ font-size:22px; font-weight:900; letter-spacing:.5px; }
-.notes-sub{ font-size:12px; font-weight:800; }
-.notes-lines{
-  border-top:1px solid var(--line);
-}
-.notes-line{
-  height:7.2mm;
-  border-bottom:1px solid var(--line);
+/* Controles nunca entram na impressão */
+@media print{
+  .controls, .controles, .toolbar{ display:none !important; }
 }
 
+
+/* === NOTES SHEETS (linhas para anotações) === */
+.notes-inner{
+  padding: 14mm 10mm 12mm;
+}
+.cover-title{
+  font-family: Tahoma, Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: .5px;
+  text-align: center;
+  margin-bottom: 6mm;
+  font-size: 18px;
+}
+.notes-lines .line{
+  height: 0;
+  border-top: 1px solid #111;
+  margin: 0 0 7.2mm 0; /* espaçamento das linhas (ajustado para caber em A5) */
+}
+
+/* === DUPLEX: garantir páginas em A5 e quebras exatas === */
+@media print{
+  @page{ size: A5; margin: 8mm; }
+  .sheet{ page-break-after: always; break-after: page; }
+  .sheet:last-child{ page-break-after: auto; break-after: auto; }
+  /* sem sombras/fundos */
+  body{ background:#fff !important; }
+  .sheet{ box-shadow:none !important; }
+}
 </style>
 </head>
 <body>
@@ -136,7 +261,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <option value="2026-12">Dezembro</option>
 </select>
 </div>
-<button id="printBtn" type="button" disabled>Imprimir / Salvar PDF</button>
+<button id="printBtn" type="button">Imprimir / Salvar PDF</button>
 </div>
 <section class="sheet" data-kind="year">
 <div class="year-title">Calendário 2026</div>
@@ -1807,43 +1932,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 </section>
 </div>
 <script>
-const printBtn = document.getElementById("printBtn");
-printBtn.disabled = true;
-
-function ensureNotesPages(){
-  // Cria 1 página de anotações logo após cada mês (para impressão frente e verso).
-  const monthSheets = Array.from(document.querySelectorAll('.sheet[data-kind="month"]'));
-  for(const ms of monthSheets){
-    const month = ms.getAttribute('data-month');
-    // já existe?
-    const next = ms.nextElementSibling;
-    if(next && next.classList.contains('notes') && next.getAttribute('data-month') === month) continue;
-
-    const monthName = (ms.querySelector('.month-name')?.textContent || '').trim();
-    const year = (month || '').split('-')[0] || '2026';
-
-    const notes = document.createElement('section');
-    notes.className = 'sheet notes';
-    notes.setAttribute('data-kind','notes');
-    notes.setAttribute('data-month', month);
-
-    // 24 linhas (ajuste fino para A5)
-    let lines = '';
-    for(let i=0;i<24;i++) lines += '<div class="notes-line"></div>';
-
-    notes.innerHTML = `
-      <div class="notes-head">
-        <div class="notes-title">ANOTAÇÕES</div>
-        <div class="notes-sub">${monthName} ${year}</div>
-      </div>
-      <div class="notes-lines">${lines}</div>
-    `;
-    ms.insertAdjacentElement('afterend', notes);
-  }
-}
-
 (function(){
-  ensureNotesPages();
   const sel = document.getElementById("monthSelect");
   const btn = document.getElementById("printBtn");
   const sheets = Array.from(document.querySelectorAll(".sheet"));
@@ -1856,7 +1945,7 @@ function ensureNotesPages(){
         return;
       }
       // mostra somente a folha do mês escolhido
-      if((kind === "month" || kind === "notes") && s.getAttribute("data-month") === month){
+      if(kind === "month" && s.getAttribute("data-month") === month){
         s.classList.remove("hidden");
       }else{
         s.classList.add("hidden");
@@ -1874,7 +1963,7 @@ function ensureNotesPages(){
     // esconde tudo, exceto o mês escolhido
     sheets.forEach(s=>{
       const kind = s.getAttribute("data-kind") || "";
-      const ok = ((kind === "month" || kind === "notes") && s.getAttribute("data-month") === month);
+      const ok = (kind === "month" && s.getAttribute("data-month") === month);
       if(!ok) s.classList.add("print-hide");
     });
   }
@@ -1944,8 +2033,6 @@ function ensureNotesPages(){
 </div>
 </div>
 <script>
-const printBtn = document.getElementById("printBtn");
-printBtn.disabled = true;
 /**
  * Integração Google Sheets -> Calendário HTML
  * Colunas esperadas na planilha: data | hora | evento
@@ -2180,8 +2267,6 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
       const label = it.time ? `${it.time} - ${it.event}` : it.event;
       addEventToDay(yyyy, mm, dd, label, it.isRed);
     }
-
-    printBtn.disabled = false;
 
     // debug leve
     console.log(`[Sheets] Eventos carregados: ${items.length}`);
