@@ -61,6 +61,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
     border:none; border-radius:0; box-shadow:none;
     padding:18mm 16mm 14mm;
   }
+}
 
 /* page numbers */
 .page-no{
@@ -2097,7 +2098,15 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
  */
 (() => {
   // ====== CONFIGURAÇÃO ======
-  const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
+  
+  // ====== CONFIG ======
+  // Opção A (recomendada): cole aqui o link "Publicar na Web" da aba (o que contém /d/e/.../pubhtml)
+  // Exemplo: https://docs.google.com/spreadsheets/d/e/XXXX/pubhtml?gid=0&single=true
+  // O código converte automaticamente para CSV (troca pubhtml -> pub e adiciona output=csv).
+  const PUBLISHED_PUBHTML_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSr59qtjfIiXj8PKems0FQzJulSdyUa70QhH8KaJSnNtbh9U0cB0KrRrxaKz93pc9CSLmTAn8btFc-0/pub?output=csv"; 
+
+  // Opção B: usar o ID do arquivo (funciona quando o endpoint gviz libera CORS para seu caso)
+const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
   // Se sua aba não for a primeira, ajuste o GID (número após "#gid=" na URL da aba).
   const SHEET_GID = "0";
   // Intervalo de atualização automática (ms). Ex.: 300000 = 5 minutos
@@ -2105,7 +2114,17 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 
   // Se você NÃO publicar a planilha na web, o fetch pode falhar por permissão/CORS.
   // O método abaixo funciona bem quando a planilha está "Publicada na Web".
-  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SHEET_GID}`;
+  const CSV_URL = (() => {
+    if (PUBLISHED_PUBHTML_URL && PUBLISHED_PUBHTML_URL.includes("docs.google.com/spreadsheets/d/e/")) {
+      // Converte o link publicado (HTML) para CSV
+      const u = new URL(PUBLISHED_PUBHTML_URL);
+      u.pathname = u.pathname.replace(/\/pubhtml$/,"/pub");
+      u.searchParams.set("output","csv");
+      return u.toString();
+    }
+    // Fallback: endpoint gviz baseado no ID
+    return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SHEET_GID}`;
+  })();
 
   // ====== CSV parser (suporta campos com vírgula/aspas) ======
   function parseCSV(text){
@@ -2270,7 +2289,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
       warn.className = 'controls';
       warn.style.maxWidth = '860px';
       warn.style.margin = '0 auto 10px';
-      warn.innerHTML = `<strong>⚠️ Não foi possível carregar a planilha.</strong> <span style="font-weight:600">Confira permissões / “Publicar na web”.</span>`;
+      warn.innerHTML = `<strong>⚠️ Não foi possível carregar a planilha.</strong> <span style="font-weight:600">Confira permissões / “Publicar na web”.</span><div style="font-size:11px;opacity:.85;margin-top:4px;word-break:break-all">URL usada: ${CSV_URL}</div>`;
       document.body.insertBefore(warn, document.body.firstChild);
     }
 
