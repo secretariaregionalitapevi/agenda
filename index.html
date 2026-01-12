@@ -142,6 +142,13 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 .evt{line-height:1.15;white-space:pre-wrap}
 .evt.red{color:var(--red);font-weight:800}
 
+/* separadores entre múltiplos eventos no mesmo dia */
+.right .evt + .evt{
+  border-top:1px solid #bbb;
+  margin-top:3px;
+  padding-top:3px;
+}
+
 /* ===== NOTES ===== */
 .notes-title{
   text-align:center;
@@ -2103,7 +2110,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
   // Opção A (recomendada): cole aqui o link "Publicar na Web" da aba (o que contém /d/e/.../pubhtml)
   // Exemplo: https://docs.google.com/spreadsheets/d/e/XXXX/pubhtml?gid=0&single=true
   // O código converte automaticamente para CSV (troca pubhtml -> pub e adiciona output=csv).
-  const PUBLISHED_PUBHTML_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSr59qtjfIiXj8PKems0FQzJulSdyUa70QhH8KaJSnNtbh9U0cB0KrRrxaKz93pc9CSLmTAn8btFc-0/pub?output=csv"; 
+  const PUBLISHED_PUBHTML_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSr59qtjfIiXj8PKems0FQzJulSdyUa70QhH8KaJSnNtbh9U0cB0KrRrxaKz93pc9CSLmTAn8btFc-0/pub?output=csv"; // <-- cole aqui se quiser usar o link publicado
 
   // Opção B: usar o ID do arquivo (funciona quando o endpoint gviz libera CORS para seu caso)
 const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
