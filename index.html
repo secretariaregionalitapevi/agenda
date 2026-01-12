@@ -2110,7 +2110,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
   // Opção A (recomendada): cole aqui o link "Publicar na Web" da aba (o que contém /d/e/.../pubhtml)
   // Exemplo: https://docs.google.com/spreadsheets/d/e/XXXX/pubhtml?gid=0&single=true
   // O código converte automaticamente para CSV (troca pubhtml -> pub e adiciona output=csv).
-  const PUBLISHED_PUBHTML_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSr59qtjfIiXj8PKems0FQzJulSdyUa70QhH8KaJSnNtbh9U0cB0KrRrxaKz93pc9CSLmTAn8btFc-0/pub?output=csv"; // <-- cole aqui se quiser usar o link publicado
+  const PUBLISHED_PUBHTML_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSr59qtjfIiXj8PKems0FQzJulSdyUa70QhH8KaJSnNtbh9U0cB0KrRrxaKz93pc9CSLmTAn8btFc-0/pub?output=csv"; 
 
   // Opção B: usar o ID do arquivo (funciona quando o endpoint gviz libera CORS para seu caso)
 const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
@@ -2135,28 +2135,60 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
 
   // ====== CSV parser (suporta campos com vírgula/aspas) ======
   function parseCSV(text){
+    // CSV do Google pode vir com separador "," ou ";" (dependendo de locale). Detectamos automaticamente.
+    const firstLine = (() => {
+      const lines = String(text).split(/\r?\n/);
+      for (const ln of lines){
+        if (ln && ln.trim() !== '') return ln;
+      }
+      return '';
+    })();
+
+    function countDelim(line, delim){
+      let inQuotes = false, c = 0;
+      for (let i=0;i<line.length;i++){
+        const ch = line[i];
+        const next = line[i+1];
+        if (ch === '"' && inQuotes && next === '"'){ i++; continue; }
+        if (ch === '"'){ inQuotes = !inQuotes; continue; }
+        if (!inQuotes && ch === delim) c++;
+      }
+      return c;
+    }
+
+    const candidates = [',',';','\t'];
+    let delim = ',';
+    let best = -1;
+    for (const d of candidates){
+      const n = countDelim(firstLine, d);
+      if (n > best){ best = n; delim = d; }
+    }
+
     const rows = [];
     let cur = '', inQuotes = false;
     const row = [];
     for (let i=0;i<text.length;i++){
       const ch = text[i];
       const next = text[i+1];
+
       if (ch === '"' && inQuotes && next === '"'){ cur += '"'; i++; continue; }
       if (ch === '"'){ inQuotes = !inQuotes; continue; }
-      if (ch === ',' && !inQuotes){ row.push(cur); cur=''; continue; }
-      if ((ch === '\n' || ch === '\r') && !inQuotes){
+
+      if (!inQuotes && ch === delim){ row.push(cur); cur=''; continue; }
+
+      if (!inQuotes && (ch === '\n' || ch === '\r')){
         if (ch === '\r' && next === '\n') i++;
         row.push(cur); cur='';
-        // descartar linhas totalmente vazias
         if (row.some(v => String(v).trim() !== '')) rows.push(row.splice(0, row.length));
         continue;
       }
+
       cur += ch;
     }
     row.push(cur);
     if (row.some(v => String(v).trim() !== '')) rows.push(row);
     return rows;
-  }
+  }}
 
   // ====== helpers ======
   function pad2(n){ return String(n).padStart(2,'0'); }
@@ -2236,7 +2268,8 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
   }
 
   async function fetchSheetEvents(){
-    const resp = await fetch(CSV_URL, { cache: 'no-store' });
+    const url = CSV_URL + (CSV_URL.includes('?') ? '&' : '?') + 'cb=' + Date.now();
+    const resp = await fetch(url, { cache: 'no-store' });
     if (!resp.ok) throw new Error(`Falha ao ler a planilha (${resp.status}). Verifique se ela está publicada na web e acessível.`);
     const csvText = await resp.text();
     const rows = parseCSV(csvText);
