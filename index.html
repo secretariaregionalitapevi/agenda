@@ -144,9 +144,9 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 
 /* separadores entre múltiplos eventos no mesmo dia */
 .right .evt + .evt{
-  border-top:1px solid #bbb;
-  margin-top:3px;
-  padding-top:3px;
+  border-top:1px solid var(--line);
+  margin-top:2px;
+  padding-top:2px;
 }
 
 /* ===== NOTES ===== */
@@ -2324,6 +2324,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
 
   // ====== iniciar ======
   window.addEventListener('DOMContentLoaded', async () => {
+    clearCalendarEvents();
     try{
       await refreshFromSheet();
     }catch(err){
