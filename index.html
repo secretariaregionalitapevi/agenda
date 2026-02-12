@@ -2285,5 +2285,17 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
   });
 })();
 </script>
+
+<script>
+function normDept(v = "") {
+  return String(v)
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // remove acentos
+    .replace(/\s+/g, "");           // tira espaços
+}
+</script>
+
 </body>
 </html>

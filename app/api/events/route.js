@@ -1,68 +1,4 @@
-export const runtime = "nodejs";
-
-function parseCSV(text: string): string[][] {
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let cur = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    const next = text[i + 1];
-
-    if (inQuotes) {
-      if (c === '"' && next === '"') {
-        cur += '"';
-        i++;
-      } else if (c === '"') {
-        inQuotes = false;
-      } else {
-        cur += c;
-      }
-      continue;
-    }
-
-    if (c === '"') {
-      inQuotes = true;
-    } else if (c === ",") {
-      row.push(cur);
-      cur = "";
-    } else if (c === "\n") {
-      row.push(cur);
-      rows.push(row);
-      row = [];
-      cur = "";
-    } else if (c === "\r") {
-      // ignore
-    } else {
-      cur += c;
-    }
-  }
-  row.push(cur);
-  rows.push(row);
-  return rows.filter(r => r.some(cell => String(cell).trim() !== ""));
-}
-
-export async function GET() {
-  const csvUrl = process.env.SHEET_CSV_URL;
-  if (!csvUrl) {
-    return new Response(JSON.stringify({ ok:false, error:"SHEET_CSV_URL não configurada." }), {
-      status: 500,
-      headers: { "Content-Type": "application/json; charset=utf-8" }
-    });
-  }
-
-  const res = await fetch(csvUrl, { next: { revalidate: 60 } });
-  if (!res.ok) {
-    return new Response(JSON.stringify({ ok:false, error:`Falha ao buscar CSV: ${res.status}` }), {
-      status: 502,
-      headers: { "Content-Type": "application/json; charset=utf-8" }
-    });
-  }
-
-  const text = await res.text();
-  function parseCSV(text) {
-  // parser simples que aguenta aspas e vírgulas dentro de aspas
+function parseCSV(text) {
   const rows = [];
   let row = [], cur = "", inQuotes = false;
 
@@ -107,17 +43,19 @@ function toISODate(s = "") {
   if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
   const m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
   if (m) return `${m[3]}-${m[2]}-${m[1]}`;
-  return v; // fallback
+  return v;
 }
 
 export async function GET() {
   const csvUrl = process.env.SHEET_CSV_URL;
-  if (!csvUrl) return Response.json({ ok: false, error: "SHEET_CSV_URL não configurada." }, { status: 500 });
+  if (!csvUrl) {
+    return Response.json({ ok: false, error: "SHEET_CSV_URL não configurada." }, { status: 500 });
+  }
 
   const res = await fetch(csvUrl, {
     redirect: "follow",
     headers: { "Accept": "text/csv,text/plain,*/*", "User-Agent": "Mozilla/5.0" },
-    next: { revalidate: 60 }
+    next: { revalidate: 60 },
   });
 
   if (!res.ok) {
@@ -126,8 +64,9 @@ export async function GET() {
 
   const text = await res.text();
   const rows = parseCSV(text);
-  const header = rows[0].map(normKey);
+  if (!rows.length) return Response.json({ ok: true, events: [] });
 
+  const header = rows[0].map(normKey);
   const idx = (name) => header.indexOf(normKey(name));
 
   const iData = idx("data");
@@ -136,24 +75,27 @@ export async function GET() {
   const iDestaque = idx("destaque");
   const iDept = idx("departamento");
 
+  if (iData === -1 || iEvento === -1) {
+    return Response.json({ ok: false, error: 'CSV precisa ter cabeçalhos "DATA" e "EVENTO".' }, { status: 400 });
+  }
+
   const events = rows.slice(1).map((r, rowIndex) => {
     const data = toISODate(r[iData] ?? "");
-    const hora = (r[iHora] ?? "").trim();
-    const evento = (r[iEvento] ?? "").trim();
-    const destaqueRaw = (r[iDestaque] ?? "").trim();
-    const deptRaw = (r[iDept] ?? "").trim();
+    const hora = String(r[iHora] ?? "").trim();
+    const evento = String(r[iEvento] ?? "").trim();
+    const destaqueRaw = String(r[iDestaque] ?? "").trim();
+    const deptRaw = String(r[iDept] ?? "").trim();
 
     return {
-      row: rowIndex + 2, // linha real na planilha (p/ editar/apagar)
+      row: rowIndex + 2,
       data,
       hora,
       evento,
       destaque: /^(sim|s|true|1)$/i.test(destaqueRaw),
-      departamento: normDept(deptRaw), // "musica" | "ministerio" | ""
+      departamento: normDept(deptRaw),
       departamento_label: deptRaw
     };
   }).filter(e => e.data && e.evento);
 
   return Response.json({ ok: true, events });
-}
 }
