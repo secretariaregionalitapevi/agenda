@@ -22,6 +22,13 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
   padding:18px 18px 32px;
   position:relative;
 }
+@media screen and (min-width:900px){
+  .sheet{
+    width:148mm;
+    height:210mm;
+    overflow:hidden;
+  }
+}
 @media (min-width:900px){
   /* aproximar proporção A4 na tela */
   .sheet{padding:28px 34px 44px}
@@ -73,7 +80,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
   gap:14px 16px;
 }
 @media (max-width:780px){ .year-grid{grid-template-columns:repeat(2, minmax(0,1fr));} }
-@media (max-width:520px){ .year-grid{grid-template-columns:1fr;} }
+@media (max-width:520px){ .year-grid{grid-template-columns:repeat(2, minmax(0,1fr));} }
 
 .mini{border:1px solid #999; padding:8px; border-radius:4px}
 .mini-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-weight:700}
@@ -179,39 +186,6 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 .controls button{font-weight:800}
 .ctrl-left{display:flex; align-items:center; gap:10px}
 .hidden{display:none !important}
-
-@media (max-width:640px){
-  .wrapper{padding:10px;gap:10px}
-  .sheet{padding:12px 10px 24px}
-
-  .controls{
-    position:static;
-    width:min(100%, 360px);
-    margin:8px auto 10px;
-    padding:8px 10px;
-    gap:8px;
-    flex-wrap:wrap;
-  }
-
-  .ctrl-left{
-    width:100%;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:6px;
-  }
-
-  .controls select{
-    min-width:0;
-    width:160px;
-    max-width:100%;
-  }
-
-  .controls button{width:100%}
-  .month-name{font-size:18px}
-  .r{grid-template-columns:74px 1fr; min-height:22px}
-  .left{padding:2px 6px; font-size:12px; gap:6px}
-  .right{padding:2px 6px; font-size:11px}
-}
 
 
 
