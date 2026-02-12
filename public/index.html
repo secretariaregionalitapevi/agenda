@@ -9,6 +9,7 @@
 <meta name="theme-color" content="#ffffff">
 <link rel="apple-touch-icon" href="/icons/icon-180.png">
 <link rel="icon" href="/icons/icon-192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
 <style>
 :root{
@@ -244,30 +245,211 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
   body{ background:#fff !important; }
   .sheet{ box-shadow:none !important; }
 }
+/* ===== Controls (tela) ===== */
+.controls{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  background:#fff;
+  border:1px solid #d0d0d0;
+  border-radius:10px;
+  box-shadow:0 1px 2px rgba(0,0,0,.05);
+  padding:10px 12px;
+}
+.ctrl-left{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.ctrl-right{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.controls label{font-size:14px}
+.controls select{
+  font-size:14px;
+  padding:6px 8px;
+  border:1px solid #cfcfcf;
+  border-radius:8px;
+  background:#fff;
+}
+.controls button{
+  font-size:14px;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid #bdbdbd;
+  background:#fff;
+  cursor:pointer;
+}
+.controls button:hover{filter:brightness(0.98)}
+.btn-secondary{background:#f6f6f6}
+.ml{margin-left:6px}
+
+/* ===== Admin modal ===== */
+.modal-backdrop{
+  position:fixed; inset:0; background:rgba(0,0,0,.45);
+  display:none; align-items:center; justify-content:center;
+  padding:14px; z-index:50;
+}
+.modal{
+  width:min(980px, 100%);
+  background:#fff; border-radius:14px;
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
+  border:1px solid rgba(0,0,0,.08);
+  overflow:hidden;
+}
+.modal-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 14px; border-bottom:1px solid #e5e5e5;
+}
+.modal-header h3{margin:0; font-size:16px}
+.modal-body{padding:12px 14px; display:grid; gap:12px}
+.admin-grid{display:grid; gap:10px}
+@media (min-width:820px){ .admin-grid{grid-template-columns: 360px 1fr; align-items:start} }
+
+.form{
+  border:1px solid #e5e5e5; border-radius:12px; padding:10px;
+  display:grid; gap:8px;
+}
+.form label{font-size:13px}
+.form input, .form select, .form textarea{
+  width:100%;
+  font-size:14px;
+  padding:8px 10px;
+  border:1px solid #cfcfcf;
+  border-radius:10px;
+}
+.form textarea{min-height:90px; resize:vertical}
+.form .row{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.form .actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:2px}
+.form .actions button{flex:1; min-width:110px}
+
+.list{
+  border:1px solid #e5e5e5; border-radius:12px; overflow:hidden;
+}
+.list-head{
+  padding:10px; border-bottom:1px solid #e5e5e5;
+  display:flex; gap:8px; align-items:center; justify-content:space-between;
+}
+.list-head .hint{font-size:12px; color:#444}
+.list-items{max-height:60vh; overflow:auto}
+.item{
+  padding:10px; border-bottom:1px solid #f0f0f0;
+  display:flex; gap:10px; align-items:flex-start; justify-content:space-between;
+}
+.item:last-child{border-bottom:none}
+.item .meta{font-size:12px; color:#333; line-height:1.25}
+.item .title{font-size:14px; font-weight:700}
+.item .badges{display:flex; gap:6px; flex-wrap:wrap; margin-top:4px}
+.badge{
+  font-size:11px; padding:2px 8px; border-radius:999px;
+  border:1px solid #ddd; background:#fafafa;
+}
+.badge.red{border-color: rgba(200,21,21,.4); color:var(--red); font-weight:700}
+.item .btns{display:flex; gap:8px}
+.item .btns button{padding:6px 10px; border-radius:10px}
+.muted{color:#666; font-size:12px}
+.err{color:var(--red); font-weight:700; font-size:13px}
+.ok{color:#0a6; font-weight:700; font-size:13px}
+
+/* ===== Admin polish ===== */
+.modal-backdrop{
+  background:rgba(10, 14, 23, .48);
+  backdrop-filter: blur(3px);
+}
+.modal{
+  border-radius:18px;
+  border:1px solid rgba(17,17,17,.08);
+  box-shadow:0 20px 50px rgba(0,0,0,.25);
+}
+.modal-header{
+  padding:14px 16px;
+  background:linear-gradient(180deg,#ffffff 0%,#fafafa 100%);
+}
+.modal-header h3{font-size:20px;font-weight:800}
+.modal-body{padding:14px 16px;background:#fcfcfd}
+.form,.list{
+  border:1px solid #e7e8eb;
+  border-radius:14px;
+  background:#fff;
+}
+.form{
+  box-shadow:0 8px 22px rgba(0,0,0,.04);
+}
+.form input, .form select, .form textarea{
+  border:1px solid #d6d9df;
+  border-radius:12px;
+  background:#fff;
+}
+.form input:focus, .form select:focus, .form textarea:focus{
+  outline:none;
+  border-color:#3c7ff0;
+  box-shadow:0 0 0 3px rgba(60,127,240,.15);
+}
+.form .actions button,
+.item .btns button,
+#btnSair,#btnRecarregar,#adminCloseBtn{
+  border:1px solid #d2d8e4;
+  border-radius:12px;
+}
+#btnSalvar{
+  background:linear-gradient(180deg,#2f71e8 0%,#255ec8 100%);
+  border-color:#255ec8;
+  color:#fff;
+  font-weight:800;
+}
+#btnSalvar:hover{filter:brightness(1.03)}
+#btnExcluir{
+  background:linear-gradient(180deg,#f05a5a 0%,#d73f3f 100%);
+  border-color:#cb3535;
+  color:#fff;
+  font-weight:800;
+}
+.item{
+  border-bottom:1px solid #eef0f4;
+}
+.item:hover{
+  background:#f9fbff;
+}
+.swal2-popup{
+  border-radius:16px !important;
+}
+.swal2-confirm{
+  border-radius:10px !important;
+  background:#255ec8 !important;
+}
+.swal2-cancel{
+  border-radius:10px !important;
+}
 </style>
 </head>
 <body>
 <div class="wrapper">
 <div aria-label="Controles" class="controls">
-<div class="ctrl-left">
-<label for="monthSelect">Escolher mês:</label>
-<select id="monthSelect">
-<option value="all">Todos</option>
-<option value="2026-01">Janeiro</option>
-<option value="2026-02">Fevereiro</option>
-<option value="2026-03">Março</option>
-<option value="2026-04">Abril</option>
-<option value="2026-05">Maio</option>
-<option value="2026-06">Junho</option>
-<option value="2026-07">Julho</option>
-<option value="2026-08">Agosto</option>
-<option value="2026-09">Setembro</option>
-<option value="2026-10">Outubro</option>
-<option value="2026-11">Novembro</option>
-<option value="2026-12">Dezembro</option>
-</select>
-</div>
-<button id="printBtn" type="button">Imprimir / Salvar PDF</button>
+  <div class="ctrl-left">
+    <label for="monthSelect">Escolher mês:</label>
+    <select id="monthSelect">
+      <option value="all">Todos</option>
+      <option value="2026-01">Janeiro</option>
+      <option value="2026-02">Fevereiro</option>
+      <option value="2026-03">Março</option>
+      <option value="2026-04">Abril</option>
+      <option value="2026-05">Maio</option>
+      <option value="2026-06">Junho</option>
+      <option value="2026-07">Julho</option>
+      <option value="2026-08">Agosto</option>
+      <option value="2026-09">Setembro</option>
+      <option value="2026-10">Outubro</option>
+      <option value="2026-11">Novembro</option>
+      <option value="2026-12">Dezembro</option>
+    </select>
+
+    <label for="deptSelect" class="ml">Departamento:</label>
+    <select id="deptSelect">
+      <option value="ambos">Ambos</option>
+      <option value="musica">Música</option>
+      <option value="ministerio">Ministério</option>
+    </select>
+  </div>
+
+  <div class="ctrl-right">
+    <button id="adminBtn" type="button" class="btn-secondary">Admin</button>
+    <button id="printBtn" type="button">Imprimir / Salvar PDF</button>
+  </div>
 </div>
 <section class="sheet" data-kind="year">
 <div class="year-title">Calendário 2026</div>
@@ -1939,12 +2121,14 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 </div>
 <script>
 
-const ADMIN_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyRTY8vZVAf0uONNbomS9U8n_g-hmMK-nM-kbub0IqQdXxl9NkU-ItK_F0Fox_wpEjr/exec";
-
+const ADMIN_WEBAPP_URL = "/api/admin";
 (function(){
   const sel = document.getElementById("monthSelect");
   const btn = document.getElementById("printBtn");
   const sheets = Array.from(document.querySelectorAll(".sheet"));
+  const deptSel = document.getElementById("deptSelect");
+  let ALL_EVENTS_RAW = [];
+
 
   function showOnly(month){
     sheets.forEach(s=>{
@@ -2041,6 +2225,7 @@ const ADMIN_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyRTY8vZVAf0uO
 </div>
 </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 /**
  * Integração Google Sheets -> Calendário HTML
@@ -2048,6 +2233,7 @@ const ADMIN_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyRTY8vZVAf0uO
  * Data pode vir como: dd/mm/aaaa, dd-mm-aaaa, aaaa-mm-dd ou Date do próprio Sheets.
  */
 (() => {
+  const deptSel = document.getElementById("deptSelect");
   
   // Remove eventos fixos do HTML (garante que a agenda venha SOMENTE do Google Sheets)
   function clearAllEventCells(){
@@ -2150,6 +2336,10 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
   }
 
   // ====== helpers ======
+  function escapeHtml(s){
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
   function pad2(n){ return String(n).padStart(2,'0'); }
 
   function parseDateAny(raw){
@@ -2227,43 +2417,39 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
   }
 
   async function fetchSheetEvents(){
-    const url = CSV_URL + (CSV_URL.includes('?') ? '&' : '?') + 'cb=' + Date.now();
-    const resp = await fetch(url, { cache: 'no-store' });
-    if (!resp.ok) throw new Error(`Falha ao ler a planilha (${resp.status}). Verifique se ela está publicada na web e acessível.`);
-    const csvText = await resp.text();
-    const rows = parseCSV(csvText);
-    if (!rows.length) return [];
-
-    // cabeçalho
-    const header = rows[0].map(h => String(h).trim().toLowerCase());
-    const idxDate  = header.findIndex(h => ['data','date'].includes(h));
-    const idxTime  = header.findIndex(h => ['hora','time'].includes(h));
-    const idxEvent = header.findIndex(h => ['evento','event'].includes(h));
-    const idxFlag  = header.findIndex(h => ['destaque','destacar','highlight','importante','red'].includes(h));
-
-    // fallback: A,B,C,(D)
-    const dI = idxDate  >= 0 ? idxDate  : 0;
-    const tI = idxTime  >= 0 ? idxTime  : 1;
-    const eI = idxEvent >= 0 ? idxEvent : 2;
-    const fI = idxFlag  >= 0 ? idxFlag  : 3;
-
-    const items = [];
-    for (let i=1;i<rows.length;i++){
-      const r = rows[i];
-      const d = parseDateAny(r[dI]);
-      const ev = String(r[eI] ?? '').trim();
-      if (!d || !ev) continue;
-      const time = normalizeTime(r[tI]);
-      const flag = String(r[fI] ?? '').trim().toUpperCase();
-      const isRed = (flag === 'SIM');
-      items.push({ date: d, time, event: ev, isRed });
+    const resp = await fetch("/api/events?cb=" + Date.now(), { cache: "no-store" });
+    const json = await resp.json().catch(() => ({}));
+    if (!resp.ok || !json.ok) {
+      const msg = (json && json.error) ? json.error : `Falha ao ler /api/events (${resp.status}).`;
+      throw new Error(msg);
     }
+
+    ALL_EVENTS_RAW = Array.isArray(json.data) ? json.data : (Array.isArray(json.events) ? json.events : []);
+
+    // Normaliza para o formato usado no calendário
+    const items = ALL_EVENTS_RAW.map((e) => {
+      const date = parseDateAny(e.data);
+      return {
+        row: e.row,
+        date,
+        time: String(e.hora || "").trim(),
+        event: String(e.evento || "").trim(),
+        isRed: (String(e.destaque || "").trim().toUpperCase() === "SIM") || e.destaque === true,
+        dept: String(e.departamento || "").trim().toLowerCase()
+      };
+    }).filter(it => it.date && it.event);
+
     return items;
   }
 
   async function refreshFromSheet(){
     clearCalendarEvents();
-    const items = await fetchSheetEvents();
+    let items = await fetchSheetEvents();
+
+    const dept = (deptSel && deptSel.value) ? deptSel.value : "ambos";
+    if (dept !== "ambos"){
+      items = items.filter(it => (it.dept || "") === dept);
+    }
 
     // ordenar por data + hora
     items.sort((a,b) => (a.date - b.date) || (timeToMinutes(a.time) - timeToMinutes(b.time)));
@@ -2281,11 +2467,338 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
     console.log(`[Sheets] Eventos carregados: ${items.length}`);
   }
 
-  // ====== iniciar ======
+  
+  // ====== Admin ======
+  let adminBackdrop = null;
+  let adminBtn = null;
+  let adminCloseBtn = null;
+  let adminForm = null;
+  let adminList = null;
+  let adminMsg = null;
+
+  let fRow = null;
+  let fData = null;
+  let fHora = null;
+  let fEvento = null;
+  let fDestaque = null;
+  let fDept = null;
+
+  let btnNovo = null;
+  let btnExcluir = null;
+  let btnRecarregar = null;
+  let btnSair = null;
+
+  async function getAdminPassword(forcePrompt = false){
+    // some quando o navegador/app é fechado
+    if (!forcePrompt){
+      const cached = sessionStorage.getItem("ccbagenda_admin_password") || "";
+      if (cached) return String(cached).trim();
+    }
+
+    if (window.Swal && typeof window.Swal.fire === "function"){
+      const result = await window.Swal.fire({
+        title: "Senha do Admin",
+        input: "password",
+        inputLabel: "Informe a senha para editar eventos",
+        inputPlaceholder: "Digite a senha",
+        inputAttributes: { autocapitalize: "off", autocorrect: "off" },
+        confirmButtonText: "Entrar",
+        cancelButtonText: "Cancelar",
+        showCancelButton: true,
+        allowOutsideClick: false,
+        preConfirm: (value) => {
+          if (!String(value || "").trim()){
+            window.Swal.showValidationMessage("Informe a senha.");
+            return false;
+          }
+          return String(value).trim();
+        }
+      });
+      if (!result.isConfirmed) return "";
+      const p = String(result.value || "").trim();
+      if (!p) return "";
+      sessionStorage.setItem("ccbagenda_admin_password", p);
+      return p;
+    }
+
+    // fallback simples
+    const p = String(prompt("Senha do Admin:") || "").trim();
+    if (!p) return "";
+    sessionStorage.setItem("ccbagenda_admin_password", p);
+    return p;
+  }
+
+  function clearAdminPassword(){
+    sessionStorage.removeItem("ccbagenda_admin_password");
+  }
+
+  async function openAdmin(){
+    if (!adminBackdrop) return;
+    // pede a senha ao abrir (simples)
+    const pw = await getAdminPassword();
+    if (!pw){
+      closeAdmin();
+      return;
+    }
+    adminBackdrop.style.display = "flex";
+    adminBackdrop.setAttribute("aria-hidden", "false");
+    renderAdminList();
+  }
+  function closeAdmin(){
+    if (!adminBackdrop) return;
+    adminBackdrop.style.display = "none";
+    adminBackdrop.setAttribute("aria-hidden", "true");
+  }
+
+  function setMsg(text, kind){
+    if (!adminMsg) return;
+    adminMsg.className = kind === "ok" ? "ok" : (kind === "err" ? "err" : "muted");
+    adminMsg.textContent = text || "";
+  }
+
+  function clearForm(){
+    fRow.value = "";
+    fData.value = "";
+    fHora.value = "";
+    fEvento.value = "";
+    fDestaque.value = "";
+    fDept.value = "";
+    setMsg("", "");
+  }
+
+  function deptLabel(v){
+    if (v === "musica") return "Música";
+    if (v === "ministerio") return "Ministério";
+    return "—";
+  }
+
+  function monthFilter(eventDate){
+    const sel = document.getElementById("monthSelect");
+    const m = sel ? sel.value : "all";
+    if (m === "all") return true;
+    if (!(eventDate instanceof Date)) return false;
+    const key = `${eventDate.getFullYear()}-${String(eventDate.getMonth()+1).padStart(2,'0')}`;
+    return key === m;
+  }
+
+  function deptFilter(dept){
+    const current = (deptSel && deptSel.value) ? deptSel.value : "ambos";
+    if (current === "ambos") return true;
+    return (String(dept||"").toLowerCase() === current);
+  }
+
+  function renderAdminList(){
+    if (!adminList) return;
+
+    // Converte ALL_EVENTS_RAW (cru) para itens com Date para filtro por mês
+    const items = (Array.isArray(ALL_EVENTS_RAW) ? ALL_EVENTS_RAW : []).map(e => {
+      const d = parseDateAny(e.data);
+      return {
+        row: e.row,
+        date: d,
+        dataRaw: String(e.data||"").trim(),
+        hora: String(e.hora||"").trim(),
+        evento: String(e.evento||"").trim(),
+        destaque: String(e.destaque||"").trim().toUpperCase()==="SIM",
+        dept: String(e.departamento||"").trim().toLowerCase()
+      };
+    }).filter(it => it.date && it.evento);
+
+    const filtered = items
+      .filter(it => monthFilter(it.date))
+      .filter(it => deptFilter(it.dept))
+      .sort((a,b) => (a.date - b.date) || (timeToMinutes(a.hora) - timeToMinutes(b.hora)));
+
+    if (!filtered.length){
+      adminList.innerHTML = `<div class="item"><div><div class="title">Sem eventos</div><div class="meta">Nenhum evento para o filtro atual.</div></div></div>`;
+      return;
+    }
+
+    adminList.innerHTML = filtered.map(it => {
+      const yyyy = it.date.getFullYear();
+      const mm = String(it.date.getMonth()+1).padStart(2,'0');
+      const dd = String(it.date.getDate()).padStart(2,'0');
+      const iso = `${yyyy}-${mm}-${dd}`;
+      const title = (it.hora ? `${it.hora} — ` : "") + escapeHtml(it.evento);
+      const badges = [
+        it.destaque ? `<span class="badge red">Destaque</span>` : ``,
+        it.dept ? `<span class="badge">${deptLabel(it.dept)}</span>` : `<span class="badge">Sem dept.</span>`
+      ].join("");
+
+      return `
+      <div class="item" data-row="${it.row}">
+        <div>
+          <div class="title">${title}</div>
+          <div class="meta">${dd}/${mm}/${yyyy} • Linha ${it.row}</div>
+          <div class="badges">${badges}</div>
+        </div>
+        <div class="btns">
+          <button type="button" class="btn-secondary" data-edit="${it.row}" data-iso="${iso}">Editar</button>
+        </div>
+      </div>`;
+    }).join("");
+
+    adminList.querySelectorAll("[data-edit]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const row = btn.getAttribute("data-edit");
+        const iso = btn.getAttribute("data-iso") || "";
+        const raw = (Array.isArray(ALL_EVENTS_RAW) ? ALL_EVENTS_RAW : []).find(e => String(e.row) === String(row));
+        if (!raw) return;
+
+        fRow.value = String(raw.row || "");
+        fData.value = iso; // sempre ISO no input date
+        fHora.value = String(raw.hora || "").trim();
+        fEvento.value = String(raw.evento || "").trim();
+        fDestaque.value = (String(raw.destaque || "").trim().toUpperCase() === "SIM") ? "SIM" : "";
+        fDept.value = String(raw.departamento || "").trim().toLowerCase();
+        setMsg(`Editando linha ${row}.`, "");
+      });
+    });
+  }
+
+  async function adminSend(payload){
+    setMsg("Salvando...", "");
+
+    async function doPost(pw){
+      const resp = await fetch(ADMIN_WEBAPP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...payload, password: pw })
+      });
+      const text = await resp.text();
+      let json = {};
+      try { json = text ? JSON.parse(text) : {}; } catch { json = { ok: resp.ok, error: text || `Falha (${resp.status})` }; }
+      return { resp, json };
+    }
+
+    // garante senha antes de enviar
+    let pw = await getAdminPassword();
+    if (!pw) throw new Error("Senha do Admin obrigatória.");
+
+    let { resp, json } = await doPost(pw);
+
+    // senha em cache pode estar antiga; limpa e pede novamente uma única vez
+    if (resp.status === 401){
+      clearAdminPassword();
+      pw = await getAdminPassword(true);
+      if (!pw) throw new Error("Senha do Admin obrigatória.");
+      ({ resp, json } = await doPost(pw));
+    }
+
+    if (!resp.ok || !json.ok){
+      const msg = (json && json.error) ? json.error : `Falha (${resp.status})`;
+      throw new Error(msg);
+    }
+    return json;
+  }
+
+
+// ====== iniciar ======
   window.addEventListener('DOMContentLoaded', async () => {
+    adminBackdrop = document.getElementById("adminBackdrop");
+    adminBtn = document.getElementById("adminBtn");
+    adminCloseBtn = document.getElementById("adminCloseBtn");
+    adminForm = document.getElementById("adminForm");
+    adminList = document.getElementById("adminList");
+    adminMsg = document.getElementById("adminMsg");
+
+    fRow = document.getElementById("fRow");
+    fData = document.getElementById("fData");
+    fHora = document.getElementById("fHora");
+    fEvento = document.getElementById("fEvento");
+    fDestaque = document.getElementById("fDestaque");
+    fDept = document.getElementById("fDept");
+
+    btnNovo = document.getElementById("btnNovo");
+    btnExcluir = document.getElementById("btnExcluir");
+    btnRecarregar = document.getElementById("btnRecarregar");
+    btnSair = document.getElementById("btnSair");
+
     try{
       clearAllEventCells();
       await refreshFromSheet();
+
+      if (deptSel){
+        deptSel.addEventListener("change", () => {
+          // não precisa refazer mês; apenas redesenha eventos com o filtro
+          refreshFromSheet().catch(console.warn);
+        });
+      }
+
+      if (adminBtn){
+        adminBtn.addEventListener("click", () => openAdmin());
+      }
+      if (adminCloseBtn){
+        adminCloseBtn.addEventListener("click", () => closeAdmin());
+      }
+      if (adminBackdrop){
+        adminBackdrop.addEventListener("click", (ev) => {
+          if (ev.target === adminBackdrop) closeAdmin();
+        });
+      }
+
+      if (btnRecarregar){
+        btnRecarregar.addEventListener("click", () => {
+          refreshFromSheet().then(()=>renderAdminList()).catch(err => setMsg(String(err.message||err), "err"));
+        });
+      }
+
+      if (btnSair){
+        btnSair.addEventListener("click", () => {
+          clearAdminPassword();
+          clearForm();
+          setMsg("Sessão do admin encerrada.", "");
+          closeAdmin();
+        });
+      }
+
+      if (btnNovo){
+        btnNovo.addEventListener("click", () => clearForm());
+      }
+
+      if (btnExcluir){
+        btnExcluir.addEventListener("click", async () => {
+          const row = String(fRow.value||"").trim();
+          if (!row){
+            setMsg("Selecione um evento para excluir (botão Editar).", "err");
+            return;
+          }
+          try{
+            await adminSend({ action:"delete", row:Number(row) });
+            setMsg("Excluído com sucesso.", "ok");
+            await refreshFromSheet();
+            renderAdminList();
+            clearForm();
+          }catch(err){
+            setMsg(String(err.message||err), "err");
+          }
+        });
+      }
+
+      if (adminForm){
+        adminForm.addEventListener("submit", async (ev) => {
+          ev.preventDefault();
+          try{
+            const row = String(fRow.value||"").trim();
+            const payload = {
+              action: row ? "update" : "create",
+              row: row ? Number(row) : undefined,
+              data: String(fData.value||"").trim(),
+              hora: String(fHora.value||"").trim(),
+              evento: String(fEvento.value||"").trim(),
+              destaque: String(fDestaque.value||"").trim(),
+              departamento: String(fDept.value||"").trim()
+            };
+            await adminSend(payload);
+            setMsg("Salvo com sucesso.", "ok");
+            await refreshFromSheet();
+            renderAdminList();
+            if (!row) clearForm();
+          }catch(err){
+            setMsg(String(err.message||err), "err");
+          }
+        });
+      }
     }catch(err){
       console.warn(err);
       // aviso discreto na tela (sem atrapalhar impressão)
@@ -2293,7 +2806,8 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
       warn.className = 'controls';
       warn.style.maxWidth = '860px';
       warn.style.margin = '0 auto 10px';
-      warn.innerHTML = `<strong>⚠️ Não foi possível carregar a planilha.</strong> <span style="font-weight:600">Confira permissões / “Publicar na web”.</span><div style="font-size:11px;opacity:.85;margin-top:4px;word-break:break-all">URL usada: ${CSV_URL}</div>`;
+      const msg = (err && err.message) ? err.message : "Erro desconhecido.";
+      warn.innerHTML = `<strong>⚠️ Não foi possível carregar os eventos.</strong> <span style="font-weight:600">${escapeHtml(msg)}</span>`;
       document.body.insertBefore(warn, document.body.firstChild);
     }
 
@@ -2312,5 +2826,80 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 
+<!-- ===== Admin Modal ===== -->
+<div id="adminBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Admin — Agenda</h3>
+      <button id="adminCloseBtn" type="button" class="btn-secondary">Fechar</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="admin-grid">
+        <form id="adminForm" class="form">
+          <div class="row">
+            <div>
+              <label>Data</label>
+              <input id="fData" type="date" required />
+            </div>
+            <div>
+              <label>Hora</label>
+              <input id="fHora" type="text" placeholder="ex: 19:30" />
+            </div>
+          </div>
+
+          <div>
+            <label>Evento</label>
+            <textarea id="fEvento" required placeholder="Descreva o evento..."></textarea>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Departamento</label>
+              <select id="fDept">
+                <option value="">(vazio)</option>
+                <option value="musica">Música</option>
+                <option value="ministerio">Ministério</option>
+              </select>
+              <div class="muted">Use “(vazio)” se não quiser filtrar por departamento.</div>
+            </div>
+            <div>
+              <label>Destaque</label>
+              <select id="fDestaque">
+                <option value="">Não</option>
+                <option value="SIM">SIM (vermelho/negrito)</option>
+              </select>
+            </div>
+          </div>
+
+          <input id="fRow" type="hidden" />
+
+          <div class="actions">
+            <button id="btnNovo" type="button" class="btn-secondary">Novo</button>
+            <button id="btnSalvar" type="submit">Salvar</button>
+            <button id="btnExcluir" type="button">Excluir</button>
+          </div>
+
+          <div id="adminMsg" class="muted"></div>
+          <div class="muted">Dica: toque em “Editar” na lista ao lado para carregar um evento.</div>
+        </form>
+
+        <div class="list">
+          <div class="list-head">
+            <div>
+              <div style="font-weight:700">Eventos</div>
+              <div class="hint">Mostra mês + departamento selecionados no topo.</div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center">
+              <button id="btnSair" type="button" class="btn-secondary">Sair</button>
+              <button id="btnRecarregar" type="button" class="btn-secondary">Recarregar</button>
+            </div>
+          </div>
+          <div id="adminList" class="list-items"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
