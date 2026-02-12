@@ -7,85 +7,46 @@ function parseCSV(text: string): string[][] {
   let inQuotes = false;
 
   for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    const next = text[i + 1];
-
-    if (inQuotes) {
-      if (c === '"' && next === '"') {
-        cur += '"';
-        i++;
-      } else if (c === '"') {
-        inQuotes = false;
-      } else {
-        cur += c;
-      }
-      continue;
-    }
-
-    if (c === '"') {
-      inQuotes = true;
-    } else if (c === ",") {
-      row.push(cur);
-      cur = "";
-    } else if (c === "\n") {
-      row.push(cur);
-      rows.push(row);
-      row = [];
-      cur = "";
-    } else if (c === "\r") {
-      // ignore
-    } else {
-      cur += c;
-    }
-  }
-  row.push(cur);
-  rows.push(row);
-  return rows.filter(r => r.some(cell => String(cell).trim() !== ""));
-}
-
-export async function GET() {
-  const csvUrl = process.env.SHEET_CSV_URL;
-  if (!csvUrl) {
-    return new Response(JSON.stringify({ ok:false, error:"SHEET_CSV_URL não configurada." }), {
-      status: 500,
-      headers: { "Content-Type": "application/json; charset=utf-8" }
-    });
-  }
-
-  const res = await fetch(csvUrl, { next: { revalidate: 60 } });
-  if (!res.ok) {
-    return new Response(JSON.stringify({ ok:false, error:`Falha ao buscar CSV: ${res.status}` }), {
-      status: 502,
-      headers: { "Content-Type": "application/json; charset=utf-8" }
-    });
-  }
-
-  const text = await res.text();
-  function parseCSV(text) {
-  // parser simples que aguenta aspas e vírgulas dentro de aspas
-  const rows = [];
-  let row = [], cur = "", inQuotes = false;
-
-  for (let i = 0; i < text.length; i++) {
     const ch = text[i];
     const next = text[i + 1];
 
-    if (ch === '"' && inQuotes && next === '"') { cur += '"'; i++; continue; }
-    if (ch === '"') { inQuotes = !inQuotes; continue; }
-
-    if (ch === "," && !inQuotes) { row.push(cur); cur = ""; continue; }
-    if ((ch === "\n" || ch === "\r") && !inQuotes) {
-      if (cur.length || row.length) { row.push(cur); rows.push(row); }
-      cur = ""; row = [];
+    if (ch === '"' && inQuotes && next === '"') {
+      cur += '"';
+      i++;
       continue;
     }
+    if (ch === '"') {
+      inQuotes = !inQuotes;
+      continue;
+    }
+    if (ch === "," && !inQuotes) {
+      row.push(cur);
+      cur = "";
+      continue;
+    }
+    if ((ch === "\n" || ch === "\r") && !inQuotes) {
+      if (ch === "\r" && next === "\n") i++;
+      if (cur.length || row.length) {
+        row.push(cur);
+        rows.push(row);
+      }
+      cur = "";
+      row = [];
+      continue;
+    }
+
     cur += ch;
   }
-  if (cur.length || row.length) { row.push(cur); rows.push(row); }
-  return rows.filter(r => r.some(c => String(c).trim() !== ""));
+
+  if (cur.length || row.length) {
+    row.push(cur);
+    rows.push(row);
+  }
+
+  return rows.filter((r) => r.some((c) => String(c).trim() !== ""));
 }
 
-function normKey(v = "") {
+function normKey(v = ""): string {
   return String(v)
     .trim()
     .toLowerCase()
@@ -93,42 +54,48 @@ function normKey(v = "") {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-function normDept(v = "") {
-  return String(v)
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\s+/g, "");
+function normDept(v = ""): string {
+  return normKey(v).replace(/\s+/g, "");
 }
 
-function toISODate(s = "") {
+function toISODate(s = ""): string {
   const v = String(s).trim();
   if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+
   const m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
   if (m) return `${m[3]}-${m[2]}-${m[1]}`;
-  return v; // fallback
+
+  return v;
 }
 
 export async function GET() {
   const csvUrl = process.env.SHEET_CSV_URL;
-  if (!csvUrl) return Response.json({ ok: false, error: "SHEET_CSV_URL não configurada." }, { status: 500 });
+  if (!csvUrl) {
+    return Response.json(
+      { ok: false, error: "SHEET_CSV_URL nao configurada." },
+      { status: 500 }
+    );
+  }
 
   const res = await fetch(csvUrl, {
     redirect: "follow",
-    headers: { "Accept": "text/csv,text/plain,*/*", "User-Agent": "Mozilla/5.0" },
-    next: { revalidate: 60 }
+    headers: { Accept: "text/csv,text/plain,*/*", "User-Agent": "Mozilla/5.0" },
+    next: { revalidate: 60 },
   });
 
   if (!res.ok) {
-    return Response.json({ ok: false, error: `Falha ao buscar CSV (${res.status})` }, { status: 502 });
+    return Response.json(
+      { ok: false, error: `Falha ao buscar CSV (${res.status})` },
+      { status: 502 }
+    );
   }
 
   const text = await res.text();
   const rows = parseCSV(text);
-  const header = rows[0].map(normKey);
+  if (!rows.length) return Response.json({ ok: true, events: [] });
 
-  const idx = (name) => header.indexOf(normKey(name));
+  const header = rows[0].map(normKey);
+  const idx = (name: string) => header.indexOf(normKey(name));
 
   const iData = idx("data");
   const iHora = idx("hora");
@@ -136,24 +103,26 @@ export async function GET() {
   const iDestaque = idx("destaque");
   const iDept = idx("departamento");
 
-  const events = rows.slice(1).map((r, rowIndex) => {
-    const data = toISODate(r[iData] ?? "");
-    const hora = (r[iHora] ?? "").trim();
-    const evento = (r[iEvento] ?? "").trim();
-    const destaqueRaw = (r[iDestaque] ?? "").trim();
-    const deptRaw = (r[iDept] ?? "").trim();
+  const events = rows
+    .slice(1)
+    .map((r, rowIndex) => {
+      const data = toISODate(r[iData] ?? "");
+      const hora = String(r[iHora] ?? "").trim();
+      const evento = String(r[iEvento] ?? "").trim();
+      const destaqueRaw = String(r[iDestaque] ?? "").trim();
+      const deptRaw = String(r[iDept] ?? "").trim();
 
-    return {
-      row: rowIndex + 2, // linha real na planilha (p/ editar/apagar)
-      data,
-      hora,
-      evento,
-      destaque: /^(sim|s|true|1)$/i.test(destaqueRaw),
-      departamento: normDept(deptRaw), // "musica" | "ministerio" | ""
-      departamento_label: deptRaw
-    };
-  }).filter(e => e.data && e.evento);
+      return {
+        row: rowIndex + 2,
+        data,
+        hora,
+        evento,
+        destaque: /^(sim|s|true|1)$/i.test(destaqueRaw),
+        departamento: normDept(deptRaw),
+        departamento_label: deptRaw,
+      };
+    })
+    .filter((e) => e.data && e.evento);
 
   return Response.json({ ok: true, events });
-}
 }
