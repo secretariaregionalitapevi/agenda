@@ -2340,6 +2340,19 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
     return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
+  function normalize_(v){
+    return String(v || "")
+      .trim()
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function normalizeDepartamento_(v){
+    const s = normalize_(v).replace(/\s+/g, "");
+    if (s === "musica" || s === "ministerio") return s;
+    return "";
+  }
+
   function pad2(n){ return String(n).padStart(2,'0'); }
 
   function parseDateAny(raw){
@@ -2419,27 +2432,68 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
   async function fetchSheetEvents(){
     const resp = await fetch("/api/events?cb=" + Date.now(), { cache: "no-store" });
     const json = await resp.json().catch(() => ({}));
-    if (!resp.ok || !json.ok) {
-      const msg = (json && json.error) ? json.error : `Falha ao ler /api/events (${resp.status}).`;
-      throw new Error(msg);
+
+    if (resp.ok && json && json.ok) {
+      ALL_EVENTS_RAW = Array.isArray(json.data) ? json.data : (Array.isArray(json.events) ? json.events : []);
+
+      // Normaliza para o formato usado no calendário
+      const items = ALL_EVENTS_RAW.map((e) => {
+        const date = parseDateAny(e.data);
+        return {
+          row: e.row,
+          date,
+          time: String(e.hora || "").trim(),
+          event: String(e.evento || "").trim(),
+          isRed: (String(e.destaque || "").trim().toUpperCase() === "SIM") || e.destaque === true,
+          dept: String(e.departamento || "").trim().toLowerCase()
+        };
+      }).filter(it => it.date && it.event);
+
+      return items;
     }
 
-    ALL_EVENTS_RAW = Array.isArray(json.data) ? json.data : (Array.isArray(json.events) ? json.events : []);
+    // Fallback para deploy estático (sem /api/events): lê CSV público direto
+    if (resp.status === 404) {
+      const csvResp = await fetch(CSV_URL + (CSV_URL.includes("?") ? "&" : "?") + "cb=" + Date.now(), { cache: "no-store" });
+      if (!csvResp.ok) throw new Error(`Falha ao ler CSV publicado (${csvResp.status}).`);
+      const csvText = await csvResp.text();
+      const rows = parseCSV(csvText);
+      if (!rows.length) return [];
 
-    // Normaliza para o formato usado no calendário
-    const items = ALL_EVENTS_RAW.map((e) => {
-      const date = parseDateAny(e.data);
-      return {
+      const header = rows[0].map(h => normalize_(h));
+      const iData = header.indexOf("data");
+      const iHora = header.indexOf("hora");
+      const iEvento = header.indexOf("evento");
+      const iDestaque = header.indexOf("destaque");
+      const iDept = header.indexOf("departamento");
+
+      const outRaw = [];
+      for (let i = 1; i < rows.length; i++) {
+        const r = rows[i];
+        const item = {
+          row: i + 1,
+          data: String(r[iData >= 0 ? iData : 0] || "").trim(),
+          hora: String(r[iHora >= 0 ? iHora : 1] || "").trim(),
+          evento: String(r[iEvento >= 0 ? iEvento : 2] || "").trim(),
+          destaque: String(r[iDestaque >= 0 ? iDestaque : 3] || "").trim(),
+          departamento: normalizeDepartamento_(r[iDept >= 0 ? iDept : 4] || "")
+        };
+        if (item.data && item.evento) outRaw.push(item);
+      }
+      ALL_EVENTS_RAW = outRaw;
+
+      return outRaw.map((e) => ({
         row: e.row,
-        date,
-        time: String(e.hora || "").trim(),
-        event: String(e.evento || "").trim(),
-        isRed: (String(e.destaque || "").trim().toUpperCase() === "SIM") || e.destaque === true,
-        dept: String(e.departamento || "").trim().toLowerCase()
-      };
-    }).filter(it => it.date && it.event);
+        date: parseDateAny(e.data),
+        time: e.hora,
+        event: e.evento,
+        isRed: String(e.destaque || "").trim().toUpperCase() === "SIM",
+        dept: e.departamento
+      })).filter(it => it.date && it.event);
+    }
 
-    return items;
+    const msg = (json && json.error) ? json.error : `Falha ao ler /api/events (${resp.status}).`;
+    throw new Error(msg);
   }
 
   async function refreshFromSheet(){
