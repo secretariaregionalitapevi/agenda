@@ -2413,9 +2413,32 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
   const btnNovo = document.getElementById("btnNovo");
   const btnExcluir = document.getElementById("btnExcluir");
   const btnRecarregar = document.getElementById("btnRecarregar");
+  const btnSair = document.getElementById("btnSair");
+
+  function getAdminPassword(){
+    // some quando o navegador/app é fechado
+    let p = sessionStorage.getItem("ccbagenda_admin_password") || "";
+    if (!p){
+      p = prompt("Senha do Admin:") || "";
+      p = String(p).trim();
+      if (!p) return "";
+      sessionStorage.setItem("ccbagenda_admin_password", p);
+    }
+    return p;
+  }
+
+  function clearAdminPassword(){
+    sessionStorage.removeItem("ccbagenda_admin_password");
+  }
 
   function openAdmin(){
     if (!adminBackdrop) return;
+    // pede a senha ao abrir (simples)
+    const pw = getAdminPassword();
+    if (!pw){
+      closeAdmin();
+      return;
+    }
     adminBackdrop.style.display = "flex";
     adminBackdrop.setAttribute("aria-hidden", "false");
     renderAdminList();
@@ -2534,10 +2557,15 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
 
   async function adminSend(payload){
     setMsg("Salvando...", "");
+
+    // garante senha antes de enviar
+    const pw = getAdminPassword();
+    if (!pw) throw new Error("Senha do Admin obrigatória.");
+
     const resp = await fetch(ADMIN_WEBAPP_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ ...payload, password: pw })
     });
     const json = await resp.json().catch(() => ({}));
     if (!resp.ok || !json.ok){
@@ -2576,6 +2604,15 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
       if (btnRecarregar){
         btnRecarregar.addEventListener("click", () => {
           refreshFromSheet().then(()=>renderAdminList()).catch(err => setMsg(String(err.message||err), "err"));
+        });
+      }
+
+      if (btnSair){
+        btnSair.addEventListener("click", () => {
+          clearAdminPassword();
+          clearForm();
+          setMsg("Sessão do admin encerrada.", "");
+          closeAdmin();
         });
       }
 
@@ -2716,7 +2753,10 @@ if ("serviceWorker" in navigator) {
               <div style="font-weight:700">Eventos</div>
               <div class="hint">Mostra mês + departamento selecionados no topo.</div>
             </div>
-            <button id="btnRecarregar" type="button" class="btn-secondary">Recarregar</button>
+            <div style="display:flex; gap:8px; align-items:center">
+              <button id="btnSair" type="button" class="btn-secondary">Sair</button>
+              <button id="btnRecarregar" type="button" class="btn-secondary">Recarregar</button>
+            </div>
           </div>
           <div id="adminList" class="list-items"></div>
         </div>

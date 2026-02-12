@@ -22,6 +22,7 @@ Crie `.env.local` na raiz (ou configure no Vercel) com base em `.env.example`:
 - `SHEET_CSV_URL`
 - `APPS_SCRIPT_URL`
 - `ADMIN_KEY`
+- `ADMIN_PASSWORD`
 
 ## 4) Rodar local
 ```bash
@@ -35,13 +36,14 @@ npm run dev
   - `SHEET_CSV_URL`
   - `APPS_SCRIPT_URL`
   - `ADMIN_KEY`
+  - `ADMIN_PASSWORD`
 - Deploy
 
 Docs oficiais (Vercel env vars): https://vercel.com/docs/projects/environment-variables
 
 ## 6) Admin no celular
 No seu app (site), use o botão/área de admin que já existe no HTML para criar/editar/excluir.
-A API `/api/admin` injeta a `ADMIN_KEY` automaticamente.
+A tela pede uma **senha simples** (`ADMIN_PASSWORD`) e a API `/api/admin` injeta a `ADMIN_KEY` automaticamente (a chave real nunca vai para o navegador).
 
 ## Referências confiáveis
 - Web App no Apps Script: https://developers.google.com/apps-script/guides/web
