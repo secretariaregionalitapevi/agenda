@@ -89,5 +89,5 @@ export async function GET() {
     };
   }).filter(e => e.data && e.evento);
 
-  return Response.json({ ok: true, events });
+  return Response.json({ ok: true, data: events, events });
 }
