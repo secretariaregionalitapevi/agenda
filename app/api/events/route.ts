@@ -1,9 +1,9 @@
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 
 function parseCSV(text: string): string[][] {
   const rows: string[][] = [];
   let row: string[] = [];
-  let cur = '';
+  let cur = "";
   let inQuotes = false;
 
   for (let i = 0; i < text.length; i++) {
@@ -24,15 +24,15 @@ function parseCSV(text: string): string[][] {
 
     if (c === '"') {
       inQuotes = true;
-    } else if (c === ',') {
+    } else if (c === ",") {
       row.push(cur);
-      cur = '';
-    } else if (c === '\n') {
+      cur = "";
+    } else if (c === "\n") {
       row.push(cur);
       rows.push(row);
       row = [];
-      cur = '';
-    } else if (c === '\r') {
+      cur = "";
+    } else if (c === "\r") {
       // ignore
     } else {
       cur += c;
@@ -40,27 +40,24 @@ function parseCSV(text: string): string[][] {
   }
   row.push(cur);
   rows.push(row);
-  return rows.filter(r => r.some(cell => String(cell).trim() !== ''));
+  return rows.filter(r => r.some(cell => String(cell).trim() !== ""));
 }
 
 export async function GET() {
   const csvUrl = process.env.SHEET_CSV_URL;
   if (!csvUrl) {
-    return new Response(JSON.stringify({ ok: false, error: 'SHEET_CSV_URL não configurada.' }), {
+    return new Response(JSON.stringify({ ok:false, error:"SHEET_CSV_URL não configurada." }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      headers: { "Content-Type": "application/json; charset=utf-8" }
     });
   }
 
   const res = await fetch(csvUrl, { next: { revalidate: 60 } });
   if (!res.ok) {
-    return new Response(
-      JSON.stringify({ ok: false, error: `Falha ao buscar CSV: ${res.status}` }),
-      {
-        status: 502,
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      }
-    );
+    return new Response(JSON.stringify({ ok:false, error:`Falha ao buscar CSV: ${res.status}` }), {
+      status: 502,
+      headers: { "Content-Type": "application/json; charset=utf-8" }
+    });
   }
 
   const text = await res.text();
@@ -69,31 +66,28 @@ export async function GET() {
 
   const idx = (name: string) => header.indexOf(name);
 
-  const iData = idx('data');
-  const iHora = idx('hora');
-  const iEvento = idx('evento');
-  const iDestaque = idx('destaque');
-  const iDept = idx('departamento');
+  const iData = idx("data");
+  const iHora = idx("hora");
+  const iEvento = idx("evento");
+  const iDestaque = idx("destaque");
+  const iDept = idx("departamento");
 
-  const data = table
-    .slice(1)
-    .map((r, k) => {
-      const get = (i: number) => (i >= 0 ? (r[i] ?? '') : '');
-      return {
-        row: k + 2, // sheet row for admin edits
-        data: String(get(iData)).trim(),
-        hora: String(get(iHora)).trim(),
-        evento: String(get(iEvento)).trim(),
-        destaque: String(get(iDestaque)).trim(),
-        departamento: String(get(iDept)).trim(),
-      };
-    })
-    .filter(e => e.data && e.evento);
+  const data = table.slice(1).map((r, k) => {
+    const get = (i: number) => (i >= 0 ? (r[i] ?? "") : "");
+    return {
+      row: k + 2, // sheet row for admin edits
+      data: String(get(iData)).trim(),
+      hora: String(get(iHora)).trim(),
+      evento: String(get(iEvento)).trim(),
+      destaque: String(get(iDestaque)).trim(),
+      departamento: String(get(iDept)).trim()
+    };
+  }).filter(e => e.data && e.evento);
 
-  return new Response(JSON.stringify({ ok: true, data }), {
+  return new Response(JSON.stringify({ ok:true, data }), {
     headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
-    },
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300"
+    }
   });
 }
