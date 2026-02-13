@@ -59,14 +59,11 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
   .right{ padding:2px 8px; font-size:10px; gap:1px; }
   .evt{ line-height:1.1; }
   .page-no{ font-size:10px; bottom:3mm; }
-}
-
-  .wrapper{max-width:none;padding:0;gap:0}
-  .sheet{
-    width:210mm; height:297mm;
-    page-break-after:always;
-    border:none; border-radius:0; box-shadow:none;
-    padding:18mm 16mm 14mm;
+  .sheet[data-kind="month"]{ overflow:hidden; }
+  .sheet[data-kind="month"] .table{
+    transform-origin: top left;
+    transform: scale(var(--table-print-scale,1));
+    width: calc(100% / var(--table-print-scale,1));
   }
 }
 
@@ -414,6 +411,48 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 }
 .swal2-cancel{
   border-radius:10px !important;
+}
+
+/* ===== Mobile fit ===== */
+@media (max-width:640px){
+  body{overflow-x:hidden}
+  .wrapper{
+    max-width:100%;
+    padding:8px;
+    gap:10px;
+  }
+  .sheet{
+    width:100%;
+    max-width:100%;
+    margin:0 auto 10px;
+    padding:12px 10px 24px;
+    overflow-x:hidden;
+  }
+  .controls{
+    position:static;
+    width:100%;
+    margin:6px 0 10px;
+    padding:10px;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .ctrl-left,.ctrl-right{
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .controls select,.controls button{
+    width:100%;
+    min-width:0;
+  }
+  .year-grid{grid-template-columns:1fr}
+  .month-name{font-size:22px}
+  .r{grid-template-columns:70px 1fr;min-height:20px}
+  .left{padding:2px 6px;font-size:11px;gap:6px}
+  .dw{font-size:10px}
+  .right{padding:2px 6px;font-size:10px}
 }
 </style>
 </head>
@@ -2122,6 +2161,9 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <script>
 
 const ADMIN_WEBAPP_URL = "/api/admin";
+// Fallback para ambientes onde /api/admin não está disponível no deploy.
+const ADMIN_FALLBACK_WEBAPP_URL = "https://script.google.com/macros/s/AKfycby6sLTL_t_DzPv5ZcglPowI8uwVHHgVhg5SzMGtG-wTdQ84JrzdsFbGqt0gV6OnY80M/exec";
+const ADMIN_FALLBACK_KEY = "CCB@1039*";
 (function(){
   const sel = document.getElementById("monthSelect");
   const btn = document.getElementById("printBtn");
@@ -2161,6 +2203,31 @@ const ADMIN_WEBAPP_URL = "/api/admin";
     });
   }
 
+  function fitMonthSheetsForPrint(){
+    const MM_TO_PX = 3.7795275591;
+    const contentHeightPx = (210 - 12) * MM_TO_PX; // A5 altura - paddings verticais (6mm + 6mm)
+
+    sheets.forEach(s=>{
+      s.style.removeProperty("--table-print-scale");
+      if ((s.getAttribute("data-kind") || "") !== "month") return;
+
+      const table = s.querySelector(".table");
+      if (!table) return;
+      const head = s.querySelector(".month-head");
+      const pageNo = s.querySelector(".page-no");
+
+      const headH = head ? head.getBoundingClientRect().height : 0;
+      const pageNoH = pageNo ? pageNo.getBoundingClientRect().height : 0;
+      const tableH = table.scrollHeight;
+      const available = contentHeightPx - headH - pageNoH - 10;
+
+      if (tableH > 0 && available > 0){
+        const scale = Math.max(0.62, Math.min(1, available / tableH));
+        s.style.setProperty("--table-print-scale", String(scale.toFixed(3)));
+      }
+    });
+  }
+
   // default: Janeiro (como seu PDF por padrão)
   if(sel){
     sel.value = "all";
@@ -2175,14 +2242,20 @@ const ADMIN_WEBAPP_URL = "/api/admin";
   if(btn){
     btn.addEventListener("click", ()=>{
       const month = sel ? sel.value : "all";
+      fitMonthSheetsForPrint();
       markPrint(month);
       window.print();
     });
   }
 
+  window.addEventListener("beforeprint", fitMonthSheetsForPrint);
+
   // garante limpeza após imprimir
   window.addEventListener("afterprint", ()=>{
-    sheets.forEach(s=>s.classList.remove("print-hide"));
+    sheets.forEach(s=>{
+      s.classList.remove("print-hide");
+      s.style.removeProperty("--table-print-scale");
+    });
   });
 })();
 </script>
@@ -2713,6 +2786,27 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
   async function adminSend(payload){
     setMsg("Salvando...", "");
 
+    function parseResponseText(resp, text){
+      let json = {};
+      try {
+        json = text ? JSON.parse(text) : {};
+      } catch {
+        json = { ok: resp.ok, error: text || `Falha (${resp.status})` };
+      }
+      return json;
+    }
+
+    async function doDirectFallback(){
+      const resp = await fetch(ADMIN_FALLBACK_WEBAPP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...payload, key: ADMIN_FALLBACK_KEY })
+      });
+      const text = await resp.text();
+      const json = parseResponseText(resp, text);
+      return { resp, json };
+    }
+
     async function doPost(pw){
       const resp = await fetch(ADMIN_WEBAPP_URL, {
         method: "POST",
@@ -2720,8 +2814,15 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
         body: JSON.stringify({ ...payload, password: pw })
       });
       const text = await resp.text();
-      let json = {};
-      try { json = text ? JSON.parse(text) : {}; } catch { json = { ok: resp.ok, error: text || `Falha (${resp.status})` }; }
+      let json = parseResponseText(resp, text);
+
+      // Em alguns deploys estáticos no Vercel, /api/admin não existe (404 NOT_FOUND).
+      const msg = String((json && json.error) || "");
+      const notFoundApi = resp.status === 404 || /NOT_FOUND/i.test(msg);
+      if (notFoundApi){
+        return doDirectFallback();
+      }
+
       return { resp, json };
     }
 
