@@ -1,6 +1,8 @@
 function parseCSV(text) {
-  const rows = [];
-  let row = [], cur = "", inQuotes = false;
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let cur = "";
+  let inQuotes = false;
 
   for (let i = 0; i < text.length; i++) {
     const ch = text[i], next = text[i + 1];
