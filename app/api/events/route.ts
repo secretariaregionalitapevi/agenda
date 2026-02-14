@@ -1,3 +1,9 @@
+﻿export const runtime = "nodejs";
+
+function cleanEnv(v = "") {
+  return String(v).trim().replace(/^['"]+|['"]+$/g, "");
+}
+
 function parseCSV(text) {
   const rows: string[][] = [];
   let row: string[] = [];
@@ -29,7 +35,6 @@ function normKey(v = "") {
 }
 
 function normDept(v = "") {
-  // "Música" -> "musica" | "Ministério" -> "ministerio"
   return String(v)
     .trim()
     .toLowerCase()
@@ -47,17 +52,25 @@ function toISODate(s = "") {
 }
 
 export async function GET() {
-  const csvUrl = process.env.SHEET_CSV_URL;
+  const csvUrl = cleanEnv(process.env.SHEET_CSV_URL || "");
   if (!csvUrl) {
-    return Response.json({ ok: false, error: "SHEET_CSV_URL não configurada." }, { status: 500 });
+    return Response.json({ ok: false, error: "SHEET_CSV_URL nao configurada." }, { status: 500 });
   }
 
-  const freshUrl = `${csvUrl}${csvUrl.includes("?") ? "&" : "?"}cb=${Date.now()}`;
-  const res = await fetch(freshUrl, {
-    redirect: "follow",
-    headers: { "Accept": "text/csv,text/plain,*/*", "User-Agent": "Mozilla/5.0" },
-    cache: "no-store"
-  });
+  let res: Response;
+  try {
+    const freshUrl = `${csvUrl}${csvUrl.includes("?") ? "&" : "?"}cb=${Date.now()}`;
+    res = await fetch(freshUrl, {
+      redirect: "follow",
+      headers: { "Accept": "text/csv,text/plain,*/*", "User-Agent": "Mozilla/5.0" },
+      cache: "no-store"
+    });
+  } catch (err: any) {
+    return Response.json(
+      { ok: false, error: `Erro ao ler SHEET_CSV_URL: ${err?.message || "erro desconhecido"}` },
+      { status: 500 }
+    );
+  }
 
   if (!res.ok) {
     return Response.json({ ok: false, error: `Falha ao buscar CSV (${res.status})` }, { status: 502 });
@@ -82,12 +95,12 @@ export async function GET() {
     const deptRaw = String(r[iDept] ?? "").trim();
 
     return {
-      row: rowIndex + 2, // linha real na planilha (para editar/apagar)
+      row: rowIndex + 2,
       data,
       hora,
       evento,
       destaque: /^(sim|s|true|1)$/i.test(destaqueRaw),
-      departamento: normDept(deptRaw), // musica | ministerio | ""
+      departamento: normDept(deptRaw),
       departamento_label: deptRaw
     };
   }).filter(e => e.data && e.evento);

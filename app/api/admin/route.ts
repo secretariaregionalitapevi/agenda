@@ -1,5 +1,9 @@
 export const runtime = "nodejs";
 
+function cleanEnv(v = "") {
+  return String(v).trim().replace(/^['"]+|['"]+$/g, "");
+}
+
 function parseAdminKeys(raw: string) {
   const base = raw
     .split(/[\r\n,;]+/)
@@ -45,9 +49,9 @@ async function readUpstream(resp: Response) {
 }
 
 export async function POST(req: Request) {
-  const scriptUrl = process.env.APPS_SCRIPT_URL;
-  const adminKeyRaw = process.env.ADMIN_KEY;
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const scriptUrl = cleanEnv(process.env.APPS_SCRIPT_URL || "");
+  const adminKeyRaw = cleanEnv(process.env.ADMIN_KEY || "");
+  const adminPassword = cleanEnv(process.env.ADMIN_PASSWORD || "");
   const adminKeys = adminKeyRaw ? parseAdminKeys(adminKeyRaw) : [];
 
   if (!scriptUrl) {
