@@ -28,6 +28,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
   box-shadow:0 1px 2px rgba(0,0,0,.05);
   padding:18px 18px 32px;
   position:relative;
+  width:100%;
 }
 @media (min-width:900px){
   /* aproximar proporção A4 na tela */
@@ -59,12 +60,6 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
   .right{ padding:2px 8px; font-size:10px; gap:1px; }
   .evt{ line-height:1.1; }
   .page-no{ font-size:10px; bottom:3mm; }
-  .sheet[data-kind="month"]{ overflow:hidden; }
-  .sheet[data-kind="month"] .table{
-    transform-origin: top left;
-    transform: scale(var(--table-print-scale,1));
-    width: calc(100% / var(--table-print-scale,1));
-  }
 }
 
 /* page numbers */
@@ -2203,31 +2198,6 @@ const ADMIN_FALLBACK_KEY = "CCB@1039*";
     });
   }
 
-  function fitMonthSheetsForPrint(){
-    const MM_TO_PX = 3.7795275591;
-    const contentHeightPx = (210 - 12) * MM_TO_PX; // A5 altura - paddings verticais (6mm + 6mm)
-
-    sheets.forEach(s=>{
-      s.style.removeProperty("--table-print-scale");
-      if ((s.getAttribute("data-kind") || "") !== "month") return;
-
-      const table = s.querySelector(".table");
-      if (!table) return;
-      const head = s.querySelector(".month-head");
-      const pageNo = s.querySelector(".page-no");
-
-      const headH = head ? head.getBoundingClientRect().height : 0;
-      const pageNoH = pageNo ? pageNo.getBoundingClientRect().height : 0;
-      const tableH = table.scrollHeight;
-      const available = contentHeightPx - headH - pageNoH - 10;
-
-      if (tableH > 0 && available > 0){
-        const scale = Math.max(0.62, Math.min(1, available / tableH));
-        s.style.setProperty("--table-print-scale", String(scale.toFixed(3)));
-      }
-    });
-  }
-
   // default: Janeiro (como seu PDF por padrão)
   if(sel){
     sel.value = "all";
@@ -2242,20 +2212,14 @@ const ADMIN_FALLBACK_KEY = "CCB@1039*";
   if(btn){
     btn.addEventListener("click", ()=>{
       const month = sel ? sel.value : "all";
-      fitMonthSheetsForPrint();
       markPrint(month);
       window.print();
     });
   }
 
-  window.addEventListener("beforeprint", fitMonthSheetsForPrint);
-
   // garante limpeza após imprimir
   window.addEventListener("afterprint", ()=>{
-    sheets.forEach(s=>{
-      s.classList.remove("print-hide");
-      s.style.removeProperty("--table-print-scale");
-    });
+    sheets.forEach(s=>s.classList.remove("print-hide"));
   });
 })();
 </script>
