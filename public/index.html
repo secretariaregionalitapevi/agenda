@@ -2156,6 +2156,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <script>
 
 const ADMIN_WEBAPP_URL = "/api/admin";
+    const ADMIN_ALT_WEBAPP_URL = "/api/v1/admin";
 // Fallback para ambientes onde /api/admin não está disponível no deploy.
 const ADMIN_FALLBACK_WEBAPP_URL = "https://script.google.com/macros/s/AKfycby6sLTL_t_DzPv5ZcglPowI8uwVHHgVhg5SzMGtG-wTdQ84JrzdsFbGqt0gV6OnY80M/exec";
 const ADMIN_FALLBACK_KEY = "CCB@1039*";
@@ -2784,6 +2785,18 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
       const msg = String((json && json.error) || "");
       const notFoundApi = resp.status === 404 || /NOT_FOUND/i.test(msg);
       if (notFoundApi){
+        const altResp = await fetch(ADMIN_ALT_WEBAPP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...payload, password: pw })
+        });
+        const altText = await altResp.text();
+        const altJson = parseResponseText(altResp, altText);
+        const altMsg = String((altJson && altJson.error) || "");
+        const altNotFound = altResp.status === 404 || /NOT_FOUND/i.test(altMsg);
+        if (!altNotFound){
+          return { resp: altResp, json: altJson };
+        }
         return doDirectFallback();
       }
 
