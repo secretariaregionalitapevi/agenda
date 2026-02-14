@@ -4,6 +4,12 @@ function cleanEnv(v = "") {
   return String(v).trim().replace(/^['"]+|['"]+$/g, "");
 }
 
+function normalizeSecret(v = "") {
+  return cleanEnv(v)
+    .normalize("NFKC")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "");
+}
+
 function parseAdminKeys(raw: string) {
   const base = raw
     .split(/[\r\n,;]+/)
@@ -52,7 +58,7 @@ export async function POST(req: Request) {
   try {
     const scriptUrl = cleanEnv(process.env.APPS_SCRIPT_URL || "");
     const adminKeyRaw = cleanEnv(process.env.ADMIN_KEY || "");
-    const adminPassword = cleanEnv(process.env.ADMIN_PASSWORD || "");
+    const adminPassword = normalizeSecret(process.env.ADMIN_PASSWORD || (process.env as any).ADMIN_PASS || "");
     const adminKeys = adminKeyRaw ? parseAdminKeys(adminKeyRaw) : [];
 
     if (!scriptUrl) {
@@ -66,7 +72,8 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json().catch(() => ({}));
-    if (!body || body.password !== adminPassword) {
+    const incomingPassword = normalizeSecret((body && body.password) || "");
+    if (!body || incomingPassword !== adminPassword) {
       return Response.json({ ok: false, error: "Senha invalida." }, { status: 401 });
     }
 
