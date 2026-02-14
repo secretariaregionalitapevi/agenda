@@ -2,6 +2,45 @@ function cleanEnv(v) {
   return String(v || "").trim().replace(/^['"]+|['"]+$/g, "");
 }
 
+function normalizeSecret(v) {
+  return cleanEnv(v)
+    .normalize("NFKC")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "");
+}
+
+async function readRawBody(req) {
+  return await new Promise((resolve, reject) => {
+    let data = "";
+    req.on("data", (chunk) => {
+      data += chunk;
+      // 1MB guard
+      if (data.length > 1024 * 1024) {
+        reject(new Error("Payload muito grande"));
+      }
+    });
+    req.on("end", () => resolve(data));
+    req.on("error", reject);
+  });
+}
+
+async function parseJsonBody(req) {
+  if (req.body && typeof req.body === "object") return req.body;
+  if (typeof req.body === "string" && req.body.trim()) {
+    try {
+      return JSON.parse(req.body);
+    } catch {
+      return {};
+    }
+  }
+  const raw = await readRawBody(req);
+  if (!raw || !raw.trim()) return {};
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+}
+
 function parseAdminKeys(raw) {
   const base = String(raw || "")
     .split(/[\r\n,;]+/)
@@ -45,15 +84,21 @@ module.exports = async function handler(req, res) {
   }
 
   const scriptUrl = cleanEnv(process.env.APPS_SCRIPT_URL);
-  const adminPassword = cleanEnv(process.env.ADMIN_PASSWORD);
+  const adminPassword = normalizeSecret(process.env.ADMIN_PASSWORD || process.env.ADMIN_PASS);
   const adminKeys = parseAdminKeys(cleanEnv(process.env.ADMIN_KEY));
 
   if (!scriptUrl) return res.status(500).json({ ok: false, error: "APPS_SCRIPT_URL nao configurada." });
   if (!adminPassword) return res.status(500).json({ ok: false, error: "ADMIN_PASSWORD nao configurada." });
   if (!adminKeys.length) return res.status(500).json({ ok: false, error: "ADMIN_KEY nao configurada." });
 
-  const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
-  if (!body || body.password !== adminPassword) {
+  let body = {};
+  try {
+    body = await parseJsonBody(req);
+  } catch {
+    body = {};
+  }
+
+  if (!body || normalizeSecret(body.password) !== adminPassword) {
     return res.status(401).json({ ok: false, error: "Senha invalida." });
   }
 
@@ -84,4 +129,3 @@ module.exports = async function handler(req, res) {
   if (last.json && typeof last.json === "object") return res.status(200).json(last.json.ok === undefined ? { ok: true, ...last.json } : last.json);
   return res.status(200).json({ ok: true, message: last.text || "OK" });
 };
-
