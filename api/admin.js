@@ -84,7 +84,9 @@ module.exports = async function handler(req, res) {
   }
 
   const scriptUrl = cleanEnv(process.env.APPS_SCRIPT_URL);
-  const adminPassword = normalizeSecret(process.env.ADMIN_PASSWORD || process.env.ADMIN_PASS);
+  const envPasswordRaw = process.env.ADMIN_PASSWORD || process.env.ADMIN_PASS || "";
+  const envPasswordSource = process.env.ADMIN_PASSWORD ? "ADMIN_PASSWORD" : (process.env.ADMIN_PASS ? "ADMIN_PASS" : "NONE");
+  const adminPassword = normalizeSecret(envPasswordRaw);
   const adminKeys = parseAdminKeys(cleanEnv(process.env.ADMIN_KEY));
 
   if (!scriptUrl) return res.status(500).json({ ok: false, error: "APPS_SCRIPT_URL nao configurada." });
@@ -98,15 +100,27 @@ module.exports = async function handler(req, res) {
     body = {};
   }
 
-  if (!body || normalizeSecret(body.password) !== adminPassword) {
-    return res.status(401).json({ ok: false, error: "Senha invalida." });
+  const incomingPassword = normalizeSecret(body && body.password);
+  if (!body || incomingPassword !== adminPassword) {
+    return res.status(401).json({
+      ok: false,
+      error: "Senha invalida.",
+      debug: {
+        source: envPasswordSource,
+        expected_len: adminPassword.length,
+        received_len: incomingPassword.length,
+        has_env_password: Boolean(adminPassword),
+      }
+    });
   }
 
   const { password, ...rest } = body;
   let last = null;
 
   for (const key of adminKeys) {
-    const payload = { ...rest, key };
+    const actionRaw = String(rest.action || "").trim().toLowerCase();
+    const action = (actionRaw === "create" || actionRaw === "update") ? "upsert" : actionRaw;
+    const payload = { ...rest, action, key };
     let upstream;
     try {
       upstream = await fetch(scriptUrl, {
