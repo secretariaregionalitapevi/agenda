@@ -1,4 +1,4 @@
-const CACHE = "ccbagenda-v4";
+const CACHE = "ccbagenda-v5";
 const ASSETS = ["/", "/manifest.webmanifest", "/icon-192.png", "/icon-512.png"];
 
 self.addEventListener("install", (event) => {
@@ -20,7 +20,15 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
 
   if (url.pathname.startsWith("/api/")) {
-    event.respondWith(fetch(req).catch(() => caches.match(req)));
+    event.respondWith(
+      fetch(req).catch(
+        () =>
+          new Response(JSON.stringify({ ok: false, error: "offline" }), {
+            status: 503,
+            headers: { "Content-Type": "application/json" },
+          })
+      )
+    );
     return;
   }
 
