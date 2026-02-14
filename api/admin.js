@@ -118,9 +118,7 @@ module.exports = async function handler(req, res) {
   let last = null;
 
   for (const key of adminKeys) {
-    const actionRaw = String(rest.action || "").trim().toLowerCase();
-    const action = (actionRaw === "create" || actionRaw === "update") ? "upsert" : actionRaw;
-    const payload = { ...rest, action, key };
+    const payload = { ...rest, key };
     let upstream;
     try {
       upstream = await fetch(scriptUrl, {

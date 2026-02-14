@@ -83,9 +83,7 @@ export async function POST(req: Request) {
     let lastParsed: any = null;
 
     for (const key of adminKeys) {
-      const actionRaw = String(rest.action || "").trim().toLowerCase();
-      const action = (actionRaw === "create" || actionRaw === "update") ? "upsert" : actionRaw;
-      const payload = { ...rest, action, key };
+      const payload = { ...rest, key };
       try {
         const upstream = await fetch(scriptUrl, {
           method: "POST",
