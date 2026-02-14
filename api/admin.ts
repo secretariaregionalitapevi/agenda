@@ -1,11 +1,15 @@
 ﻿import type { NextApiRequest, NextApiResponse } from "next";
 
+function cleanEnv(v?: string) {
+  return String(v || "").trim().replace(/^['"]+|['"]+$/g, "");
+}
+
 function parseAdminKeys(raw: string) {
   const base = raw
     .split(/[\r\n,;]+/)
     .map((v) => String(v || "").trim())
     .filter(Boolean)
-    .map((v) => v.replace(/^['\"]+|['\"]+$/g, ""));
+    .map((v) => v.replace(/^['"]+|['"]+$/g, ""));
 
   const out: string[] = [];
   const seen = new Set<string>();
@@ -49,16 +53,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ ok: false, error: "Metodo nao permitido." });
   }
 
-  const scriptUrl = process.env.APPS_SCRIPT_URL;
-  const adminKeyRaw = process.env.ADMIN_KEY;
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const scriptUrl = cleanEnv(process.env.APPS_SCRIPT_URL);
+  const adminKeyRaw = cleanEnv(process.env.ADMIN_KEY);
+  const adminPassword = cleanEnv(process.env.ADMIN_PASSWORD);
   const adminKeys = adminKeyRaw ? parseAdminKeys(adminKeyRaw) : [];
 
   if (!scriptUrl) return res.status(500).json({ ok: false, error: "APPS_SCRIPT_URL nao configurada." });
   if (!adminKeyRaw || adminKeys.length === 0) return res.status(500).json({ ok: false, error: "ADMIN_KEY nao configurada." });
   if (!adminPassword) return res.status(500).json({ ok: false, error: "ADMIN_PASSWORD nao configurada." });
 
-  const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
+  let body: any = {};
+  try {
+    body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
+  } catch {
+    body = {};
+  }
+
   if (!body || body.password !== adminPassword) {
     return res.status(401).json({ ok: false, error: "Senha invalida." });
   }
@@ -70,31 +80,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   for (const key of adminKeys) {
     const payload = { ...rest, key };
-    const upstream = await fetch(scriptUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    let upstream: Response;
+    try {
+      upstream = await fetch(scriptUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+    } catch (err: any) {
+      return res.status(502).json({ ok: false, error: `Falha ao conectar no Apps Script: ${err?.message || "erro de rede"}` });
+    }
 
     const { text, parsed } = await readUpstream(upstream);
     lastResp = upstream;
     lastText = text;
     lastParsed = parsed;
 
-    const invalidKey =
-      parsed &&
-      typeof parsed === "object" &&
-      String(parsed.error || "").toLowerCase().includes("chave inv");
-
+    const invalidKey = parsed && typeof parsed === "object" && String(parsed.error || "").toLowerCase().includes("chave inv");
     if (upstream.ok && !invalidKey) break;
   }
 
   if (!lastResp) return res.status(502).json({ ok: false, error: "Falha ao enviar para Apps Script." });
 
   if (!lastResp.ok) {
-    const errorMsg =
-      (lastParsed && typeof lastParsed.error === "string" && lastParsed.error) ||
-      `Apps Script retornou ${lastResp.status}`;
+    const errorMsg = (lastParsed && typeof lastParsed.error === "string" && lastParsed.error) || `Apps Script retornou ${lastResp.status}`;
     return res.status(lastResp.status).json({ ok: false, error: errorMsg, upstream_status: lastResp.status, upstream_body: lastText || "" });
   }
 

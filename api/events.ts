@@ -1,5 +1,9 @@
 ﻿import type { NextApiRequest, NextApiResponse } from "next";
 
+function cleanEnv(v?: string) {
+  return String(v || "").trim().replace(/^['"]+|['"]+$/g, "");
+}
+
 function parseCSV(text: string) {
   const rows: string[][] = [];
   let row: string[] = [];
@@ -10,40 +14,21 @@ function parseCSV(text: string) {
     const ch = text[i];
     const next = text[i + 1];
 
-    if (ch === '"' && inQuotes && next === '"') {
-      cur += '"';
-      i++;
-      continue;
-    }
-    if (ch === '"') {
-      inQuotes = !inQuotes;
-      continue;
-    }
+    if (ch === '"' && inQuotes && next === '"') { cur += '"'; i++; continue; }
+    if (ch === '"') { inQuotes = !inQuotes; continue; }
 
-    if (ch === "," && !inQuotes) {
-      row.push(cur);
-      cur = "";
-      continue;
-    }
+    if (ch === "," && !inQuotes) { row.push(cur); cur = ""; continue; }
 
     if ((ch === "\n" || ch === "\r") && !inQuotes) {
-      if (cur.length || row.length) {
-        row.push(cur);
-        rows.push(row);
-      }
-      cur = "";
-      row = [];
+      if (cur.length || row.length) { row.push(cur); rows.push(row); }
+      cur = ""; row = [];
       continue;
     }
 
     cur += ch;
   }
 
-  if (cur.length || row.length) {
-    row.push(cur);
-    rows.push(row);
-  }
-
+  if (cur.length || row.length) { row.push(cur); rows.push(row); }
   return rows.filter((r) => r.some((c) => String(c).trim() !== ""));
 }
 
@@ -52,12 +37,7 @@ function normKey(v = "") {
 }
 
 function normDept(v = "") {
-  return String(v)
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\s+/g, "");
+  return String(v).trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "");
 }
 
 function toISODate(s = "") {
@@ -73,17 +53,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ ok: false, error: "Metodo nao permitido." });
   }
 
-  const csvUrl = process.env.SHEET_CSV_URL;
+  const csvUrl = cleanEnv(process.env.SHEET_CSV_URL);
   if (!csvUrl) {
     return res.status(500).json({ ok: false, error: "SHEET_CSV_URL nao configurada." });
   }
 
-  const freshUrl = `${csvUrl}${csvUrl.includes("?") ? "&" : "?"}cb=${Date.now()}`;
-  const upstream = await fetch(freshUrl, {
-    redirect: "follow",
-    headers: { Accept: "text/csv,text/plain,*/*", "User-Agent": "Mozilla/5.0" },
-    cache: "no-store",
-  });
+  let upstream: Response;
+  try {
+    const freshUrl = `${csvUrl}${csvUrl.includes("?") ? "&" : "?"}cb=${Date.now()}`;
+    upstream = await fetch(freshUrl, {
+      redirect: "follow",
+      headers: { Accept: "text/csv,text/plain,*/*", "User-Agent": "Mozilla/5.0" },
+      cache: "no-store",
+    });
+  } catch (err: any) {
+    return res.status(500).json({ ok: false, error: `Erro ao ler SHEET_CSV_URL: ${err?.message || "erro desconhecido"}` });
+  }
 
   if (!upstream.ok) {
     return res.status(502).json({ ok: false, error: `Falha ao buscar CSV (${upstream.status})` });
@@ -100,26 +85,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const iDestaque = idx("destaque");
   const iDept = idx("departamento");
 
-  const events = rows
-    .slice(1)
-    .map((r, rowIndex) => {
-      const data = toISODate(r[iData] ?? "");
-      const hora = String(r[iHora] ?? "").trim();
-      const evento = String(r[iEvento] ?? "").trim();
-      const destaqueRaw = String(r[iDestaque] ?? "").trim();
-      const deptRaw = String(r[iDept] ?? "").trim();
+  const events = rows.slice(1).map((r, rowIndex) => {
+    const data = toISODate(r[iData] ?? "");
+    const hora = String(r[iHora] ?? "").trim();
+    const evento = String(r[iEvento] ?? "").trim();
+    const destaqueRaw = String(r[iDestaque] ?? "").trim();
+    const deptRaw = String(r[iDept] ?? "").trim();
 
-      return {
-        row: rowIndex + 2,
-        data,
-        hora,
-        evento,
-        destaque: /^(sim|s|true|1)$/i.test(destaqueRaw),
-        departamento: normDept(deptRaw),
-        departamento_label: deptRaw,
-      };
-    })
-    .filter((e) => e.data && e.evento);
+    return {
+      row: rowIndex + 2,
+      data,
+      hora,
+      evento,
+      destaque: /^(sim|s|true|1)$/i.test(destaqueRaw),
+      departamento: normDept(deptRaw),
+      departamento_label: deptRaw,
+    };
+  }).filter((e) => e.data && e.evento);
 
   return res.status(200).json({ ok: true, data: events, events });
 }
