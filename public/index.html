@@ -1,9 +1,9 @@
-﻿ï¿½ï¿½<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>CalendÃ¡rio CCB Regional Itapevi 2026</title>
+<title>Calendário CCB Regional Itapevi 2026</title>
 
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#ffffff">
@@ -31,7 +31,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
   width:100%;
 }
 @media (min-width:900px){
-  /* aproximar proporÃ§Ã£o A4 na tela */
+  /* aproximar proporção A4 na tela */
   .sheet{padding:28px 34px 44px}
 }
 
@@ -49,7 +49,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
     padding:6mm 6mm 6mm;
   }
 
-  /* imprimir somente o que estÃ¡ marcado para impressÃ£o */
+  /* imprimir somente o que está marcado para impressão */
   .print-hide{ display:none !important; }
 
   /* Ajustes para caber no A5 */
@@ -141,7 +141,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 .evt{line-height:1.15;white-space:pre-wrap}
 .evt.red{color:var(--red);font-weight:800}
 
-/* separadores entre mÃºltiplos eventos no mesmo dia */
+/* separadores entre múltiplos eventos no mesmo dia */
 .right .evt + .evt{
   border-top:1px solid var(--line);
   margin-top:2px;
@@ -190,7 +190,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 
 
 
-/* === PAGE MODEL: cada .sheet = 1 pÃ¡gina A5 (frente/verso alinhado) === */
+/* === PAGE MODEL: cada .sheet = 1 página A5 (frente/verso alinhado) === */
 .sheet{
   margin: 0 auto 18px auto;
 }
@@ -204,13 +204,13 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
     break-after: auto;
   }
 }
-/* Controles nunca entram na impressÃ£o */
+/* Controles nunca entram na impressão */
 @media print{
   .controls, .controles, .toolbar{ display:none !important; }
 }
 
 
-/* === NOTES SHEETS (linhas para anotaÃ§Ãµes) === */
+/* === NOTES SHEETS (linhas para anotações) === */
 .notes-inner{
   padding: 14mm 10mm 12mm;
 }
@@ -225,10 +225,10 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 .notes-lines .line{
   height: 0;
   border-top: 1px solid #111;
-  margin: 0 0 7.2mm 0; /* espaÃ§amento das linhas (ajustado para caber em A5) */
+  margin: 0 0 7.2mm 0; /* espaçamento das linhas (ajustado para caber em A5) */
 }
 
-/* === DUPLEX: garantir pÃ¡ginas em A5 e quebras exatas === */
+/* === DUPLEX: garantir páginas em A5 e quebras exatas === */
 @media print{
   @page{ size: A5; margin: 8mm; }
   .sheet{ page-break-after: always; break-after: page; }
@@ -455,12 +455,12 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <div class="wrapper">
 <div aria-label="Controles" class="controls">
   <div class="ctrl-left">
-    <label for="monthSelect">Escolher mÃªs:</label>
+    <label for="monthSelect">Escolher mês:</label>
     <select id="monthSelect">
       <option value="all">Todos</option>
       <option value="2026-01">Janeiro</option>
       <option value="2026-02">Fevereiro</option>
-      <option value="2026-03">MarÃ§o</option>
+      <option value="2026-03">Março</option>
       <option value="2026-04">Abril</option>
       <option value="2026-05">Maio</option>
       <option value="2026-06">Junho</option>
@@ -475,8 +475,8 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
     <label for="deptSelect" class="ml">Departamento:</label>
     <select id="deptSelect">
       <option value="ambos">Ambos</option>
-      <option value="musica">MÃºsica</option>
-      <option value="ministerio">MinistÃ©rio</option>
+      <option value="musica">Música</option>
+      <option value="ministerio">Ministério</option>
     </select>
   </div>
 
@@ -486,70 +486,70 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
   </div>
 </div>
 <section class="sheet" data-kind="year">
-<div class="year-title">CalendÃ¡rio 2026</div>
+<div class="year-title">Calendário 2026</div>
 <div class="year-grid">
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Janeiro</span><span class="mini-year">2026</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
-<div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday holiday" title="ConfraternizaÃ§Ã£o Universal">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday sun">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday sun">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday sun">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday sun holiday" title="AniversÃ¡rio de SÃ£o Paulo">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+<div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday holiday" title="Confraternização Universal">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday sun">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday sun">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday sun">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday sun holiday" title="Aniversário de São Paulo">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Fevereiro</span><span class="mini-year">2026</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday sun">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday sun">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday sun">15</div><div class="mday">16</div><div class="mday holiday" title="Carnaval">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday sun">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div></div>
 </div>
 <div class="mini">
-<div class="mini-head"><span class="mini-name">MarÃ§o</span><span class="mini-year">2026</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-head"><span class="mini-name">Março</span><span class="mini-year">2026</span></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday sun">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday sun">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday sun">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday sun">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday sun">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Abril</span><span class="mini-year">2026</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
-<div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday holiday" title="Sexta-feira Santa">3</div><div class="mday">4</div><div class="mday sun holiday" title="Domingo de PÃ¡scoa">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday sun">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday sun">19</div><div class="mday">20</div><div class="mday holiday" title="Tiradentes">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday sun">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+<div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday holiday" title="Sexta-feira Santa">3</div><div class="mday">4</div><div class="mday sun holiday" title="Domingo de Páscoa">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday sun">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday sun">19</div><div class="mday">20</div><div class="mday holiday" title="Tiradentes">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday sun">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Maio</span><span class="mini-year">2026</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday holiday" title="Dia do Trabalhador">1</div><div class="mday">2</div><div class="mday sun">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday sun">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday sun">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday sun">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday sun">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Junho</span><span class="mini-year">2026</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday sun">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday sun">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday holiday" title="Corpus Christi">20</div><div class="mday sun">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday sun">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Julho</span><span class="mini-year">2026</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
-<div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday sun">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday holiday" title="RevoluÃ§Ã£o Constitucionalista">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday sun">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday sun">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday sun">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+<div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday sun">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday holiday" title="Revolução Constitucionalista">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday sun">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday sun">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday sun">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Agosto</span><span class="mini-year">2026</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday sun">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday sun">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday sun">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday sun">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday sun">30</div><div class="mday">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Setembro</span><span class="mini-year">2026</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
-<div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday sun">6</div><div class="mday holiday" title="Dia da IndependÃªncia">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday sun">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday sun">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday sun">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+<div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday sun">6</div><div class="mday holiday" title="Dia da Independência">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday sun">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday sun">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday sun">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Outubro</span><span class="mini-year">2026</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday sun">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday sun">11</div><div class="mday holiday" title="N. S. Aparecida">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday sun">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday sun">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Novembro</span><span class="mini-year">2026</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
-<div class="mini-grid"><div class="mday sun">1</div><div class="mday holiday" title="Finados">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday sun">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday sun holiday" title="ProclamaÃ§Ã£o da RepÃºblica">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday holiday" title="ConsciÃªncia Negra">20</div><div class="mday">21</div><div class="mday sun">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday sun">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
+<div class="mini-grid"><div class="mday sun">1</div><div class="mday holiday" title="Finados">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday sun">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday sun holiday" title="Proclamação da República">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday holiday" title="Consciência Negra">20</div><div class="mday">21</div><div class="mday sun">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday sun">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Dezembro</span><span class="mini-year">2026</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday sun">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday sun">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday sun">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday holiday" title="Natal">25</div><div class="mday">26</div><div class="mday sun">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 </div>
-<div class="year-holidays">01/01 ConfraternizaÃ§Ã£o Universal â¬¢ 25/01 AniversÃ¡rio de SÃ£o Paulo â¬¢ 17/02 Carnaval â¬¢ 03/04 Sexta-feira Santa â¬¢ 05/04 Domingo de PÃ¡scoa â¬¢ 21/04 Tiradentes â¬¢ 01/05 Dia do Trabalhador â¬¢ 20/06 Corpus Christi â¬¢ 09/07 RevoluÃ§Ã£o Constitucionalista â¬¢ 07/09 Dia da IndependÃªncia â¬¢ 12/10 N. S. Aparecida â¬¢ 02/11 Finados â¬¢ 15/11 ProclamaÃ§Ã£o da RepÃºblica â¬¢ 20/11 ConsciÃªncia Negra â¬¢ 25/12 Natal</div>
+<div class="year-holidays">01/01 Confraternização Universal • 25/01 Aniversário de São Paulo • 17/02 Carnaval • 03/04 Sexta-feira Santa • 05/04 Domingo de Páscoa • 21/04 Tiradentes • 01/05 Dia do Trabalhador • 20/06 Corpus Christi • 09/07 Revolução Constitucionalista • 07/09 Dia da Independência • 12/10 N. S. Aparecida • 02/11 Finados • 15/11 Proclamação da República • 20/11 Consciência Negra • 25/12 Natal</div>
 <div class="page-no">1</div>
 </section>
 <section class="sheet" data-kind="month" data-month="2026-01">
@@ -557,127 +557,127 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <div class="table">
 <div class="r">
 <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">04</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">11</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">18</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">25</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 </div>
 <div class="page-no">2</div>
@@ -687,245 +687,245 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <div class="table">
 <div class="r">
 <div class="left sun"><span class="dd">01</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">08</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">15</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">22</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 </div>
 <div class="page-no">4</div>
 </section>
 <section class="sheet" data-kind="month" data-month="2026-03">
-<div class="month-head"><div class="month-name">MARï¿½!O</div></div>
+<div class="month-head"><div class="month-name">MARÇO</div></div>
 <div class="table">
 <div class="r">
 <div class="left sun"><span class="dd">01</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">08</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">15</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">22</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">29</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 </div>
 <div class="page-no">6</div>
@@ -935,123 +935,123 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <div class="table">
 <div class="r">
 <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">05</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">12</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">19</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">26</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 </div>
 <div class="page-no">8</div>
@@ -1061,127 +1061,127 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <div class="table">
 <div class="r">
 <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">03</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">10</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">17</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">24</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">31</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 </div>
 <div class="page-no">10</div>
@@ -1191,111 +1191,111 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <div class="table">
 <div class="r">
 <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">07</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">14</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">21</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 </div>
 <div class="page-no">12</div>
@@ -1305,127 +1305,127 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <div class="table">
 <div class="r">
 <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">05</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">12</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">19</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">26</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 </div>
 <div class="page-no">14</div>
@@ -1434,128 +1434,128 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <div class="month-head"><div class="month-name">AGOSTO</div></div>
 <div class="table">
 <div class="r">
-<div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">02</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">09</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">16</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">23</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">30</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 </div>
 <div class="page-no">16</div>
@@ -1565,123 +1565,123 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <div class="table">
 <div class="r">
 <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">06</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">13</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">20</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">27</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 </div>
 <div class="page-no">18</div>
@@ -1691,127 +1691,127 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <div class="table">
 <div class="r">
 <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">04</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">11</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">18</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">25</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 </div>
 <div class="page-no">20</div>
@@ -1821,123 +1821,123 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <div class="table">
 <div class="r">
 <div class="left sun"><span class="dd">01</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">06</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">08</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">13</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">15</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">20</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">22</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">27</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">29</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 </div>
 <div class="page-no">22</div>
@@ -1947,206 +1947,206 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <div class="table">
 <div class="r">
 <div class="left"><span class="dd">01</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">02</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">03</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">04</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">05</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">06</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">07</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">08</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">09</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">10</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">11</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">12</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">13</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">14</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">15</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">16</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">17</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">18</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">19</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">20</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">21</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">22</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">23</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">24</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">25</span><span class="bar">|</span><span class="dw">Sex</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
-<div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">SÃ¡b</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="left"><span class="dd">26</span><span class="bar">|</span><span class="dw">Sáb</span></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left sun"><span class="dd">27</span><span class="bar">|</span><span class="dw">Dom</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">28</span><span class="bar">|</span><span class="dw">Seg</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">29</span><span class="bar">|</span><span class="dw">Ter</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">30</span><span class="bar">|</span><span class="dw">Qua</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 <div class="r">
 <div class="left"><span class="dd">31</span><span class="bar">|</span><span class="dw">Qui</span></div>
-<div class="right"><div class="evt">Â </div></div>
+<div class="right"><div class="evt"> </div></div>
 </div>
 </div>
 <div class="page-no">24</div>
 </section>
 <section class="sheet" data-kind="notes">
-<div class="notes-title">ANOTAï¿½!ï¿½"ES</div>
+<div class="notes-title">ANOTAÇÕES</div>
 <div class="notes-lines">
 <div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div>
 </div>
 <div class="page-no">26</div>
 </section>
 <section class="sheet" data-kind="notes">
-<div class="notes-title">ANOTAï¿½!ï¿½"ES</div>
+<div class="notes-title">ANOTAÇÕES</div>
 <div class="notes-lines">
 <div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div><div class="nline"></div>
 </div>
 <div class="page-no">27</div>
 </section>
 <section class="sheet">
-<div class="year-title">CalendÃ¡rio 2027</div>
+<div class="year-title">Calendário 2027</div>
 <div class="year-grid">
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Janeiro</span><span class="mini-year">2027</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday sun">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday sun">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday sun">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday sun">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday sun">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Fevereiro</span><span class="mini-year">2027</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday sun">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday sun">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday sun">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday sun">28</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
-<div class="mini-head"><span class="mini-name">MarÃ§o</span><span class="mini-year">2027</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-head"><span class="mini-name">Março</span><span class="mini-year">2027</span></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday sun">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday sun">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday sun">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday sun">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Abril</span><span class="mini-year">2027</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday sun">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday sun">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday sun">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday sun">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Maio</span><span class="mini-year">2027</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday sun">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday sun">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday sun">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday sun">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday sun">30</div><div class="mday">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Junho</span><span class="mini-year">2027</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday sun">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday sun">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday sun">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday sun">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Julho</span><span class="mini-year">2027</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday sun">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday sun">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday sun">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday sun">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Agosto</span><span class="mini-year">2027</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday sun">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday sun">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday sun">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday sun">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday sun">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Setembro</span><span class="mini-year">2027</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday sun">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday sun">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday sun">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday sun">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Outubro</span><span class="mini-year">2027</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday sun">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday sun">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday sun">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday sun">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday sun">31</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Novembro</span><span class="mini-year">2027</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday">5</div><div class="mday">6</div><div class="mday sun">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday">12</div><div class="mday">13</div><div class="mday sun">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday">19</div><div class="mday">20</div><div class="mday sun">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday">26</div><div class="mday">27</div><div class="mday sun">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div></div>
 </div>
 <div class="mini">
 <div class="mini-head"><span class="mini-name">Dezembro</span><span class="mini-year">2027</span></div>
-<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÃB</div></div>
+<div class="mini-dow"><div class="d sun">DOM</div><div class="d">SEG</div><div class="d">TER</div><div class="d">QUA</div><div class="d">QUI</div><div class="d">SEX</div><div class="d">SÁB</div></div>
 <div class="mini-grid"><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday empty">.</div><div class="mday">1</div><div class="mday">2</div><div class="mday">3</div><div class="mday">4</div><div class="mday sun">5</div><div class="mday">6</div><div class="mday">7</div><div class="mday">8</div><div class="mday">9</div><div class="mday">10</div><div class="mday">11</div><div class="mday sun">12</div><div class="mday">13</div><div class="mday">14</div><div class="mday">15</div><div class="mday">16</div><div class="mday">17</div><div class="mday">18</div><div class="mday sun">19</div><div class="mday">20</div><div class="mday">21</div><div class="mday">22</div><div class="mday">23</div><div class="mday">24</div><div class="mday">25</div><div class="mday sun">26</div><div class="mday">27</div><div class="mday">28</div><div class="mday">29</div><div class="mday">30</div><div class="mday">31</div><div class="mday empty">.</div></div>
 </div>
 </div>
@@ -2156,7 +2156,7 @@ body{margin:0;background:#f3f3f3;font-family:Tahoma, Arial, sans-serif;color:var
 <script>
 
 const ADMIN_WEBAPP_URL = "/api/admin";
-// Fallback para ambientes onde /api/admin nÃ£o estÃ¡ disponÃ­vel no deploy.
+// Fallback para ambientes onde /api/admin não está disponível no deploy.
 const ADMIN_FALLBACK_WEBAPP_URL = "https://script.google.com/macros/s/AKfycby6sLTL_t_DzPv5ZcglPowI8uwVHHgVhg5SzMGtG-wTdQ84JrzdsFbGqt0gV6OnY80M/exec";
 const ADMIN_FALLBACK_KEY = "CCB@1039*";
 (function(){
@@ -2174,7 +2174,7 @@ const ADMIN_FALLBACK_KEY = "CCB@1039*";
         s.classList.remove("hidden");
         return;
       }
-      // mostra somente a folha do mÃªs escolhido
+      // mostra somente a folha do mês escolhido
       if(kind === "month" && s.getAttribute("data-month") === month){
         s.classList.remove("hidden");
       }else{
@@ -2184,13 +2184,13 @@ const ADMIN_FALLBACK_KEY = "CCB@1039*";
   }
 
   function markPrint(month){
-    // limpa marcaÃ§Ãµes
+    // limpa marcações
     sheets.forEach(s=>s.classList.remove("print-hide"));
     if(month === "all"){
       // imprime tudo
       return;
     }
-    // esconde tudo, exceto o mÃªs escolhido
+    // esconde tudo, exceto o mês escolhido
     sheets.forEach(s=>{
       const kind = s.getAttribute("data-kind") || "";
       const ok = (kind === "month" && s.getAttribute("data-month") === month);
@@ -2198,7 +2198,7 @@ const ADMIN_FALLBACK_KEY = "CCB@1039*";
     });
   }
 
-  // default: Janeiro (como seu PDF por padrÃ£o)
+  // default: Janeiro (como seu PDF por padrão)
   if(sel){
     sel.value = "all";
     showOnly(sel.value);
@@ -2208,7 +2208,7 @@ const ADMIN_FALLBACK_KEY = "CCB@1039*";
     });
   }
 
-  // imprimir apenas o mÃªs selecionado
+  // imprimir apenas o mês selecionado
   if(btn){
     btn.addEventListener("click", ()=>{
       const month = sel ? sel.value : "all";
@@ -2217,7 +2217,7 @@ const ADMIN_FALLBACK_KEY = "CCB@1039*";
     });
   }
 
-  // garante limpeza apÃ³s imprimir
+  // garante limpeza após imprimir
   window.addEventListener("afterprint", ()=>{
     sheets.forEach(s=>s.classList.remove("print-hide"));
   });
@@ -2225,7 +2225,7 @@ const ADMIN_FALLBACK_KEY = "CCB@1039*";
 </script>
 <div class="sheet cover-sheet">
 <div class="notes-inner">
-<div class="cover-title">ANOTAï¿½!ï¿½"ES</div>
+<div class="cover-title">ANOTAÇÕES</div>
 <div class="notes-lines">
 <div class="line"></div>
 <div class="line"></div>
@@ -2265,9 +2265,9 @@ const ADMIN_FALLBACK_KEY = "CCB@1039*";
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 /**
- * IntegraÃ§Ã£o Google Sheets -> CalendÃ¡rio HTML
+ * Integração Google Sheets -> Calendário HTML
  * Colunas esperadas na planilha: data | hora | evento
- * Data pode vir como: dd/mm/aaaa, dd-mm-aaaa, aaaa-mm-dd ou Date do prÃ³prio Sheets.
+ * Data pode vir como: dd/mm/aaaa, dd-mm-aaaa, aaaa-mm-dd ou Date do próprio Sheets.
  */
 (() => {
   const deptSel = document.getElementById("deptSelect");
@@ -2283,28 +2283,28 @@ const ADMIN_FALLBACK_KEY = "CCB@1039*";
     });
   }
 
-// ====== CONFIGURAï¿½!ï¿½O ======
+// ====== CONFIGURAÇÃO ======
   
   // ====== CONFIG ======
-  // OpÃ§Ã£o A (recomendada): cole aqui o link "Publicar na Web" da aba (o que contÃ©m /d/e/.../pubhtml)
+  // Opção A (recomendada): cole aqui o link "Publicar na Web" da aba (o que contém /d/e/.../pubhtml)
   // Exemplo: https://docs.google.com/spreadsheets/d/e/XXXX/pubhtml?gid=0&single=true
-  // O cÃ³digo converte automaticamente para CSV (troca pubhtml -> pub e adiciona output=csv).
+  // O código converte automaticamente para CSV (troca pubhtml -> pub e adiciona output=csv).
   const PUBLISHED_PUBHTML_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSr59qtjfIiXj8PKems0FQzJulSdyUa70QhH8KaJSnNtbh9U0cB0KrRrxaKz93pc9CSLmTAn8btFc-0/pub?output=csv"; // <-- cole aqui se quiser usar o link publicado
 
-  // OpÃ§Ã£o B: usar o ID do arquivo (funciona quando o endpoint gviz libera CORS para seu caso)
+  // Opção B: usar o ID do arquivo (funciona quando o endpoint gviz libera CORS para seu caso)
 const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
-  // Se sua aba nÃ£o for a primeira, ajuste o GID (nÃºmero apÃ³s "#gid=" na URL da aba).
+  // Se sua aba não for a primeira, ajuste o GID (número após "#gid=" na URL da aba).
   const SHEET_GID = "0";
-  // Intervalo de atualizaÃ§Ã£o automÃ¡tica (ms). Ex.: 300000 = 5 minutos
+  // Intervalo de atualização automática (ms). Ex.: 300000 = 5 minutos
   const REFRESH_MS = 300000;
 
-  // Se vocÃª Nï¿½O publicar a planilha na web, o fetch pode falhar por permissÃ£o/CORS.
-  // O mÃ©todo abaixo funciona bem quando a planilha estÃ¡ "Publicada na Web".
+  // Se você NÃO publicar a planilha na web, o fetch pode falhar por permissão/CORS.
+  // O método abaixo funciona bem quando a planilha está "Publicada na Web".
   const CSV_URL = (() => {
     if (PUBLISHED_PUBHTML_URL && PUBLISHED_PUBHTML_URL.includes("docs.google.com/spreadsheets/d/e/")) {
-      // Aceita tanto pubhtml quanto pub; garante parÃ¢metros necessÃ¡rios para CSV da aba correta
+      // Aceita tanto pubhtml quanto pub; garante parâmetros necessários para CSV da aba correta
       const u = new URL(PUBLISHED_PUBHTML_URL);
-      u.pathname = u.pathname.replace(/\/pubhtml$/,"/pub"); // se jÃ¡ for /pub, nÃ£o muda
+      u.pathname = u.pathname.replace(/\/pubhtml$/,"/pub"); // se já for /pub, não muda
       // Garante aba correta e export CSV
       if (!u.searchParams.has("gid")) u.searchParams.set("gid", SHEET_GID);
       if (!u.searchParams.has("single")) u.searchParams.set("single", "true");
@@ -2315,7 +2315,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
     return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SHEET_GID}`;
   })();
 
-  // ====== CSV parser (suporta campos com vÃ­rgula/aspas) ======
+  // ====== CSV parser (suporta campos com vírgula/aspas) ======
   function parseCSV(text){
     // CSV do Google pode vir com separador "," ou ";" (dependendo de locale). Detectamos automaticamente.
     const firstLine = (() => {
@@ -2434,7 +2434,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
   }
 
   function clearCalendarEvents(){
-    // Limpa todos os eventos existentes nas pÃ¡ginas de mÃªs
+    // Limpa todos os eventos existentes nas páginas de mês
     document.querySelectorAll('section.sheet[data-kind="month"] .r .right').forEach(right => {
       right.innerHTML = '<div class="evt">&nbsp;</div>';
     });
@@ -2456,7 +2456,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
     const right = row.querySelector('.right');
     if (!right) return;
 
-    // se sÃ³ tem placeholder, remove
+    // se só tem placeholder, remove
     const onlyPlaceholder = right.children.length === 1 && right.textContent.replace(/\s+/g,'').replace(/&nbsp;/g,'') === '';
     if (onlyPlaceholder) right.innerHTML = '';
 
@@ -2473,7 +2473,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
     if (resp.ok && json && json.ok) {
       ALL_EVENTS_RAW = Array.isArray(json.data) ? json.data : (Array.isArray(json.events) ? json.events : []);
 
-      // Normaliza para o formato usado no calendÃ¡rio
+      // Normaliza para o formato usado no calendário
       const items = ALL_EVENTS_RAW.map((e) => {
         const date = parseDateAny(e.data);
         return {
@@ -2489,7 +2489,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
       return items;
     }
 
-    // Fallback para deploy estÃ¡tico (sem /api/events): lÃª CSV pÃºblico direto
+    // Fallback para deploy estático (sem /api/events): lê CSV público direto
     if (!resp.ok) {
       const csvResp = await fetch(CSV_URL + (CSV_URL.includes("?") ? "&" : "?") + "cb=" + Date.now(), { cache: "no-store" });
       if (!csvResp.ok) throw new Error(`Falha ao ler CSV publicado (${csvResp.status}).`);
@@ -2580,7 +2580,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
   let btnSair = null;
 
   async function getAdminPassword(forcePrompt = false){
-    // some quando o navegador/app Ã© fechado
+    // some quando o navegador/app é fechado
     if (!forcePrompt){
       const cached = sessionStorage.getItem("ccbagenda_admin_password") || "";
       if (cached) return String(cached).trim();
@@ -2658,9 +2658,9 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
   }
 
   function deptLabel(v){
-    if (v === "musica") return "MÃºsica";
-    if (v === "ministerio") return "MinistÃ©rio";
-    return "ï¿½";
+    if (v === "musica") return "Música";
+    if (v === "ministerio") return "Ministério";
+    return "—";
   }
 
   function monthFilter(eventDate){
@@ -2681,7 +2681,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
   function renderAdminList(){
     if (!adminList) return;
 
-    // Converte ALL_EVENTS_RAW (cru) para itens com Date para filtro por mÃªs
+    // Converte ALL_EVENTS_RAW (cru) para itens com Date para filtro por mês
     const items = (Array.isArray(ALL_EVENTS_RAW) ? ALL_EVENTS_RAW : []).map(e => {
       const d = parseDateAny(e.data);
       return {
@@ -2710,7 +2710,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
       const mm = String(it.date.getMonth()+1).padStart(2,'0');
       const dd = String(it.date.getDate()).padStart(2,'0');
       const iso = `${yyyy}-${mm}-${dd}`;
-      const title = (it.hora ? `${it.hora} ï¿½ ` : "") + escapeHtml(it.evento);
+      const title = (it.hora ? `${it.hora} — ` : "") + escapeHtml(it.evento);
       const badges = [
         it.destaque ? `<span class="badge red">Destaque</span>` : ``,
         it.dept ? `<span class="badge">${deptLabel(it.dept)}</span>` : `<span class="badge">Sem dept.</span>`
@@ -2720,7 +2720,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
       <div class="item" data-row="${it.row}">
         <div>
           <div class="title">${title}</div>
-          <div class="meta">${dd}/${mm}/${yyyy} â¬¢ Linha ${it.row}</div>
+          <div class="meta">${dd}/${mm}/${yyyy} • Linha ${it.row}</div>
           <div class="badges">${badges}</div>
         </div>
         <div class="btns">
@@ -2780,7 +2780,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
       const text = await resp.text();
       let json = parseResponseText(resp, text);
 
-      // Em alguns deploys estÃ¡ticos no Vercel, /api/admin nÃ£o existe (404 NOT_FOUND).
+      // Em alguns deploys estáticos no Vercel, /api/admin não existe (404 NOT_FOUND).
       const msg = String((json && json.error) || "");
       const notFoundApi = resp.status === 404 || /NOT_FOUND/i.test(msg);
       if (notFoundApi){
@@ -2792,15 +2792,15 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
 
     // garante senha antes de enviar
     let pw = await getAdminPassword();
-    if (!pw) throw new Error("Senha do Admin obrigatÃ³ria.");
+    if (!pw) throw new Error("Senha do Admin obrigatória.");
 
     let { resp, json } = await doPost(pw);
 
-    // senha em cache pode estar antiga; limpa e pede novamente uma Ãºnica vez
+    // senha em cache pode estar antiga; limpa e pede novamente uma única vez
     if (resp.status === 401){
       clearAdminPassword();
       pw = await getAdminPassword(true);
-      if (!pw) throw new Error("Senha do Admin obrigatÃ³ria.");
+      if (!pw) throw new Error("Senha do Admin obrigatória.");
       ({ resp, json } = await doPost(pw));
     }
 
@@ -2839,7 +2839,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
 
       if (deptSel){
         deptSel.addEventListener("change", () => {
-          // nÃ£o precisa refazer mÃªs; apenas redesenha eventos com o filtro
+          // não precisa refazer mês; apenas redesenha eventos com o filtro
           refreshFromSheet().catch(console.warn);
         });
       }
@@ -2866,7 +2866,7 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
         btnSair.addEventListener("click", () => {
           clearAdminPassword();
           clearForm();
-          setMsg("SessÃ£o do admin encerrada.", "");
+          setMsg("Sessão do admin encerrada.", "");
           closeAdmin();
         });
       }
@@ -2879,12 +2879,12 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
         btnExcluir.addEventListener("click", async () => {
           const row = String(fRow.value||"").trim();
           if (!row){
-            setMsg("Selecione um evento para excluir (botÃ£o Editar).", "err");
+            setMsg("Selecione um evento para excluir (botão Editar).", "err");
             return;
           }
           try{
             await adminSend({ action:"delete", row:Number(row) });
-            setMsg("ExcluÃ­do com sucesso.", "ok");
+            setMsg("Excluído com sucesso.", "ok");
             await refreshFromSheet();
             renderAdminList();
             clearForm();
@@ -2920,13 +2920,13 @@ const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
       }
     }catch(err){
       console.warn(err);
-      // aviso discreto na tela (sem atrapalhar impressÃ£o)
+      // aviso discreto na tela (sem atrapalhar impressão)
       const warn = document.createElement('div');
       warn.className = 'controls';
       warn.style.maxWidth = '860px';
       warn.style.margin = '0 auto 10px';
       const msg = (err && err.message) ? err.message : "Erro desconhecido.";
-      warn.innerHTML = `<strong>ï¿½aï¿½ï¸ NÃ£o foi possÃ­vel carregar os eventos.</strong> <span style="font-weight:600">${escapeHtml(msg)}</span>`;
+      warn.innerHTML = `<strong>⚠️ Não foi possível carregar os eventos.</strong> <span style="font-weight:600">${escapeHtml(msg)}</span>`;
       document.body.insertBefore(warn, document.body.firstChild);
     }
 
@@ -2949,7 +2949,7 @@ if (false && "serviceWorker" in navigator) {
 <div id="adminBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="modal">
     <div class="modal-header">
-      <h3>Admin ï¿½ Agenda</h3>
+      <h3>Admin — Agenda</h3>
       <button id="adminCloseBtn" type="button" class="btn-secondary">Fechar</button>
     </div>
 
@@ -2977,15 +2977,15 @@ if (false && "serviceWorker" in navigator) {
               <label>Departamento</label>
               <select id="fDept">
                 <option value="">(vazio)</option>
-                <option value="musica">MÃºsica</option>
-                <option value="ministerio">MinistÃ©rio</option>
+                <option value="musica">Música</option>
+                <option value="ministerio">Ministério</option>
               </select>
-              <div class="muted">Use ï¿½S(vazio)â¬ se nÃ£o quiser filtrar por departamento.</div>
+              <div class="muted">Use “(vazio)” se não quiser filtrar por departamento.</div>
             </div>
             <div>
               <label>Destaque</label>
               <select id="fDestaque">
-                <option value="">NÃ£o</option>
+                <option value="">Não</option>
                 <option value="SIM">SIM (vermelho/negrito)</option>
               </select>
             </div>
@@ -3000,14 +3000,14 @@ if (false && "serviceWorker" in navigator) {
           </div>
 
           <div id="adminMsg" class="muted"></div>
-          <div class="muted">Dica: toque em ï¿½SEditarâ¬ na lista ao lado para carregar um evento.</div>
+          <div class="muted">Dica: toque em “Editar” na lista ao lado para carregar um evento.</div>
         </form>
 
         <div class="list">
           <div class="list-head">
             <div>
               <div style="font-weight:700">Eventos</div>
-              <div class="hint">Mostra mÃªs + departamento selecionados no topo.</div>
+              <div class="hint">Mostra mês + departamento selecionados no topo.</div>
             </div>
             <div style="display:flex; gap:8px; align-items:center">
               <button id="btnSair" type="button" class="btn-secondary">Sair</button>
@@ -3022,7 +3022,3 @@ if (false && "serviceWorker" in navigator) {
 </div>
 </body>
 </html>
-
-
-
-
