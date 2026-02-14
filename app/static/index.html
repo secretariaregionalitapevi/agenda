@@ -657,11 +657,31 @@
       gap: 8px;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
     }
 
     .list-head .hint {
       font-size: 12px;
       color: #444
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #cfcfcf;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: #255ec8;
     }
 
     .list-items {
@@ -925,6 +945,37 @@
         grid-template-columns: 1fr;
         gap: 0
       }
+
+      /* Ajuste crítico de scroll do modal */
+      .modal {
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+        /* Limita altura */
+        margin: 10px;
+        /* Margem de respiro */
+      }
+
+      .modal-body {
+        overflow-y: auto;
+        /* Permite scroll no conteúdo (form + lista) */
+        flex: 1;
+        /* Ocupa espaço restante */
+        display: block;
+        /* Remove grid para evitar comportamento estranho */
+      }
+
+      .admin-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      /* Remove scroll interno da lista em mobile para unificar scroll no corpo */
+      .list-items {
+        max-height: none !important;
+        overflow: visible !important;
+      }
     }
 
     /* Botão Voltar ao Topo */
@@ -935,26 +986,35 @@
       z-index: 99;
       border: none;
       outline: none;
-      background-color: #255ec8;
+      /* Gradiente do tema (igual ao btnSalvar) */
+      background: linear-gradient(180deg, #2f71e8 0%, #255ec8 100%);
       color: white;
       cursor: pointer;
-      padding: 12px;
+      padding: 0;
       border-radius: 50%;
-      font-size: 18px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 12px rgba(37, 94, 200, 0.4);
       display: none;
-      opacity: 0.8;
-      transition: opacity 0.3s, background-color 0.3s;
-      width: 45px;
-      height: 45px;
+      opacity: 0.9;
+      transition: opacity 0.3s, transform 0.2s, filter 0.2s;
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     #scrollTopBtn:hover {
-      background-color: #1e4b9e;
+      filter: brightness(1.1);
+      transform: translateY(-2px);
       opacity: 1;
+    }
+
+    #scrollTopBtn svg {
+      width: 24px;
+      height: 24px;
+      fill: #fff;
+      stroke: #fff;
+      stroke-width: 2px;
     }
 
     /* Ocultar inicialmente */
@@ -1229,8 +1289,8 @@
             <div class="mday">20</div>
             <div class="mday">21</div>
             <div class="mday">22</div>
-            <div class="mday">23</div>
-            <div class="mday sun">24</div>
+            <div class="mday sun">23</div>
+            <div class="mday">24</div>
             <div class="mday">25</div>
             <div class="mday">26</div>
             <div class="mday">27</div>
@@ -1272,6 +1332,7 @@
             <div class="mday">11</div>
             <div class="mday">12</div>
             <div class="mday">13</div>
+            <div class="mday">14</div>
             <div class="mday sun">14</div>
             <div class="mday">15</div>
             <div class="mday">16</div>
@@ -4690,7 +4751,7 @@
       const PUBLISHED_PUBHTML_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSr59qtjfIiXj8PKems0FQzJulSdyUa70QhH8KaJSnNtbh9U0cB0KrRrxaKz93pc9CSLmTAn8btFc-0/pub?output=csv"; // <-- cole aqui se quiser usar o link publicado
 
       // Opção B: usar o ID do arquivo (funciona quando o endpoint gviz libera CORS para seu caso)
-      const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwsyqrVpO_o73edIJifDMyHFb4";
+      const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwszqrVpO_o73edIJifDMyHFb4";
       // Se sua aba não for a primeira, ajuste o GID (número após "#gid=" na URL da aba).
       const SHEET_GID = "0";
       // Intervalo de atualização automática (ms). Ex.: 300000 = 5 minutos
@@ -4964,6 +5025,7 @@
       let adminForm = null;
       let adminList = null;
       let adminMsg = null;
+      let searchInput = null; // Campo de pesquisa
 
       let fRow = null;
       let fData = null;
@@ -5079,6 +5141,9 @@
       function renderAdminList() {
         if (!adminList) return;
 
+        // Obtém o termo de pesquisa
+        const searchTerm = (searchInput ? searchInput.value : "").toLowerCase().trim();
+
         // Converte ALL_EVENTS_RAW (cru) para itens com Date para filtro por mês
         const items = (Array.isArray(ALL_EVENTS_RAW) ? ALL_EVENTS_RAW : []).map(e => {
           const d = parseDateAny(e.data);
@@ -5094,8 +5159,40 @@
         }).filter(it => it.date && it.evento);
 
         const filtered = items
-          .filter(it => monthFilter(it.date))
-          .filter(it => deptFilter(it.dept))
+          .filter(it => {
+            // Se houver termo de busca, ignoramos filtros de topo para facilitar encontrar qualquer evento
+            if (searchTerm) return true;
+            return monthFilter(it.date) && deptFilter(it.dept);
+          })
+          // Filtro de pesquisa: busca no título do evento, departamento e data
+          .filter(it => {
+            if (!searchTerm) return true;
+
+            // Função para normalizar (remover acentos e toLowerCase)
+            const normalize = (val) => String(val || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+            const term = normalize(searchTerm);
+            const eventText = normalize(it.evento);
+            const timeText = normalize(it.hora);
+            const deptText = normalize(deptLabel(it.dept));
+
+            // Formatos de data para busca (dd/mm/yyyy, dd/mm, d/m)
+            const y = it.date.getFullYear();
+            const m = String(it.date.getMonth() + 1).padStart(2, '0');
+            const d = String(it.date.getDate()).padStart(2, '0');
+            const dd_mm_yyyy = `${d}/${m}/${y}`;
+            const dd_mm = `${d}/${m}`;
+            const d_m = `${it.date.getDate()}/${it.date.getMonth() + 1}`;
+            const dateRaw = normalize(it.dataRaw);
+
+            return eventText.includes(term) ||
+              timeText.includes(term) ||
+              deptText.includes(term) ||
+              dd_mm_yyyy.includes(term) ||
+              dd_mm.includes(term) ||
+              d_m.includes(term) ||
+              dateRaw.includes(term);
+          })
           .sort((a, b) => (a.date - b.date) || (timeToMinutes(a.hora) - timeToMinutes(b.hora)));
 
         if (!filtered.length) {
@@ -5230,6 +5327,14 @@
         btnExcluir = document.getElementById("btnExcluir");
         btnRecarregar = document.getElementById("btnRecarregar");
         btnSair = document.getElementById("btnSair");
+        searchInput = document.getElementById("searchInput"); // Inicializa campo de pesquisa
+
+        // Event listener para pesquisa em tempo real
+        if (searchInput) {
+          searchInput.addEventListener("input", () => {
+            renderAdminList();
+          });
+        }
 
         try {
           clearAllEventCells();
@@ -5407,6 +5512,9 @@
                 <div style="font-weight:700">Eventos</div>
                 <div class="hint">Mostra mês + departamento selecionados no topo.</div>
               </div>
+              <div class="search-box">
+                <input id="searchInput" type="text" placeholder="Pesquisar eventos..." />
+              </div>
               <div style="display:flex; gap:8px; align-items:center">
                 <button id="btnSair" type="button" class="btn-secondary">Sair</button>
                 <button id="btnRecarregar" type="button" class="btn-secondary">Recarregar</button>
@@ -5418,7 +5526,12 @@
       </div>
     </div>
   </div>
-  <button id="scrollTopBtn" title="Voltar ao topo" class="hidden-scroll">⬆</button>
+  <button id="scrollTopBtn" title="Voltar ao topo" class="hidden-scroll">
+    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M13 19V7.83l4.88 4.88c.39.39 1.03.39 1.42 0 .39-.39.39-1.03 0-1.42l-6.6-6.6a.996.996 0 0 0-1.41 0l-6.6 6.6c-.39.39-.39 1.03 0 1.42.39.39 1.03.39 1.42 0L11 7.83V19c0 .55.45 1 1 1s1-.45 1-1z" />
+    </svg>
+  </button>
 
   <script>
     (function () {

@@ -50,10 +50,11 @@ export async function GET() {
     return Response.json({ ok: false, error: "SHEET_CSV_URL não configurada." }, { status: 500 });
   }
 
-  const res = await fetch(csvUrl, {
+  const freshUrl = `${csvUrl}${csvUrl.includes("?") ? "&" : "?"}cb=${Date.now()}`;
+  const res = await fetch(freshUrl, {
     redirect: "follow",
     headers: { "Accept": "text/csv,text/plain,*/*", "User-Agent": "Mozilla/5.0" },
-    next: { revalidate: 60 }
+    cache: "no-store"
   });
 
   if (!res.ok) {
