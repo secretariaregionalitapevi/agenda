@@ -5349,7 +5349,8 @@
           // Em alguns deploys estáticos no Vercel, /api/admin não existe (404 NOT_FOUND).
           const msg = String((json && json.error) || "");
           const notFoundApi = resp.status === 404 || /NOT_FOUND/i.test(msg);
-          if (notFoundApi) {
+          const invalidWebApp = /Apps Script invalido|implantacao web|doPost|doGet/i.test(msg);
+          if (notFoundApi || invalidWebApp) {
             return doDirectFallback();
           }
 
