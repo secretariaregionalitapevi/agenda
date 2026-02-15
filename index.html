@@ -5165,6 +5165,21 @@
         sessionStorage.removeItem("ccbagenda_admin_password");
       }
 
+      let syncOnCloseRunning = false;
+
+      async function syncCalendarNow() {
+        if (syncOnCloseRunning) return;
+        syncOnCloseRunning = true;
+        try {
+          await refreshFromSheet();
+          renderAdminList();
+        } catch (_) {
+          // silencioso: não bloquear fechamento do modal por falha transitória de rede
+        } finally {
+          syncOnCloseRunning = false;
+        }
+      }
+
       async function openAdmin() {
         if (!adminBackdrop) return;
         // pede a senha ao abrir (simples)
@@ -5181,6 +5196,7 @@
         if (!adminBackdrop) return;
         adminBackdrop.style.display = "none";
         adminBackdrop.setAttribute("aria-hidden", "true");
+        syncCalendarNow();
       }
 
       function setMsg(text, kind) {
