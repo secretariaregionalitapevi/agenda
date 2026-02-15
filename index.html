@@ -5355,7 +5355,9 @@
         let { resp, json } = await doPost(pw);
 
         // senha em cache pode estar antiga; limpa e pede novamente uma única vez
-        if (resp.status === 401) {
+        const msg401 = String((json && json.error) || "");
+        const shouldRepromptPassword = resp.status === 401 && /senha invalida/i.test(msg401);
+        if (shouldRepromptPassword) {
           clearAdminPassword();
           pw = await getAdminPassword(true);
           if (!pw) throw new Error("Senha do Admin obrigatória.");

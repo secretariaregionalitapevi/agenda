@@ -47,8 +47,10 @@ async function readUpstream(resp: Response) {
 }
 
 function isInvalidScriptDeployment(status: number, parsed: any, text: string) {
+  const looksLikeHtml = /^\s*<!doctype html/i.test(text || "") || /^\s*<html/i.test(text || "");
   const msg = String((parsed && parsed.error) || text || "");
   return (
+    looksLikeHtml ||
     status === 404 ||
     /NOT_FOUND/i.test(msg) ||
     /Apps Script invalido/i.test(msg) ||
@@ -174,4 +176,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   return res.status(200).json({ ok: true, message: lastText || "OK" });
 }
+
 

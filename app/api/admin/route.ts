@@ -57,8 +57,10 @@ async function readUpstream(resp: Response) {
 }
 
 function isInvalidScriptDeployment(status: number, parsed: any, text: string) {
+  const looksLikeHtml = /^\s*<!doctype html/i.test(text || "") || /^\s*<html/i.test(text || "");
   const msg = String((parsed && parsed.error) || text || "");
   return (
+    looksLikeHtml ||
     status === 404 ||
     /NOT_FOUND/i.test(msg) ||
     /Apps Script invalido/i.test(msg) ||
@@ -205,4 +207,5 @@ export async function POST(req: Request) {
     );
   }
 }
+
 
