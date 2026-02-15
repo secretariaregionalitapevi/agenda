@@ -4616,6 +4616,11 @@
   <script>
 
     const ADMIN_ENDPOINTS = ["/api/admin", "/api/v1/admin"];
+    const ADMIN_DIRECT_WEBAPP_URLS = [
+      "https://script.google.com/macros/s/AKfycbycS9Hn_apUDsvwrYjcLZKvK3PLeiuZ7I_b-Mr_g8AP3fyn_z9dWsp5OBq1iIj2Xrsa/exec",
+      "https://script.google.com/macros/s/AKfycby6sLTL_t_DzPv5ZcglPowI8uwVHHgVhg5SzMGtG-wTdQ84JrzdsFbGqt0gV6OnY80M/exec"
+    ];
+    const ADMIN_DIRECT_KEY = "123456";
     (function () {
       const sel = document.getElementById("monthSelect");
       const btn = document.getElementById("printBtn");
@@ -5324,6 +5329,28 @@
         }
 
         async function doPost(pw) {
+          async function doDirectWebAppFallback() {
+            let lastDirectErr = null;
+            for (const url of ADMIN_DIRECT_WEBAPP_URLS) {
+              try {
+                const resp = await fetch(url, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ ...payload, key: ADMIN_DIRECT_KEY })
+                });
+                const text = await resp.text();
+                const json = parseResponseText(resp, text);
+                const msg = String((json && json.error) || "");
+                const invalid = !resp.ok || !json.ok || /NOT_FOUND|doPost|doGet|implantacao web/i.test(msg);
+                if (!invalid) return { resp, json };
+                lastDirectErr = new Error(msg || `Falha no Web App (${resp.status})`);
+              } catch (err) {
+                lastDirectErr = err;
+              }
+            }
+            throw (lastDirectErr || new Error("Falha no fallback direto do Apps Script."));
+          }
+
           let lastErr = null;
           for (const endpoint of ADMIN_ENDPOINTS) {
             try {
@@ -5345,7 +5372,7 @@
               lastErr = err;
             }
           }
-          throw (lastErr || new Error("Falha de conexão com a API de admin."));
+          return doDirectWebAppFallback();
         }
 
         // garante senha antes de enviar
