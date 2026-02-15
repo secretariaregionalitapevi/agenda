@@ -5169,11 +5169,39 @@
         }
       }
 
-      function removeLocalAdminEvent(rowNumber) {
+      function removeLocalAdminEvent(rowNumber, fallbackMatch) {
         const row = Number(rowNumber || 0);
-        if (!Number.isFinite(row) || row < 2) return;
-        if (!Array.isArray(ALL_EVENTS_RAW)) return;
-        ALL_EVENTS_RAW = ALL_EVENTS_RAW.filter(e => Number(e && e.row) !== row);
+        if (!Array.isArray(ALL_EVENTS_RAW)) return 0;
+
+        const before = ALL_EVENTS_RAW.length;
+        let removed = 0;
+
+        if (Number.isFinite(row) && row >= 2) {
+          ALL_EVENTS_RAW = ALL_EVENTS_RAW
+            .filter(e => Number(e && e.row) !== row)
+            .map(e => {
+              const n = Number(e && e.row);
+              if (Number.isFinite(n) && n > row) return { ...e, row: n - 1 };
+              return e;
+            });
+          removed = before - ALL_EVENTS_RAW.length;
+        }
+
+        // Fallback: se a linha local estiver desatualizada, remove por assinatura do evento editado.
+        if (removed === 0 && fallbackMatch) {
+          const fData = String(fallbackMatch.data || "").trim();
+          const fHora = String(fallbackMatch.hora || "").trim();
+          const fEvento = String(fallbackMatch.evento || "").trim();
+          ALL_EVENTS_RAW = ALL_EVENTS_RAW.filter(e => {
+            const sameData = String(e && e.data || "").trim() === fData;
+            const sameHora = String(e && e.hora || "").trim() === fHora;
+            const sameEvento = String(e && e.evento || "").trim() === fEvento;
+            return !(sameData && sameHora && sameEvento);
+          });
+          removed = before - ALL_EVENTS_RAW.length;
+        }
+
+        return removed;
       }
 
       function deptLabel(v) {
@@ -5470,8 +5498,14 @@
               if (!confirmed) return;
 
               try {
+                const deleteSnapshot = {
+                  data: String(fData.value || "").trim(),
+                  hora: String(fHora.value || "").trim(),
+                  evento: String(fEvento.value || "").trim()
+                };
+
                 await adminSend({ action: "delete", row: Number(row) });
-                removeLocalAdminEvent(Number(row));
+                removeLocalAdminEvent(Number(row), deleteSnapshot);
 
                 if (window.Swal && typeof window.Swal.fire === "function") {
                   await window.Swal.fire({
@@ -5487,9 +5521,10 @@
                 renderAdminList();
                 clearForm();
                 setMsg("Excluído com sucesso.", "ok");
+                refreshFromSheet().then(() => renderAdminList()).catch(() => { });
                 setTimeout(() => {
                   refreshFromSheet().then(() => renderAdminList()).catch(() => { });
-                }, 15000);
+                }, 5000);
               } catch (err) {
                 setMsg(String(err.message || err), "err");
               }
@@ -5536,10 +5571,10 @@
                 }
                 setMsg(row ? "Atualizado com sucesso." : "Salvo com sucesso.", "ok");
                 renderAdminList();
+                clearForm();
                 setTimeout(() => {
                   refreshFromSheet().then(() => renderAdminList()).catch(() => { });
                 }, 15000);
-                if (!row) clearForm();
               } catch (err) {
                 setMsg(String(err.message || err), "err");
               }
