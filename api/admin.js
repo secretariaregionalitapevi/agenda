@@ -15,9 +15,9 @@ function parseAdminKeys(raw = "") {
     .filter(Boolean)
     .map((v) => v.replace(/^['"]+|['"]+$/g, ""));
 
-  const out: string[] = [];
-  const seen = new Set<string>();
-  const push = (k: string) => {
+  const out = [];
+  const seen = new Set();
+  const push = (k) => {
     const key = String(k || "").trim();
     if (!key || seen.has(key)) return;
     seen.add(key);
@@ -41,7 +41,7 @@ function parseAdminKeys(raw = "") {
   return out;
 }
 
-function normalizeDepartamentoLabel(v: unknown): string {
+function normalizeDepartamentoLabel(v) {
   const key = String(v ?? "")
     .trim()
     .toLowerCase()
@@ -54,9 +54,9 @@ function normalizeDepartamentoLabel(v: unknown): string {
   return "";
 }
 
-async function readUpstream(resp: Response) {
+async function readUpstream(resp) {
   const text = await resp.text();
-  let parsed: any = null;
+  let parsed = null;
   try {
     parsed = text ? JSON.parse(text) : null;
   } catch {
@@ -65,7 +65,31 @@ async function readUpstream(resp: Response) {
   return { text, parsed };
 }
 
-export default async function handler(req: any, res: any) {
+async function readJsonBody(req) {
+  if (req && req.body && typeof req.body === "object") return req.body;
+  if (req && typeof req.body === "string") {
+    try {
+      return JSON.parse(req.body || "{}");
+    } catch {
+      return {};
+    }
+  }
+
+  const chunks = [];
+  await new Promise((resolve) => {
+    req.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+    req.on("end", resolve);
+    req.on("error", resolve);
+  });
+  const raw = Buffer.concat(chunks).toString("utf8");
+  try {
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ ok: false, error: "Metodo nao permitido." });
   }
@@ -80,21 +104,21 @@ export default async function handler(req: any, res: any) {
     if (!adminKeyRaw || adminKeys.length === 0) return res.status(500).json({ ok: false, error: "ADMIN_KEY nao configurada." });
     if (!adminPassword) return res.status(500).json({ ok: false, error: "ADMIN_PASSWORD nao configurada." });
 
-    const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
+    const body = await readJsonBody(req);
     const incomingPassword = normalizeSecret((body && body.password) || "");
     if (!body || incomingPassword !== adminPassword) {
       return res.status(401).json({ ok: false, error: "Senha invalida." });
     }
 
     const { password, ...rest } = body;
-    const normalizedPayload = { ...rest } as Record<string, unknown>;
+    const normalizedPayload = { ...rest };
     if ("departamento" in normalizedPayload) {
       normalizedPayload.departamento = normalizeDepartamentoLabel(normalizedPayload.departamento);
     }
 
-    let lastResp: Response | null = null;
+    let lastResp = null;
     let lastText = "";
-    let lastParsed: any = null;
+    let lastParsed = null;
 
     for (const key of adminKeys) {
       const payload = { ...normalizedPayload, key };
@@ -157,10 +181,10 @@ export default async function handler(req: any, res: any) {
     }
 
     return res.status(200).json({ ok: true, message: lastText || "OK" });
-  } catch (err: any) {
+  } catch (err) {
     return res.status(500).json({
       ok: false,
       error: `Erro interno em /api/admin: ${err?.message || "erro desconhecido"}`,
     });
   }
-}
+};

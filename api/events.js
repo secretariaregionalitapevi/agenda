@@ -2,9 +2,9 @@ function cleanEnv(v = "") {
   return String(v).trim().replace(/^['"]+|['"]+$/g, "");
 }
 
-function parseCSV(text: string) {
-  const rows: string[][] = [];
-  let row: string[] = [];
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
   let cur = "";
   let inQuotes = false;
 
@@ -70,7 +70,7 @@ function toISODate(s = "") {
   return v;
 }
 
-export default async function handler(req: any, res: any) {
+module.exports = async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).json({ ok: false, error: "Metodo nao permitido." });
   }
@@ -95,7 +95,7 @@ export default async function handler(req: any, res: any) {
     const text = await upstream.text();
     const rows = parseCSV(text);
     const header = (rows[0] || []).map(normKey);
-    const idx = (name: string) => header.indexOf(normKey(name));
+    const idx = (name) => header.indexOf(normKey(name));
 
     const iData = idx("data");
     const iHora = idx("hora");
@@ -125,10 +125,10 @@ export default async function handler(req: any, res: any) {
       .filter((e) => e.data && e.evento);
 
     return res.status(200).json({ ok: true, data: events, events });
-  } catch (err: any) {
+  } catch (err) {
     return res.status(500).json({
       ok: false,
       error: `Erro interno em /api/events: ${err?.message || "erro desconhecido"}`,
     });
   }
-}
+};
