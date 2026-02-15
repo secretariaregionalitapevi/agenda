@@ -8,8 +8,8 @@ function normalizeSecret(v = "") {
     .replace(/[\u200B-\u200D\uFEFF]/g, "");
 }
 
-const SCRIPT_FALLBACK_URL = "https://script.google.com/macros/s/AKfycby6sLTL_t_DzPv5ZcglPowI8uwVHHgVhg5SzMGtG-wTdQ84JrzdsFbGqt0gV6OnY80M/exec";
-const SCRIPT_FALLBACK_KEY = "CCB@1039*";
+const SCRIPT_FALLBACK_URL = "https://script.google.com/macros/s/AKfycbycS9Hn_apUDsvwrYjcLZKvK3PLeiuZ7I_b-Mr_g8AP3fyn_z9dWsp5OBq1iIj2Xrsa/exec";
+const SCRIPT_FALLBACK_KEY = "123456";
 
 function parseAdminKeys(raw = "") {
   const base = String(raw)
@@ -219,3 +219,4 @@ module.exports = async function handler(req, res) {
     });
   }
 };
+
