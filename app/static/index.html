@@ -4753,7 +4753,7 @@
       // Se sua aba não for a primeira, ajuste o GID (número após "#gid=" na URL da aba).
       const SHEET_GID = "0";
       // Intervalo de atualização automática (ms). Ex.: 300000 = 5 minutos
-      const REFRESH_MS = 300000;
+      const REFRESH_MS = 60000;
 
       // Se você NÃO publicar a planilha na web, o fetch pode falhar por permissão/CORS.
       // O método abaixo funciona bem quando a planilha está "Publicada na Web".
@@ -5394,7 +5394,7 @@
             fHora.value = String(raw.hora || "").trim();
             fEvento.value = String(raw.evento || "").trim();
             fDestaque.value = (String(raw.destaque || "").trim().toUpperCase() === "SIM") ? "SIM" : "";
-            fDept.value = canonicalDepartamentoLabel(raw.departamento_label || raw.departamento || "");
+            fDept.value = normalizeDepartamento_(raw.departamento_label || raw.departamento || "");
             setMsg(`Editando linha ${row}.`, "");
           });
         });
@@ -5615,7 +5615,7 @@
                   hora: String(fHora.value || "").trim(),
                   evento: String(fEvento.value || "").trim(),
                   destaque: String(fDestaque.value || "").trim(),
-                  departamento: canonicalDepartamentoLabel(fDept.value || "")
+                  departamento: canonicalDepartamentoLabel(normalizeDepartamento_(fDept.value || ""))
                 };
                 const result = await adminSend(payload);
                 const effectiveRow = row ? Number(row) : Number((result && result.row) || 0);
@@ -5664,9 +5664,14 @@
           document.body.insertBefore(warn, document.body.firstChild);
         }
 
+        const syncNow = () => refreshFromSheet().then(() => renderAdminList()).catch(console.warn);
         if (REFRESH_MS > 0) {
-          setInterval(() => refreshFromSheet().catch(console.warn), REFRESH_MS);
+          setInterval(syncNow, REFRESH_MS);
         }
+        document.addEventListener("visibilitychange", () => {
+          if (!document.hidden) syncNow();
+        });
+        window.addEventListener("focus", syncNow);
       });
     })();
   </script>
@@ -5674,7 +5679,9 @@
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("/sw.js").catch(() => { });
+        navigator.serviceWorker.register("/sw.js").then((reg) => {
+          reg.update().catch(() => { });
+        }).catch(() => { });
       });
     }
   </script>
