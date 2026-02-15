@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 const SCRIPT_FALLBACK_URL = "https://script.google.com/macros/s/AKfycbycS9Hn_apUDsvwrYjcLZKvK3PLeiuZ7I_b-Mr_g8AP3fyn_z9dWsp5OBq1iIj2Xrsa/exec";
-const SCRIPT_FALLBACK_KEY = "123456";
+const DEFAULT_ADMIN_KEYS = ["123456", "admin123"];
 
 function parseAdminKeys(raw: string) {
   const base = raw
@@ -33,6 +33,10 @@ function parseAdminKeys(raw: string) {
     push(root.replace(/['"]/g, ""));
   }
   return out;
+}
+
+function resolveAdminKeys(raw = "") {
+  return parseAdminKeys([raw, ...DEFAULT_ADMIN_KEYS].filter(Boolean).join(","));
 }
 
 async function readUpstream(resp: Response) {
@@ -80,10 +84,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const scriptUrl = process.env.APPS_SCRIPT_URL;
   const adminKeyRaw = process.env.ADMIN_KEY;
   const adminPassword = process.env.ADMIN_PASSWORD;
-  const adminKeys = adminKeyRaw ? parseAdminKeys(adminKeyRaw) : [];
+  const adminKeys = resolveAdminKeys(adminKeyRaw || "");
 
   if (!scriptUrl) return res.status(500).json({ ok: false, error: "APPS_SCRIPT_URL nao configurada." });
-  if (!adminKeyRaw || adminKeys.length === 0) return res.status(500).json({ ok: false, error: "ADMIN_KEY nao configurada." });
   if (!adminPassword) return res.status(500).json({ ok: false, error: "ADMIN_PASSWORD nao configurada." });
 
   const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
@@ -135,7 +138,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const fallbackDueToInvalid = !lastStatus || isInvalidScriptDeployment(lastStatus, lastParsed, lastText);
     const shouldFallback = fallbackDueToInvalid || !!lastFetchError;
     if (shouldFallback) {
-      await trySend(SCRIPT_FALLBACK_URL, [SCRIPT_FALLBACK_KEY]);
+      await trySend(SCRIPT_FALLBACK_URL, DEFAULT_ADMIN_KEYS);
     }
   }
 

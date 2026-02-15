@@ -1,3 +1,5 @@
+const DEFAULT_ADMIN_KEYS = ["123456", "admin123"];
+
 function parseAdminKeys(raw = "") {
   const base = String(raw)
     .split(/[\r\n,;]+/)
@@ -29,6 +31,10 @@ function parseAdminKeys(raw = "") {
     push(root.replace(/['"]/g, ""));
   }
   return out;
+}
+
+function resolveAdminKeys(raw = "") {
+  return parseAdminKeys([raw, ...DEFAULT_ADMIN_KEYS].filter(Boolean).join(","));
 }
 
 async function readUpstream(resp) {
@@ -63,10 +69,9 @@ module.exports = async function handler(req, res) {
   const scriptUrl = process.env.APPS_SCRIPT_URL;
   const adminKeyRaw = process.env.ADMIN_KEY;
   const adminPassword = process.env.ADMIN_PASSWORD;
-  const adminKeys = adminKeyRaw ? parseAdminKeys(adminKeyRaw) : [];
+  const adminKeys = resolveAdminKeys(adminKeyRaw || "");
 
   if (!scriptUrl) return res.status(500).json({ ok: false, error: "APPS_SCRIPT_URL nao configurada." });
-  if (!adminKeyRaw || adminKeys.length === 0) return res.status(500).json({ ok: false, error: "ADMIN_KEY nao configurada." });
   if (!adminPassword) return res.status(500).json({ ok: false, error: "ADMIN_PASSWORD nao configurada." });
 
   const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};

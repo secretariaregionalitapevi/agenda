@@ -1,6 +1,6 @@
 export const runtime = "nodejs";
 const SCRIPT_FALLBACK_URL = "https://script.google.com/macros/s/AKfycbycS9Hn_apUDsvwrYjcLZKvK3PLeiuZ7I_b-Mr_g8AP3fyn_z9dWsp5OBq1iIj2Xrsa/exec";
-const SCRIPT_FALLBACK_KEY = "123456";
+const DEFAULT_ADMIN_KEYS = ["123456", "admin123"];
 
 function cleanEnv(v = "") {
   return String(v).trim().replace(/^['"]+|['"]+$/g, "");
@@ -45,6 +45,10 @@ function parseAdminKeys(raw: string) {
   return out;
 }
 
+function resolveAdminKeys(raw = "") {
+  return parseAdminKeys([raw, ...DEFAULT_ADMIN_KEYS].filter(Boolean).join(","));
+}
+
 async function readUpstream(resp: Response) {
   const text = await resp.text();
   let parsed: any = null;
@@ -87,13 +91,10 @@ export async function POST(req: Request) {
     const scriptUrl = cleanEnv(process.env.APPS_SCRIPT_URL || "");
     const adminKeyRaw = cleanEnv(process.env.ADMIN_KEY || "");
     const adminPassword = normalizeSecret(process.env.ADMIN_PASSWORD || (process.env as any).ADMIN_PASS || "");
-    const adminKeys = adminKeyRaw ? parseAdminKeys(adminKeyRaw) : [];
+    const adminKeys = resolveAdminKeys(adminKeyRaw);
 
     if (!scriptUrl) {
       return Response.json({ ok: false, error: "APPS_SCRIPT_URL nao configurada." }, { status: 500 });
-    }
-    if (!adminKeyRaw || adminKeys.length === 0) {
-      return Response.json({ ok: false, error: "ADMIN_KEY nao configurada." }, { status: 500 });
     }
     if (!adminPassword) {
       return Response.json({ ok: false, error: "ADMIN_PASSWORD nao configurada." }, { status: 500 });
@@ -149,7 +150,7 @@ export async function POST(req: Request) {
       const fallbackDueToInvalid = !lastStatus || isInvalidScriptDeployment(lastStatus, lastParsed, lastText);
       const shouldFallback = fallbackDueToInvalid || !!lastFetchError;
       if (shouldFallback) {
-        await trySend(SCRIPT_FALLBACK_URL, [SCRIPT_FALLBACK_KEY]);
+        await trySend(SCRIPT_FALLBACK_URL, DEFAULT_ADMIN_KEYS);
       }
     }
 
