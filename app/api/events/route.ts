@@ -1,4 +1,4 @@
-﻿export const runtime = "nodejs";
+export const runtime = "nodejs";
 
 function cleanEnv(v = "") {
   return String(v).trim().replace(/^['"]+|['"]+$/g, "");

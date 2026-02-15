@@ -1,4 +1,4 @@
-﻿import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 function parseAdminKeys(raw: string) {
   const base = raw
@@ -44,6 +44,19 @@ async function readUpstream(resp: Response) {
   return { text, parsed };
 }
 
+function normalizeDepartamentoLabel(v: unknown): string {
+  const key = String(v ?? "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "");
+
+  if (key === "musica") return "M\u00FAsica";
+  if (key === "ministerio") return "Minist\u00E9rio";
+  return "";
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ ok: false, error: "Metodo nao permitido." });
@@ -64,12 +77,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { password, ...rest } = body;
+  const normalizedPayload = { ...rest } as Record<string, unknown>;
+  if ("departamento" in normalizedPayload) {
+    normalizedPayload.departamento = normalizeDepartamentoLabel(normalizedPayload.departamento);
+  }
   let lastResp: Response | null = null;
   let lastText = "";
   let lastParsed: any = null;
 
   for (const key of adminKeys) {
-    const payload = { ...rest, key };
+    const payload = { ...normalizedPayload, key };
     const upstream = await fetch(scriptUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

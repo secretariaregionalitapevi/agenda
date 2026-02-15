@@ -1,4 +1,4 @@
-import { readStaticIndexHtml } from './lib/static-html';
+import { readStaticIndexHtml } from '../lib/static-html';
 
 export const runtime = 'nodejs';
 
@@ -8,7 +8,6 @@ export async function GET() {
   return new Response(html, {
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
-      // Evita servir HTML antigo em edge cache durante ajustes visuais.
       'Cache-Control': 'no-store, max-age=0',
     },
   });

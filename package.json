@@ -3,6 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
+    "check:encoding": "node scripts/check-encoding.mjs",
+    "check:index-html": "node scripts/check-index-html.mjs",
+    "predev": "npm run check:encoding && npm run check:index-html",
+    "prebuild": "npm run check:encoding && npm run check:index-html",
+    "prestart": "npm run check:encoding",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

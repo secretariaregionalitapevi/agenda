@@ -54,6 +54,19 @@ async function readUpstream(resp: Response) {
   return { text, parsed };
 }
 
+function normalizeDepartamentoLabel(v: unknown): string {
+  const key = String(v ?? "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "");
+
+  if (key === "musica") return "M\u00FAsica";
+  if (key === "ministerio") return "Minist\u00E9rio";
+  return "";
+}
+
 export async function POST(req: Request) {
   try {
     const scriptUrl = cleanEnv(process.env.APPS_SCRIPT_URL || "");
@@ -78,12 +91,16 @@ export async function POST(req: Request) {
     }
 
     const { password, ...rest } = body;
+    const normalizedPayload = { ...rest } as Record<string, unknown>;
+    if ("departamento" in normalizedPayload) {
+      normalizedPayload.departamento = normalizeDepartamentoLabel(normalizedPayload.departamento);
+    }
     let lastResp: Response | null = null;
     let lastText = "";
     let lastParsed: any = null;
 
     for (const key of adminKeys) {
-      const payload = { ...rest, key };
+      const payload = { ...normalizedPayload, key };
       try {
         const upstream = await fetch(scriptUrl, {
           method: "POST",

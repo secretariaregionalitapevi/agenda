@@ -528,7 +528,7 @@
 
     .controls button {
       font-size: 14px;
-      padding: 8px 10px;
+      padding: 9px 10px;
       border-radius: 10px;
       border: 1px solid #bdbdbd;
       background: #fff;
@@ -641,7 +641,8 @@
 
     .form .actions button {
       flex: 1;
-      min-width: 110px
+      min-width: 110px;
+      padding: 9px 10px;
     }
 
     .list {
@@ -1048,8 +1049,8 @@
         <label for="deptSelect" class="ml">Departamento:</label>
         <select id="deptSelect">
           <option value="ambos">Ambos</option>
-          <option value="musica">Música</option>
-          <option value="ministerio">Ministério</option>
+          <option value="musica">M&uacute;sica</option>
+          <option value="ministerio">Minist&eacute;rio</option>
         </select>
       </div>
 
@@ -1658,10 +1659,10 @@
           </div>
         </div>
       </div>
-      <div class="year-holidays">01/01 Confraternização Universal • 25/01 Aniversário de São Paulo • 17/02 Carnaval •
-        03/04 Sexta-feira Santa • 05/04 Domingo de Páscoa • 21/04 Tiradentes • 01/05 Dia do Trabalhador • 20/06 Corpus
-        Christi • 09/07 Revolução Constitucionalista • 07/09 Dia da Independência • 12/10 N. S. Aparecida • 02/11
-        Finados • 15/11 Proclamação da República • 20/11 Consciência Negra • 25/12 Natal</div>
+      <div class="year-holidays">01/01 Confraternização Universal ⬢ 25/01 Aniversário de São Paulo ⬢ 17/02 Carnaval ⬢
+        03/04 Sexta-feira Santa ⬢ 05/04 Domingo de Páscoa ⬢ 21/04 Tiradentes ⬢ 01/05 Dia do Trabalhador ⬢ 20/06 Corpus
+        Christi ⬢ 09/07 Revolução Constitucionalista ⬢ 07/09 Dia da Independência ⬢ 12/10 N. S. Aparecida ⬢ 02/11
+        Finados ⬢ 15/11 Proclamação da República ⬢ 20/11 Consciência Negra ⬢ 25/12 Natal</div>
       <div class="page-no">1</div>
     </section>
     <section class="sheet" data-kind="month" data-month="2026-01">
@@ -4849,6 +4850,13 @@
         return "";
       }
 
+      function canonicalDepartamentoLabel(v) {
+        const key = normalizeDepartamento_(v);
+        if (key === "musica") return "M\u00FAsica";
+        if (key === "ministerio") return "Minist\u00E9rio";
+        return "";
+      }
+
       function pad2(n) { return String(n).padStart(2, '0'); }
 
       function parseDateAny(raw) {
@@ -4924,32 +4932,8 @@
         div.textContent = text;
         right.appendChild(div);
       }
-
       async function fetchSheetEvents() {
-        const resp = await fetch("/api/events?cb=" + Date.now(), { cache: "no-store" });
-        const json = await resp.json().catch(() => ({}));
-
-        if (resp.ok && json && json.ok) {
-          ALL_EVENTS_RAW = Array.isArray(json.data) ? json.data : (Array.isArray(json.events) ? json.events : []);
-
-          // Normaliza para o formato usado no calendário
-          const items = ALL_EVENTS_RAW.map((e) => {
-            const date = parseDateAny(e.data);
-            return {
-              row: e.row,
-              date,
-              time: String(e.hora || "").trim(),
-              event: String(e.evento || "").trim(),
-              isRed: (String(e.destaque || "").trim().toUpperCase() === "SIM") || e.destaque === true,
-              dept: String(e.departamento || "").trim().toLowerCase()
-            };
-          }).filter(it => it.date && it.event);
-
-          return items;
-        }
-
-        // Fallback para deploy estático (sem /api/events): lê CSV público direto
-        if (resp.status === 404) {
+        async function readCsvDirect() {
           const csvResp = await fetch(CSV_URL + (CSV_URL.includes("?") ? "&" : "?") + "cb=" + Date.now(), { cache: "no-store" });
           if (!csvResp.ok) throw new Error(`Falha ao ler CSV publicado (${csvResp.status}).`);
           const csvText = await csvResp.text();
@@ -4988,8 +4972,38 @@
           })).filter(it => it.date && it.event);
         }
 
-        const msg = (json && json.error) ? json.error : `Falha ao ler /api/events (${resp.status}).`;
-        throw new Error(msg);
+        try {
+          const resp = await fetch("/api/events?cb=" + Date.now(), { cache: "no-store" });
+          const json = await resp.json().catch(() => ({}));
+
+          if (resp.ok && json && json.ok) {
+            ALL_EVENTS_RAW = Array.isArray(json.data) ? json.data : (Array.isArray(json.events) ? json.events : []);
+
+            const items = ALL_EVENTS_RAW.map((e) => {
+              const date = parseDateAny(e.data);
+              return {
+                row: e.row,
+                date,
+                time: String(e.hora || "").trim(),
+                event: String(e.evento || "").trim(),
+                isRed: (String(e.destaque || "").trim().toUpperCase() === "SIM") || e.destaque === true,
+                dept: String(e.departamento || "").trim().toLowerCase()
+              };
+            }).filter(it => it.date && it.event);
+
+            return items;
+          }
+
+          return await readCsvDirect();
+        } catch (apiErr) {
+          try {
+            return await readCsvDirect();
+          } catch (csvErr) {
+            const apiMsg = (apiErr && apiErr.message) ? apiErr.message : "erro ao ler /api/events";
+            const csvMsg = (csvErr && csvErr.message) ? csvErr.message : "erro ao ler CSV publicado";
+            throw new Error(`${apiMsg}; ${csvMsg}`);
+          }
+        }
       }
 
       async function refreshFromSheet() {
@@ -5107,6 +5121,21 @@
         adminMsg.textContent = text || "";
       }
 
+      function showSuccessNotice(text) {
+        const msg = String(text || "Sucesso.");
+        if (window.Swal && typeof window.Swal.fire === "function") {
+          window.Swal.fire({
+            icon: "success",
+            title: msg,
+            toast: true,
+            position: "top-end",
+            timer: 1800,
+            showConfirmButton: false,
+            timerProgressBar: true
+          });
+        }
+      }
+
       function clearForm() {
         fRow.value = "";
         fData.value = "";
@@ -5115,6 +5144,39 @@
         fDestaque.value = "";
         fDept.value = "";
         setMsg("", "");
+      }
+
+      function upsertLocalAdminEvent(rowNumber, payload) {
+        const row = Number(rowNumber || 0);
+        if (!Number.isFinite(row) || row < 2) return;
+
+        const idx = Array.isArray(ALL_EVENTS_RAW)
+          ? ALL_EVENTS_RAW.findIndex(e => Number(e && e.row) === row)
+          : -1;
+
+        const rec = {
+          row,
+          data: String(payload.data || "").trim(),
+          hora: String(payload.hora || "").trim(),
+          evento: String(payload.evento || "").trim(),
+          destaque: String(payload.destaque || "").trim(),
+          departamento: normalizeDepartamento_(payload.departamento || ""),
+          departamento_label: canonicalDepartamentoLabel(payload.departamento || "")
+        };
+
+        if (!Array.isArray(ALL_EVENTS_RAW)) ALL_EVENTS_RAW = [];
+        if (idx >= 0) {
+          ALL_EVENTS_RAW[idx] = { ...ALL_EVENTS_RAW[idx], ...rec };
+        } else {
+          ALL_EVENTS_RAW.unshift(rec);
+        }
+      }
+
+      function removeLocalAdminEvent(rowNumber) {
+        const row = Number(rowNumber || 0);
+        if (!Number.isFinite(row) || row < 2) return;
+        if (!Array.isArray(ALL_EVENTS_RAW)) return;
+        ALL_EVENTS_RAW = ALL_EVENTS_RAW.filter(e => Number(e && e.row) !== row);
       }
 
       function deptLabel(v) {
@@ -5215,7 +5277,7 @@
       <div class="item" data-row="${it.row}">
         <div>
           <div class="title">${title}</div>
-          <div class="meta">${dd}/${mm}/${yyyy} • Linha ${it.row}</div>
+          <div class="meta">${dd}/${mm}/${yyyy} ⬢ Linha ${it.row}</div>
           <div class="badges">${badges}</div>
         </div>
         <div class="btns">
@@ -5236,7 +5298,7 @@
             fHora.value = String(raw.hora || "").trim();
             fEvento.value = String(raw.evento || "").trim();
             fDestaque.value = (String(raw.destaque || "").trim().toUpperCase() === "SIM") ? "SIM" : "";
-            fDept.value = String(raw.departamento || "").trim().toLowerCase();
+            fDept.value = canonicalDepartamentoLabel(raw.departamento_label || raw.departamento || "");
             setMsg(`Editando linha ${row}.`, "");
           });
         });
@@ -5250,7 +5312,16 @@
           try {
             json = text ? JSON.parse(text) : {};
           } catch {
-            json = { ok: resp.ok, error: text || `Falha (${resp.status})` };
+            const raw = String(text || "");
+            const looksLikeHtml = /^\s*<!doctype html/i.test(raw) || /^\s*<html/i.test(raw);
+            if (looksLikeHtml) {
+              json = {
+                ok: false,
+                error: `Erro interno no servidor (${resp.status}). Recarregue a página e tente novamente.`,
+              };
+            } else {
+              json = { ok: resp.ok, error: raw || `Falha (${resp.status})` };
+            }
           }
           return json;
         }
@@ -5385,12 +5456,46 @@
                 setMsg("Selecione um evento para excluir (botão Editar).", "err");
                 return;
               }
+
+              let confirmed = false;
+              if (window.Swal && typeof window.Swal.fire === "function") {
+                const result = await window.Swal.fire({
+                  title: "Tem certeza?",
+                  text: "Você não poderá reverter esta exclusão.",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Sim, excluir",
+                  cancelButtonText: "Cancelar"
+                });
+                confirmed = !!(result && result.isConfirmed);
+              } else {
+                confirmed = confirm("Tem certeza? Esta exclusão não pode ser desfeita.");
+              }
+              if (!confirmed) return;
+
               try {
                 await adminSend({ action: "delete", row: Number(row) });
-                setMsg("Excluído com sucesso.", "ok");
-                await refreshFromSheet();
+                removeLocalAdminEvent(Number(row));
+
+                if (window.Swal && typeof window.Swal.fire === "function") {
+                  await window.Swal.fire({
+                    title: "Excluído!",
+                    text: "O evento foi excluído com sucesso.",
+                    icon: "success",
+                    timer: 4000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                  });
+                }
+
                 renderAdminList();
                 clearForm();
+                setMsg("Excluído com sucesso.", "ok");
+                setTimeout(() => {
+                  refreshFromSheet().then(() => renderAdminList()).catch(() => { });
+                }, 15000);
               } catch (err) {
                 setMsg(String(err.message || err), "err");
               }
@@ -5409,12 +5514,37 @@
                   hora: String(fHora.value || "").trim(),
                   evento: String(fEvento.value || "").trim(),
                   destaque: String(fDestaque.value || "").trim(),
-                  departamento: String(fDept.value || "").trim()
+                  departamento: canonicalDepartamentoLabel(fDept.value || "")
                 };
-                await adminSend(payload);
-                setMsg("Salvo com sucesso.", "ok");
-                await refreshFromSheet();
+                const result = await adminSend(payload);
+                const effectiveRow = row ? Number(row) : Number((result && result.row) || 0);
+                upsertLocalAdminEvent(effectiveRow, payload);
+                if (window.Swal && typeof window.Swal.fire === "function") {
+                  if (row) {
+                    await window.Swal.fire({
+                      title: "Atualizado com sucesso!",
+                      text: "O evento foi atualizado com sucesso.",
+                      icon: "success",
+                      timer: 4000,
+                      timerProgressBar: true,
+                      showConfirmButton: false
+                    });
+                  } else {
+                    await window.Swal.fire({
+                      title: "Salvo com sucesso!",
+                      text: "O evento foi salvo com sucesso.",
+                      icon: "success",
+                      timer: 4000,
+                      timerProgressBar: true,
+                      showConfirmButton: false
+                    });
+                  }
+                }
+                setMsg(row ? "Atualizado com sucesso." : "Salvo com sucesso.", "ok");
                 renderAdminList();
+                setTimeout(() => {
+                  refreshFromSheet().then(() => renderAdminList()).catch(() => { });
+                }, 15000);
                 if (!row) clearForm();
               } catch (err) {
                 setMsg(String(err.message || err), "err");
@@ -5429,7 +5559,7 @@
           warn.style.maxWidth = '860px';
           warn.style.margin = '0 auto 10px';
           const msg = (err && err.message) ? err.message : "Erro desconhecido.";
-          warn.innerHTML = `<strong>⚠️ Não foi possível carregar os eventos.</strong> <span style="font-weight:600">${escapeHtml(msg)}</span>`;
+          warn.innerHTML = `<strong>Não foi possível carregar os eventos.</strong> <span style="font-weight:600">${escapeHtml(msg)}</span>`;
           document.body.insertBefore(warn, document.body.firstChild);
         }
 
@@ -5483,7 +5613,7 @@
                   <option value="musica">Música</option>
                   <option value="ministerio">Ministério</option>
                 </select>
-                <div class="muted">Use “(vazio)” se não quiser filtrar por departamento.</div>
+                <div class="muted">Use "(vazio)" se não quiser filtrar por departamento.</div>
               </div>
               <div>
                 <label>Destaque</label>
@@ -5503,7 +5633,7 @@
             </div>
 
             <div id="adminMsg" class="muted"></div>
-            <div class="muted">Dica: toque em “Editar” na lista ao lado para carregar um evento.</div>
+            <div class="muted">Dica: toque em "Editar" na lista ao lado para carregar um evento.</div>
           </form>
 
           <div class="list">
