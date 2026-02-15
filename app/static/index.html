@@ -4615,10 +4615,7 @@
   </div>
   <script>
 
-    const ADMIN_WEBAPP_URL = "/api/admin";
-    // Fallback para ambientes onde /api/admin não está disponível no deploy.
-    const ADMIN_FALLBACK_WEBAPP_URL = "https://script.google.com/macros/s/AKfycby6sLTL_t_DzPv5ZcglPowI8uwVHHgVhg5SzMGtG-wTdQ84JrzdsFbGqt0gV6OnY80M/exec";
-    const ADMIN_FALLBACK_KEY = "CCB@1039*";
+    const ADMIN_ENDPOINTS = ["/api/admin", "/api/v1/admin"];
     (function () {
       const sel = document.getElementById("monthSelect");
       const btn = document.getElementById("printBtn");
@@ -5326,35 +5323,29 @@
           return json;
         }
 
-        async function doDirectFallback() {
-          const resp = await fetch(ADMIN_FALLBACK_WEBAPP_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ...payload, key: ADMIN_FALLBACK_KEY })
-          });
-          const text = await resp.text();
-          const json = parseResponseText(resp, text);
-          return { resp, json };
-        }
-
         async function doPost(pw) {
-          const resp = await fetch(ADMIN_WEBAPP_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ...payload, password: pw })
-          });
-          const text = await resp.text();
-          let json = parseResponseText(resp, text);
-
-          // Em alguns deploys estáticos no Vercel, /api/admin não existe (404 NOT_FOUND).
-          const msg = String((json && json.error) || "");
-          const notFoundApi = resp.status === 404 || /NOT_FOUND/i.test(msg);
-          const invalidWebApp = /Apps Script invalido|implantacao web|doPost|doGet/i.test(msg);
-          if (notFoundApi || invalidWebApp) {
-            return doDirectFallback();
+          let lastErr = null;
+          for (const endpoint of ADMIN_ENDPOINTS) {
+            try {
+              const resp = await fetch(endpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...payload, password: pw })
+              });
+              const text = await resp.text();
+              const json = parseResponseText(resp, text);
+              const msg = String((json && json.error) || "");
+              const notFoundApi = resp.status === 404 || /NOT_FOUND/i.test(msg);
+              if (notFoundApi) {
+                lastErr = new Error(`Endpoint indisponível: ${endpoint}`);
+                continue;
+              }
+              return { resp, json };
+            } catch (err) {
+              lastErr = err;
+            }
           }
-
-          return { resp, json };
+          throw (lastErr || new Error("Falha de conexão com a API de admin."));
         }
 
         // garante senha antes de enviar

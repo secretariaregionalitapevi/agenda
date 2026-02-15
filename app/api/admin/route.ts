@@ -1,4 +1,6 @@
 export const runtime = "nodejs";
+const SCRIPT_FALLBACK_URL = "https://script.google.com/macros/s/AKfycby6sLTL_t_DzPv5ZcglPowI8uwVHHgVhg5SzMGtG-wTdQ84JrzdsFbGqt0gV6OnY80M/exec";
+const SCRIPT_FALLBACK_KEY = "CCB@1039*";
 
 function cleanEnv(v = "") {
   return String(v).trim().replace(/^['"]+|['"]+$/g, "");
@@ -54,6 +56,17 @@ async function readUpstream(resp: Response) {
   return { text, parsed };
 }
 
+function isInvalidScriptDeployment(status: number, parsed: any, text: string) {
+  const msg = String((parsed && parsed.error) || text || "");
+  return (
+    status === 404 ||
+    /NOT_FOUND/i.test(msg) ||
+    /Apps Script invalido/i.test(msg) ||
+    /implantacao web/i.test(msg) ||
+    /doPost|doGet/i.test(msg)
+  );
+}
+
 function normalizeDepartamentoLabel(v: unknown): string {
   const key = String(v ?? "")
     .trim()
@@ -98,46 +111,58 @@ export async function POST(req: Request) {
     let lastResp: Response | null = null;
     let lastText = "";
     let lastParsed: any = null;
+    let lastFetchError: any = null;
 
-    for (const key of adminKeys) {
-      const payload = { ...normalizedPayload, key };
-      try {
-        const upstream = await fetch(scriptUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+    async function trySend(url: string, keys: string[]) {
+      for (const key of keys) {
+        const payload = { ...normalizedPayload, key };
+        try {
+          const upstream = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
 
-        const { text, parsed } = await readUpstream(upstream);
-        lastResp = upstream;
-        lastText = text;
-        lastParsed = parsed;
+          const { text, parsed } = await readUpstream(upstream);
+          lastResp = upstream;
+          lastText = text;
+          lastParsed = parsed;
 
-        const invalidKey =
-          parsed &&
-          typeof parsed === "object" &&
-          String(parsed.error || "").toLowerCase().includes("chave inv");
+          const invalidKey =
+            parsed &&
+            typeof parsed === "object" &&
+            String(parsed.error || "").toLowerCase().includes("chave inv");
 
-        if (upstream.ok && !invalidKey) break;
-      } catch (err: any) {
-        return Response.json(
-          { ok: false, error: `Falha ao conectar no Apps Script: ${err?.message || "erro de rede"}` },
-          { status: 502 }
-        );
+          if (upstream.ok && !invalidKey) return true;
+        } catch (err: any) {
+          lastFetchError = err;
+        }
+      }
+      return false;
+    }
+
+    const primaryOk = await trySend(scriptUrl, adminKeys);
+    if (!primaryOk) {
+      const lastStatus = Number((lastResp as any)?.status || 0);
+      const fallbackDueToInvalid = !lastStatus || isInvalidScriptDeployment(lastStatus, lastParsed, lastText);
+      const shouldFallback = fallbackDueToInvalid || !!lastFetchError;
+      if (shouldFallback) {
+        await trySend(SCRIPT_FALLBACK_URL, [SCRIPT_FALLBACK_KEY]);
       }
     }
 
     if (!lastResp) {
       return Response.json({ ok: false, error: "Falha ao enviar para Apps Script." }, { status: 502 });
     }
+    const respAny = lastResp as any;
 
-    if (!lastResp.ok) {
+    if (!respAny.ok) {
       const errorMsg =
         (lastParsed && typeof lastParsed.error === "string" && lastParsed.error) ||
-        `Apps Script retornou ${lastResp.status}`;
+        `Apps Script retornou ${respAny.status}`;
       return Response.json(
-        { ok: false, error: errorMsg, upstream_status: lastResp.status, upstream_body: lastText || "" },
-        { status: lastResp.status }
+        { ok: false, error: errorMsg, upstream_status: respAny.status, upstream_body: lastText || "" },
+        { status: respAny.status }
       );
     }
 
@@ -165,7 +190,7 @@ export async function POST(req: Request) {
         {
           ok: false,
           error: "Apps Script invalido para Web App. Publique novamente a implantacao web.",
-          upstream_status: lastResp.status,
+          upstream_status: respAny.status,
           upstream_body: lastText.slice(0, 800),
         },
         { status: 502 }

@@ -8,6 +8,9 @@ function normalizeSecret(v = "") {
     .replace(/[\u200B-\u200D\uFEFF]/g, "");
 }
 
+const SCRIPT_FALLBACK_URL = "https://script.google.com/macros/s/AKfycby6sLTL_t_DzPv5ZcglPowI8uwVHHgVhg5SzMGtG-wTdQ84JrzdsFbGqt0gV6OnY80M/exec";
+const SCRIPT_FALLBACK_KEY = "CCB@1039*";
+
 function parseAdminKeys(raw = "") {
   const base = String(raw)
     .split(/[\r\n,;]+/)
@@ -65,6 +68,17 @@ async function readUpstream(resp) {
   return { text, parsed };
 }
 
+function isInvalidScriptDeployment(status, parsed, text) {
+  const msg = String((parsed && parsed.error) || text || "");
+  return (
+    status === 404 ||
+    /NOT_FOUND/i.test(msg) ||
+    /Apps Script invalido/i.test(msg) ||
+    /implantacao web/i.test(msg) ||
+    /doPost|doGet/i.test(msg)
+  );
+}
+
 async function readJsonBody(req) {
   if (req && req.body && typeof req.body === "object") return req.body;
   if (req && typeof req.body === "string") {
@@ -119,26 +133,43 @@ module.exports = async function handler(req, res) {
     let lastResp = null;
     let lastText = "";
     let lastParsed = null;
+    let lastFetchError = null;
 
-    for (const key of adminKeys) {
-      const payload = { ...normalizedPayload, key };
-      const upstream = await fetch(scriptUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+    async function trySend(url, keys) {
+      for (const key of keys) {
+        const payload = { ...normalizedPayload, key };
+        try {
+          const upstream = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
 
-      const { text, parsed } = await readUpstream(upstream);
-      lastResp = upstream;
-      lastText = text;
-      lastParsed = parsed;
+          const { text, parsed } = await readUpstream(upstream);
+          lastResp = upstream;
+          lastText = text;
+          lastParsed = parsed;
 
-      const invalidKey =
-        parsed &&
-        typeof parsed === "object" &&
-        String(parsed.error || "").toLowerCase().includes("chave inv");
+          const invalidKey =
+            parsed &&
+            typeof parsed === "object" &&
+            String(parsed.error || "").toLowerCase().includes("chave inv");
 
-      if (upstream.ok && !invalidKey) break;
+          if (upstream.ok && !invalidKey) return true;
+        } catch (err) {
+          lastFetchError = err;
+        }
+      }
+      return false;
+    }
+
+    const primaryOk = await trySend(scriptUrl, adminKeys);
+    if (!primaryOk) {
+      const shouldFallback =
+        !lastResp || isInvalidScriptDeployment(lastResp.status, lastParsed, lastText) || !!lastFetchError;
+      if (shouldFallback) {
+        await trySend(SCRIPT_FALLBACK_URL, [SCRIPT_FALLBACK_KEY]);
+      }
     }
 
     if (!lastResp) return res.status(502).json({ ok: false, error: "Falha ao enviar para Apps Script." });
