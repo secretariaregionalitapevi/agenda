@@ -5028,6 +5028,77 @@
         console.log(`[Sheets] Eventos carregados: ${items.length}`);
       }
 
+      function setupPullToRefresh() {
+        if (!("ontouchstart" in window)) return;
+
+        const THRESHOLD = 90;
+        let startY = 0;
+        let distance = 0;
+        let tracking = false;
+        let source = "window"; // window | admin
+        let running = false;
+
+        const isAdminOpen = () =>
+          !!(adminBackdrop &&
+            adminBackdrop.classList.contains("show") &&
+            adminBackdrop.getAttribute("aria-hidden") !== "true");
+
+        function canStart(target) {
+          if (isAdminOpen()) {
+            return !!(adminList && adminList.contains(target) && adminList.scrollTop <= 0);
+          }
+
+          if (window.scrollY > 0) return false;
+          const tag = String((target && target.tagName) || "").toUpperCase();
+          if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return false;
+          return true;
+        }
+
+        window.addEventListener("touchstart", (ev) => {
+          if (ev.touches.length !== 1 || running) return;
+          const t = ev.target;
+          if (!canStart(t)) return;
+          tracking = true;
+          startY = ev.touches[0].clientY;
+          distance = 0;
+          source = (isAdminOpen() && adminList && adminList.contains(t)) ? "admin" : "window";
+        }, { passive: true });
+
+        window.addEventListener("touchmove", (ev) => {
+          if (!tracking || running) return;
+          const y = ev.touches[0].clientY;
+          distance = y - startY;
+          if (distance <= 0) return;
+
+          const atTop = source === "admin"
+            ? !!(adminList && adminList.scrollTop <= 0)
+            : window.scrollY <= 0;
+
+          if (atTop && distance > 12) {
+            ev.preventDefault();
+          }
+        }, { passive: false });
+
+        window.addEventListener("touchend", async () => {
+          if (!tracking || running) return;
+          tracking = false;
+          if (distance < THRESHOLD) return;
+
+          running = true;
+          setMsg("Atualizando eventos...", "");
+          try {
+            await refreshFromSheet();
+            renderAdminList();
+            setMsg("Eventos sincronizados.", "ok");
+          } catch (err) {
+            setMsg(String(err && err.message ? err.message : err), "err");
+          } finally {
+            running = false;
+            distance = 0;
+          }
+        });
+      }
+
 
       // ====== Admin ======
       let adminBackdrop = null;
@@ -5421,6 +5492,7 @@
         btnRecarregar = document.getElementById("btnRecarregar");
         btnSair = document.getElementById("btnSair");
         searchInput = document.getElementById("searchInput"); // Inicializa campo de pesquisa
+        setupPullToRefresh();
 
         // Event listener para pesquisa em tempo real
         if (searchInput) {
