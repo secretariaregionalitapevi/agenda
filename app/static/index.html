@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <title>Calendário CCB Regional Itapevi 2026 [V-2026.03.17]</title>
+  <title>Calendário CCB Regional Itapevi 2026 [V-10 (20/03/26)]</title>
 
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="theme-color" content="#ffffff">
@@ -4733,14 +4733,13 @@
       let lastSyncTime = 0;
       const SYNC_THROTTLE_MS = 30000; // 30 segundos
 
-      // Remove eventos fixos do HTML (garante que a agenda venha SOMENTE do Google Sheets)
+      // --- LOCK GLOBAL (v3) ---
+      // Impede que múltiplas instâncias do script ou chamadas rápidas se sobreponham
+      window.__AGENDA_SYNC_RUNNING__ = false;
+
       function clearAllEventCells() {
         document.querySelectorAll('.r .right').forEach((right) => {
-          right.innerHTML = '';
-          const blank = document.createElement('div');
-          blank.className = 'evt';
-          blank.innerHTML = '&nbsp;';
-          right.appendChild(blank);
+          right.innerHTML = '<div class="evt">&nbsp;</div>';
         });
       }
 
@@ -5025,9 +5024,14 @@
       }
 
       async function refreshFromSheet() {
-        if (isSyncing) return;
-        isSyncing = true;
+        if (window.__AGENDA_SYNC_RUNNING__) {
+          console.log("[v10] Sincronização já em curso, ignorando chamada.");
+          return;
+        }
+        window.__AGENDA_SYNC_RUNNING__ = true;
+        
         try {
+          console.log("[v10] Iniciando sincronização atômica...");
           let rawItems = await fetchSheetEvents();
 
           const dept = (deptSel && deptSel.value) ? deptSel.value : "ambos";
@@ -5035,7 +5039,7 @@
             rawItems = rawItems.filter(it => (it.dept || "") === dept);
           }
 
-          // --- DEDUPLICAÇÃO DE DADOS (v2) ---
+          // --- DEDUPLICAÇÃO DE DADOS RIGOROSA (v3) ---
           const seen = new Set();
           const items = [];
           for (const it of rawItems) {
@@ -5043,10 +5047,12 @@
             const mm = it.date.getMonth() + 1;
             const dd = it.date.getDate();
             const label = (it.time ? `${normalizeTime(it.time)} - ${it.event}` : it.event).trim();
-            // Chave única por dia + texto (normalizado)
-            const key = `${yyyy}-${mm}-${dd}|${normalize_(label)}`;
-            if (!seen.has(key)) {
-              seen.add(key);
+            
+            // Chave ultra-normalizada: data + label (sem acentos, sem espaços, tudo minúsculo)
+            const ultraKey = `${yyyy}-${mm}-${dd}|${normalize_(label).replace(/\s+/g, "")}`;
+            
+            if (!seen.has(ultraKey)) {
+              seen.add(ultraKey);
               items.push({ ...it, label });
             }
           }
@@ -5054,9 +5060,10 @@
           // ordenar por data + hora
           items.sort((a, b) => (a.date - b.date) || (timeToMinutes(a.time) - timeToMinutes(b.time)));
 
+          // Limpeza Total antes de reconstruir
           clearCalendarEvents();
 
-          // Agrupar por dia para renderização atômica
+          // Agrupar por dia para substituição real do HTML
           const dayGroups = {};
           for (const it of items) {
             const dayKey = `${it.date.getFullYear()}-${pad2(it.date.getMonth() + 1)}-${pad2(it.date.getDate())}`;
@@ -5064,37 +5071,43 @@
             dayGroups[dayKey].push(it);
           }
 
+          // Seleciona todas as sessões de mês para atualizar todas (ex: duplicatas de impressão)
+          const allMonthSections = document.querySelectorAll('section.sheet[data-kind="month"]');
+
           for (const dayKey in dayGroups) {
             const [yyyy, mm, dd] = dayKey.split('-');
             const monthKey = `${yyyy}-${mm}`;
-            const sec = document.querySelector(`section.sheet[data-kind="month"][data-month="${monthKey}"]`);
-            if (!sec) continue;
-
-            const row = Array.from(sec.querySelectorAll('.r')).find(r => {
-              const el = r.querySelector('.left .dd');
-              return el && el.textContent.trim() === dd;
-            });
-            if (!row) continue;
-
-            const right = row.querySelector('.right');
-            if (!right) continue;
-
-            // Substituição Atômica: reconstrói todo o conteúdo do dia
-            const html = dayGroups[dayKey].map(it => {
-              const className = 'evt' + (it.isRed ? ' red' : '');
-              return `<div class="${className}">${escapeHtml(it.label)}</div>`;
-            }).join('');
             
-            right.innerHTML = html || '<div class="evt">&nbsp;</div>';
+            // Encontra todas as páginas que contém este mês
+            const targetSections = Array.from(allMonthSections).filter(s => s.getAttribute('data-month') === monthKey);
+            
+            for (const sec of targetSections) {
+              const row = Array.from(sec.querySelectorAll('.r')).find(r => {
+                const el = r.querySelector('.left .dd');
+                return el && el.textContent.trim() === dd;
+              });
+              if (!row) continue;
+
+              const right = row.querySelector('.right');
+              if (!right) continue;
+
+              // Substituição Atômica (v3): reconstrói todo o conteúdo do dia
+              const html = dayGroups[dayKey].map(it => {
+                const className = 'evt' + (it.isRed ? ' red' : '');
+                return `<div class="${className}">${escapeHtml(it.label)}</div>`;
+              }).join('');
+              
+              right.innerHTML = html || '<div class="evt">&nbsp;</div>';
+            }
           }
 
           updateLastSyncStamp();
-          console.log(`[Sheets] Eventos renderizados: ${items.length}`);
+          console.log(`[v10] Renderização concluída: ${items.length} eventos.`);
         } catch (err) {
-          console.error("Erro na sincronização:", err);
+          console.error("[v10] Erro fatal na sincronização:", err);
           throw err;
         } finally {
-          isSyncing = false;
+          window.__AGENDA_SYNC_RUNNING__ = false;
         }
       }
 
