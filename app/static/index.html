@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <title>Calendário CCB Regional Itapevi 2026</title>
+  <title>Calendário CCB Regional Itapevi 2026 [V-2026.03.17]</title>
 
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="theme-color" content="#ffffff">
@@ -4858,6 +4858,18 @@
         return "";
       }
 
+      function updateLastSyncStamp() {
+        let el = document.getElementById("debugSyncStamp");
+        if (!el) {
+          el = document.createElement('div');
+          el.id = "debugSyncStamp";
+          el.style = "text-align:center; font-size:10px; color:#999; margin-top:10px; padding-bottom:20px;";
+          document.querySelector(".wrapper").appendChild(el);
+        }
+        const now = new Date();
+        el.textContent = "Última sincronização: " + now.toLocaleDateString() + " " + now.toLocaleTimeString();
+      }
+
       function pad2(n) { return String(n).padStart(2, '0'); }
 
       function parseDateAny(raw) {
@@ -5016,11 +5028,27 @@
         if (isSyncing) return;
         isSyncing = true;
         try {
-          let items = await fetchSheetEvents();
+          let rawItems = await fetchSheetEvents();
 
           const dept = (deptSel && deptSel.value) ? deptSel.value : "ambos";
           if (dept !== "ambos") {
-            items = items.filter(it => (it.dept || "") === dept);
+            rawItems = rawItems.filter(it => (it.dept || "") === dept);
+          }
+
+          // --- DEDUPLICAÇÃO DE DADOS (v2) ---
+          const seen = new Set();
+          const items = [];
+          for (const it of rawItems) {
+            const yyyy = it.date.getFullYear();
+            const mm = it.date.getMonth() + 1;
+            const dd = it.date.getDate();
+            const label = (it.time ? `${normalizeTime(it.time)} - ${it.event}` : it.event).trim();
+            // Chave única por dia + texto (normalizado)
+            const key = `${yyyy}-${mm}-${dd}|${normalize_(label)}`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              items.push({ ...it, label });
+            }
           }
 
           // ordenar por data + hora
@@ -5028,17 +5056,43 @@
 
           clearCalendarEvents();
 
+          // Agrupar por dia para renderização atômica
+          const dayGroups = {};
           for (const it of items) {
-            const yyyy = it.date.getFullYear();
-            const mm = pad2(it.date.getMonth() + 1);
-            const dd = pad2(it.date.getDate());
-
-            const label = it.time ? `${it.time} - ${it.event}` : it.event;
-            addEventToDay(yyyy, mm, dd, label, it.isRed);
+            const dayKey = `${it.date.getFullYear()}-${pad2(it.date.getMonth() + 1)}-${pad2(it.date.getDate())}`;
+            if (!dayGroups[dayKey]) dayGroups[dayKey] = [];
+            dayGroups[dayKey].push(it);
           }
 
-          // debug leve
-          console.log(`[Sheets] Eventos carregados: ${items.length}`);
+          for (const dayKey in dayGroups) {
+            const [yyyy, mm, dd] = dayKey.split('-');
+            const monthKey = `${yyyy}-${mm}`;
+            const sec = document.querySelector(`section.sheet[data-kind="month"][data-month="${monthKey}"]`);
+            if (!sec) continue;
+
+            const row = Array.from(sec.querySelectorAll('.r')).find(r => {
+              const el = r.querySelector('.left .dd');
+              return el && el.textContent.trim() === dd;
+            });
+            if (!row) continue;
+
+            const right = row.querySelector('.right');
+            if (!right) continue;
+
+            // Substituição Atômica: reconstrói todo o conteúdo do dia
+            const html = dayGroups[dayKey].map(it => {
+              const className = 'evt' + (it.isRed ? ' red' : '');
+              return `<div class="${className}">${escapeHtml(it.label)}</div>`;
+            }).join('');
+            
+            right.innerHTML = html || '<div class="evt">&nbsp;</div>';
+          }
+
+          updateLastSyncStamp();
+          console.log(`[Sheets] Eventos renderizados: ${items.length}`);
+        } catch (err) {
+          console.error("Erro na sincronização:", err);
+          throw err;
         } finally {
           isSyncing = false;
         }

@@ -99,7 +99,13 @@ export async function GET() {
       };
     }).filter(e => e.data && e.evento);
 
-    return Response.json({ ok: true, data: events, events });
+    return new Response(JSON.stringify({ ok: true, data: events, events }), {
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store, max-age=0",
+        "X-Agenda-Version": "2026-v9"
+      }
+    });
   } catch (err: any) {
     return Response.json(
       { ok: false, error: `Erro interno em /api/events: ${err?.message || "erro desconhecido"}` },
