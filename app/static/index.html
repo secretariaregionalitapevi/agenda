@@ -4728,6 +4728,8 @@
      */
     (() => {
       const deptSel = document.getElementById("deptSelect");
+      let ALL_EVENTS_RAW = [];
+      let isSyncing = false;
 
       // Remove eventos fixos do HTML (garante que a agenda venha SOMENTE do Google Sheets)
       function clearAllEventCells() {
@@ -5004,28 +5006,35 @@
       }
 
       async function refreshFromSheet() {
-        clearCalendarEvents();
-        let items = await fetchSheetEvents();
+        if (isSyncing) return;
+        isSyncing = true;
+        try {
+          let items = await fetchSheetEvents();
 
-        const dept = (deptSel && deptSel.value) ? deptSel.value : "ambos";
-        if (dept !== "ambos") {
-          items = items.filter(it => (it.dept || "") === dept);
+          const dept = (deptSel && deptSel.value) ? deptSel.value : "ambos";
+          if (dept !== "ambos") {
+            items = items.filter(it => (it.dept || "") === dept);
+          }
+
+          // ordenar por data + hora
+          items.sort((a, b) => (a.date - b.date) || (timeToMinutes(a.time) - timeToMinutes(b.time)));
+
+          clearCalendarEvents();
+
+          for (const it of items) {
+            const yyyy = it.date.getFullYear();
+            const mm = pad2(it.date.getMonth() + 1);
+            const dd = pad2(it.date.getDate());
+
+            const label = it.time ? `${it.time} - ${it.event}` : it.event;
+            addEventToDay(yyyy, mm, dd, label, it.isRed);
+          }
+
+          // debug leve
+          console.log(`[Sheets] Eventos carregados: ${items.length}`);
+        } finally {
+          isSyncing = false;
         }
-
-        // ordenar por data + hora
-        items.sort((a, b) => (a.date - b.date) || (timeToMinutes(a.time) - timeToMinutes(b.time)));
-
-        for (const it of items) {
-          const yyyy = it.date.getFullYear();
-          const mm = pad2(it.date.getMonth() + 1);
-          const dd = pad2(it.date.getDate());
-
-          const label = it.time ? `${it.time} - ${it.event}` : it.event;
-          addEventToDay(yyyy, mm, dd, label, it.isRed);
-        }
-
-        // debug leve
-        console.log(`[Sheets] Eventos carregados: ${items.length}`);
       }
 
       function setupPullToRefresh() {
