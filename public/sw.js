@@ -1,6 +1,6 @@
 // ─── CCB Agenda – Service Worker ─────────────────────────────────────────────
 // Mude a versão abaixo a cada novo deploy para que os clientes recebam o badge.
-const CACHE_VERSION = "ccbagenda-v7";
+const CACHE_VERSION = "ccbagenda-v8";
 const ASSETS = ["/", "/manifest.webmanifest", "/icon-192.png", "/icon-512.png"];
 
 // ── Install ──────────────────────────────────────────────────────────────────

@@ -4730,6 +4730,8 @@
       const deptSel = document.getElementById("deptSelect");
       let ALL_EVENTS_RAW = [];
       let isSyncing = false;
+      let lastSyncTime = 0;
+      const SYNC_THROTTLE_MS = 30000; // 30 segundos
 
       // Remove eventos fixos do HTML (garante que a agenda venha SOMENTE do Google Sheets)
       function clearAllEventCells() {
@@ -4921,6 +4923,11 @@
 
         const right = row.querySelector('.right');
         if (!right) return;
+
+        // --- PROTEÇÃO CONTRA DUPLICATAS ---
+        // Verifica se este exato texto já existe neste dia
+        const existing = Array.from(right.querySelectorAll('.evt')).some(e => e.textContent.trim() === text.trim());
+        if (existing) return;
 
         // se só tem placeholder, remove
         const onlyPlaceholder = right.children.length === 1 && right.textContent.replace(/\s+/g, '').replace(/&nbsp;/g, '') === '';
@@ -5689,14 +5696,22 @@
           document.body.insertBefore(warn, document.body.firstChild);
         }
 
-        const syncNow = () => refreshFromSheet().then(() => renderAdminList()).catch(console.warn);
+        const syncNow = (forced = false) => {
+          if (!forced) {
+            const now = Date.now();
+            if (now - lastSyncTime < SYNC_THROTTLE_MS) return Promise.resolve();
+          }
+          lastSyncTime = Date.now();
+          return refreshFromSheet().then(() => renderAdminList()).catch(console.warn);
+        };
+
         if (REFRESH_MS > 0) {
-          setInterval(syncNow, REFRESH_MS);
+          setInterval(() => syncNow(false), REFRESH_MS);
         }
         document.addEventListener("visibilitychange", () => {
-          if (!document.hidden) syncNow();
+          if (!document.hidden) syncNow(false);
         });
-        window.addEventListener("focus", syncNow);
+        window.addEventListener("focus", () => syncNow(false));
       });
     })();
   </script>
