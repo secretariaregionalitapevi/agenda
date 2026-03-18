@@ -4614,7 +4614,7 @@
   </div>
   <script>
 
-    const ADMIN_ENDPOINTS = ["/api/admin", "/api/v1/admin"];
+    const ADMIN_ENDPOINTS = ["/api/admin"];
     (function () {
       const sel = document.getElementById("monthSelect");
       const btn = document.getElementById("printBtn");
@@ -4737,6 +4737,9 @@
       if (typeof window.__AGENDA_SYNC_RUNNING__ === 'undefined') {
         window.__AGENDA_SYNC_RUNNING__ = false;
       }
+
+      // Endpoints admin (apenas /api/admin existe)
+      const _ADMIN_ENDPOINTS = typeof ADMIN_ENDPOINTS !== 'undefined' ? ADMIN_ENDPOINTS : ["/api/admin"];
 
       function clearAllEventCells() {
         document.querySelectorAll('.r .right').forEach((right) => {
