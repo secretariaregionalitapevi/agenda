@@ -1,6 +1,6 @@
 // ─── CCB Agenda – Service Worker ─────────────────────────────────────────────
 // Mude a versão abaixo a cada novo deploy para que os clientes recebam o badge.
-const CACHE_VERSION = "ccbagenda-v10";
+const CACHE_VERSION = "ccbagenda-v11";
 const ASSETS = ["/", "/manifest.webmanifest", "/icon-192.png", "/icon-512.png"];
 
 // ── Install ──────────────────────────────────────────────────────────────────
@@ -59,7 +59,7 @@ self.addEventListener("fetch", (event) => {
         () =>
           new Response(JSON.stringify({ ok: false, error: "offline" }), {
             status: 503,
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Agenda-Version": "2026-v11" },
           })
       )
     );

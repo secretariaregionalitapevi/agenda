@@ -103,7 +103,7 @@ export async function GET() {
       headers: {
         "Content-Type": "application/json",
         "Cache-Control": "no-store, max-age=0",
-        "X-Agenda-Version": "2026-v9"
+        "X-Agenda-Version": "2026-v11"
       }
     });
   } catch (err: any) {
