@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <title>Calendário CCB Regional Itapevi 2026 [V-11 (20/03/26)]</title>
+  <title>Calendário CCB Regional Itapevi 2026</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="theme-color" content="#ffffff">
   <link rel="apple-touch-icon" href="/icons/icon-180.png">
@@ -4753,10 +4753,8 @@
       // Opção A (recomendada): cole aqui o link "Publicar na Web" da aba (o que contém /d/e/.../pubhtml)
       // Exemplo: https://docs.google.com/spreadsheets/d/e/XXXX/pubhtml?gid=0&single=true
       // O código converte automaticamente para CSV (troca pubhtml -> pub e adiciona output=csv).
-      const PUBLISHED_PUBHTML_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSr59qtjfIiXj8PKems0FQzJulSdyUa70QhH8KaJSnNtbh9U0cB0KrRrxaKz93pc9CSLmTAn8btFc-0/pub?output=csv"; // <-- cole aqui se quiser usar o link publicado
-
-      // Opção B: usar o ID do arquivo (funciona quando o endpoint gviz libera CORS para seu caso)
-      const SHEET_ID = "1gJEGC_G5bIxqKGcVvTwszqrVpO_o73edIJifDMyHFb4";
+      const PUBLISHED_PUBHTML_URL = "https://script.google.com/macros/s/AKfycbw8cDlKeV3JuncWmVXY5EmZQ66p2Y_LMpoj93ILRxmDSF582oe8nehEatqtlCMRKs8t/exec";
+      const SHEET_ID = "1yx1DDu-dEJq__G_oY92JomKv4tuVFAgPe0J_8K5j_zg";
       // Se sua aba não for a primeira, ajuste o GID (número após "#gid=" na URL da aba).
       const SHEET_GID = "0";
       // Intervalo de atualização automática (ms). Ex.: 300000 = 5 minutos
@@ -4765,6 +4763,10 @@
       // Se você NÃO publicar a planilha na web, o fetch pode falhar por permissão/CORS.
       // O método abaixo funciona bem quando a planilha está "Publicada na Web".
       const CSV_URL = (() => {
+        // Se for o link do Apps Script fornecido pelo usuário
+        if (PUBLISHED_PUBHTML_URL && PUBLISHED_PUBHTML_URL.includes("script.google.com/macros/s/")) {
+          return PUBLISHED_PUBHTML_URL;
+        }
         if (PUBLISHED_PUBHTML_URL && PUBLISHED_PUBHTML_URL.includes("docs.google.com/spreadsheets/d/e/")) {
           // Aceita tanto pubhtml quanto pub; garante parâmetros necessários para CSV da aba correta
           const u = new URL(PUBLISHED_PUBHTML_URL);
@@ -4966,18 +4968,25 @@
           const iHora = header.indexOf("hora");
           const iEvento = header.indexOf("evento");
           const iDestaque = header.indexOf("destaque");
-          const iDept = header.indexOf("departamento");
+          let iDept = header.indexOf("departamento");
+          if (iDept === -1) {
+            const iMin = header.indexOf("ministerio");
+            const iMus = header.indexOf("musica");
+            if (iMin !== -1) iDept = iMin;
+            else if (iMus !== -1) iDept = iMus;
+          }
 
           const outRaw = [];
           for (let i = 1; i < rows.length; i++) {
             const r = rows[i];
+            const colDept = iDept >= 0 ? iDept : 4;
             const item = {
               row: i + 1,
               data: String(r[iData >= 0 ? iData : 0] || "").trim(),
               hora: String(r[iHora >= 0 ? iHora : 1] || "").trim(),
               evento: String(r[iEvento >= 0 ? iEvento : 2] || "").trim(),
               destaque: String(r[iDestaque >= 0 ? iDestaque : 3] || "").trim(),
-              departamento: normalizeDepartamento_(r[iDept >= 0 ? iDept : 4] || "")
+              departamento: normalizeDepartamento_(r[colDept] || "")
             };
             if (item.data && item.evento) outRaw.push(item);
           }
@@ -5033,7 +5042,7 @@
           return;
         }
         window.__AGENDA_SYNC_RUNNING__ = true;
-        
+
         try {
           console.log("[v10] Iniciando sincronização atômica...");
           let rawItems = await fetchSheetEvents();
@@ -5051,10 +5060,10 @@
             const mm = it.date.getMonth() + 1;
             const dd = it.date.getDate();
             const label = (it.time ? `${normalizeTime(it.time)} - ${it.event}` : it.event).trim();
-            
+
             // Chave ultra-normalizada: data + label (sem acentos, sem espaços, tudo minúsculo)
             const ultraKey = `${yyyy}-${mm}-${dd}|${normalize_(label).replace(/\s+/g, "")}`;
-            
+
             if (!seen.has(ultraKey)) {
               seen.add(ultraKey);
               items.push({ ...it, label });
@@ -5081,10 +5090,10 @@
           for (const dayKey in dayGroups) {
             const [yyyy, mm, dd] = dayKey.split('-');
             const monthKey = `${yyyy}-${mm}`;
-            
+
             // Encontra todas as páginas que contém este mês
             const targetSections = Array.from(allMonthSections).filter(s => s.getAttribute('data-month') === monthKey);
-            
+
             for (const sec of targetSections) {
               const row = Array.from(sec.querySelectorAll('.r')).find(r => {
                 const el = r.querySelector('.left .dd');
@@ -5100,7 +5109,7 @@
                 const className = 'evt' + (it.isRed ? ' red' : '');
                 return `<div class="${className}">${escapeHtml(it.label)}</div>`;
               }).join('');
-              
+
               right.innerHTML = html || '<div class="evt">&nbsp;</div>';
             }
           }

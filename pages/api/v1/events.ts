@@ -98,7 +98,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const iHora = idx("hora");
   const iEvento = idx("evento");
   const iDestaque = idx("destaque");
-  const iDept = idx("departamento");
+  
+  let iDept = idx("departamento");
+  if (iDept === -1) {
+    // Busca por nomes alternativos no cabeçalho
+    const altMin = idx("ministerio");
+    const altMus = idx("musica");
+    if (altMin !== -1) iDept = altMin;
+    else if (altMus !== -1) iDept = altMus;
+  }
 
   const events = rows
     .slice(1)
@@ -107,7 +115,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const hora = String(r[iHora] ?? "").trim();
       const evento = String(r[iEvento] ?? "").trim();
       const destaqueRaw = String(r[iDestaque] ?? "").trim();
-      const deptRaw = String(r[iDept] ?? "").trim();
+      
+      // Fallback para a coluna 4 (E) se iDept for -1
+      const colDept = iDept >= 0 ? iDept : 4;
+      const deptRaw = String(r[colDept] ?? "").trim();
 
       return {
         row: rowIndex + 2,
