@@ -7,7 +7,7 @@
   const isMobile = () => isIos() || /android/i.test(navigator.userAgent);
 
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+    window.addEventListener('load', () => navigator.serviceWorker.register('/?pwa=sw', { scope: '/' }).catch(() => {}));
   }
 
   window.addEventListener('beforeinstallprompt', (event) => {
@@ -31,7 +31,7 @@
     overlay.setAttribute('aria-labelledby', 'install-title');
     overlay.innerHTML = `
       <section class="install-card">
-        <img src="/icons/icon-192.png" alt="" class="install-icon">
+        <img src="/?pwa=icon192" alt="" class="install-icon">
         <p class="install-eyebrow">ACESSO RÁPIDO</p>
         <h2 id="install-title">Instale o CCB Agenda</h2>
         <p class="install-description">Use como aplicativo, direto pela tela inicial do celular.</p>
