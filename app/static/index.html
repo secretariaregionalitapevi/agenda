@@ -5,13 +5,11 @@
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <title>Calendário CCB Regional Itapevi 2026</title>
-  <link rel="manifest" href="/?pwa=manifest">
+  <link rel="manifest" href="/">
   <meta name="theme-color" content="#ffffff">
   <link rel="apple-touch-icon" href="/?pwa=icon180">
   <link rel="icon" href="/?pwa=icon192">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <link rel="stylesheet" href="/?pwa=install-css&amp;v=1.1.0">
-  <script defer src="/?pwa=install-js&amp;v=1.1.0"></script>
 
   <style>
     :root {
@@ -5801,7 +5799,7 @@
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("/?pwa=sw", { scope: "/" }).then((reg) => {
+        navigator.serviceWorker.register("/", { scope: "/" }).then((reg) => {
           reg.update().catch(() => { });
         }).catch(() => { });
       });

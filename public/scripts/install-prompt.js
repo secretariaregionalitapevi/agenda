@@ -7,7 +7,7 @@
   const isMobile = () => isIos() || /android/i.test(navigator.userAgent);
 
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('/?pwa=sw', { scope: '/' }).catch(() => {}));
+    window.addEventListener('load', () => navigator.serviceWorker.register('/', { scope: '/' }).catch(() => {}));
   }
 
   window.addEventListener('beforeinstallprompt', (event) => {
