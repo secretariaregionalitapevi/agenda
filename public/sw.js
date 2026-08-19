@@ -1,7 +1,7 @@
 // ─── CCB Agenda – Service Worker ─────────────────────────────────────────────
 // Mude a versão abaixo a cada novo deploy para que os clientes recebam o badge.
-const CACHE_VERSION = "ccbagenda-v11";
-const ASSETS = ["/", "/manifest.webmanifest", "/icon-192.png", "/icon-512.png"];
+const CACHE_VERSION = "ccbagenda-v12";
+const ASSETS = ["/", "/?pwa=manifest", "/?pwa=install-css", "/?pwa=install-js", "/?pwa=icon192", "/?pwa=icon512"];
 
 // ── Install ──────────────────────────────────────────────────────────────────
 self.addEventListener("install", (event) => {
