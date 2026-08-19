@@ -2,250 +2,114 @@
 
 import { useEffect, useState } from "react";
 
-// ─── Estilos inline (sem dependências externas) ───────────────────────────────
-const S = {
-    // Banner de instalação (bottom sheet)
-    banner: {
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 9999,
-        background: "linear-gradient(135deg, #1a3a5c 0%, #2563b0 100%)",
-        color: "#fff",
-        padding: "16px 20px",
-        display: "flex",
-        alignItems: "center",
-        gap: 14,
-        boxShadow: "0 -4px 24px rgba(0,0,0,0.25)",
-        borderRadius: "16px 16px 0 0",
-        animation: "slideUp 0.4s ease",
-    },
-    icon: {
-        width: 52,
-        height: 52,
-        borderRadius: 12,
-        objectFit: "cover",
-        flexShrink: 0,
-        boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-    },
-    texts: { flex: 1 },
-    title: { margin: 0, fontSize: 15, fontWeight: 700, lineHeight: 1.3 },
-    sub: { margin: "2px 0 0", fontSize: 13, opacity: 0.85 },
-    btnInstall: {
-        background: "#fff",
-        color: "#1a3a5c",
-        border: "none",
-        borderRadius: 10,
-        padding: "9px 18px",
-        fontWeight: 700,
-        fontSize: 14,
-        cursor: "pointer",
-        whiteSpace: "nowrap",
-        flexShrink: 0,
-    },
-    btnClose: {
-        background: "none",
-        border: "none",
-        color: "#fff",
-        fontSize: 22,
-        cursor: "pointer",
-        padding: "0 4px",
-        lineHeight: 1,
-        opacity: 0.75,
-        flexShrink: 0,
-    },
-    // Toast de nova versão (topo)
-    toast: {
-        position: "fixed",
-        top: 16,
-        left: "50%",
-        transform: "translateX(-50%)",
-        zIndex: 10000,
-        background: "#1e293b",
-        color: "#fff",
-        padding: "12px 20px",
-        borderRadius: 12,
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        fontSize: 14,
-        boxShadow: "0 4px 20px rgba(0,0,0,0.35)",
-        whiteSpace: "nowrap",
-        animation: "fadeIn 0.3s ease",
-    },
-    badge: {
-        background: "#f59e0b",
-        color: "#000",
-        borderRadius: 999,
-        padding: "2px 8px",
-        fontSize: 12,
-        fontWeight: 700,
-    },
-    btnUpdate: {
-        background: "#3b82f6",
-        color: "#fff",
-        border: "none",
-        borderRadius: 8,
-        padding: "6px 14px",
-        fontWeight: 700,
-        fontSize: 13,
-        cursor: "pointer",
-    },
-    btnDismiss: {
-        background: "none",
-        border: "none",
-        color: "rgba(255,255,255,0.6)",
-        fontSize: 20,
-        cursor: "pointer",
-        lineHeight: 1,
-        padding: "0 2px",
-    },
-};
+const DISMISSED_KEY = "ccb-agenda-install-dismissed";
+const isIos = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const isAndroid = () => /android/i.test(navigator.userAgent);
+const isInstalled = () => window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
 
-const KEYFRAMES = `
-@keyframes slideUp {
-  from { transform: translateY(100%); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0);    }
-}
+const css = `
+  .pwa-overlay{position:fixed;inset:0;z-index:10001;display:flex;align-items:flex-end;justify-content:center;padding:16px;background:rgba(15,23,42,.62);backdrop-filter:blur(3px)}
+  .pwa-card{width:min(100%,430px);box-sizing:border-box;padding:24px 22px 20px;border-radius:22px;background:#fff;color:#1e293b;box-shadow:0 24px 70px rgba(0,0,0,.32);text-align:center;animation:pwa-up .35s ease}
+  .pwa-icon{width:72px;height:72px;border-radius:17px;box-shadow:0 6px 18px rgba(26,58,92,.22)}
+  .pwa-eyebrow{margin:14px 0 5px;color:#2563b0;font-size:12px;font-weight:800;letter-spacing:.12em}.pwa-title{margin:0;font-size:24px;line-height:1.2}.pwa-description{margin:9px 0 16px;color:#64748b;font-size:15px;line-height:1.45}
+  .pwa-instructions{margin-bottom:16px;padding:13px;border-radius:13px;background:#eef4fb;color:#334155;font-size:14px;line-height:1.5}.pwa-actions{display:grid;gap:9px}
+  .pwa-primary,.pwa-secondary{width:100%;border:0;cursor:pointer}.pwa-primary{padding:12px 16px;border-radius:12px;background:#1a3a5c;color:#fff;font-size:15px;font-weight:700}.pwa-secondary{padding:10px 16px;background:transparent;color:#64748b;font-size:14px}
+  .pwa-toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:10000;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;background:#1e293b;color:#fff;box-shadow:0 4px 20px rgba(0,0,0,.35);font-size:14px;white-space:nowrap}
+  .pwa-update{padding:6px 12px;border:0;border-radius:8px;background:#3b82f6;color:#fff;font-weight:700;cursor:pointer}.pwa-toast-close{border:0;background:transparent;color:rgba(255,255,255,.7);font-size:20px;cursor:pointer}
+  @keyframes pwa-up{from{transform:translateY(35px);opacity:0}to{transform:translateY(0);opacity:1}}
+  @media(min-width:600px){.pwa-overlay{align-items:center}}
 `;
 
-// ─── Componente ───────────────────────────────────────────────────────────────
 export default function PWAManager() {
-    const [installPrompt, setInstallPrompt] = useState(null);
-    const [showBanner, setShowBanner] = useState(false);
-    const [waitingSW, setWaitingSW] = useState(null);
-    const [showToast, setShowToast] = useState(false);
+  const [prompt, setPrompt] = useState(null);
+  const [platform, setPlatform] = useState(null);
+  const [showInstall, setShowInstall] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
+  const [waitingWorker, setWaitingWorker] = useState(null);
+  const [showUpdate, setShowUpdate] = useState(false);
 
-    useEffect(() => {
-        if (typeof window === "undefined") return;
+  useEffect(() => {
+    const mobilePlatform = isIos() ? "ios" : isAndroid() ? "android" : null;
+    setPlatform(mobilePlatform);
+    const timer = window.setTimeout(() => {
+      if (mobilePlatform && !isInstalled() && !sessionStorage.getItem(DISMISSED_KEY)) setShowInstall(true);
+    }, 1200);
 
-        // ── 1. Injetar keyframes via <style> ─────────────────────────────────────
-        const style = document.createElement("style");
-        style.textContent = KEYFRAMES;
-        document.head.appendChild(style);
+    let refreshing = false;
+    const controllerChanged = () => {
+      if (!refreshing) { refreshing = true; window.location.reload(); }
+    };
 
-        // ── 2. Registrar Service Worker ──────────────────────────────────────────
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker
-                .register("/sw.js")
-                .then((reg) => {
-                    // SW em espera (atualização já baixada mas aguardando)
-                    if (reg.waiting) {
-                        setWaitingSW(reg.waiting);
-                        setShowToast(true);
-                    }
-
-                    // Detecta instalação de novo SW
-                    reg.addEventListener("updatefound", () => {
-                        const newSW = reg.installing;
-                        if (!newSW) return;
-                        newSW.addEventListener("statechange", () => {
-                            if (newSW.state === "installed" && navigator.serviceWorker.controller) {
-                                // Há uma nova versão pronta esperando ativação
-                                setWaitingSW(newSW);
-                                setShowToast(true);
-                            }
-                        });
-                    });
-                })
-                .catch((err) => console.warn("[PWA] SW register error:", err));
-
-            // Quando o SW ativa (após SKIP_WAITING), recarrega a página
-            let refreshing = false;
-            navigator.serviceWorker.addEventListener("controllerchange", () => {
-                if (!refreshing) {
-                    refreshing = true;
-                    window.location.reload();
-                }
-            });
-        }
-
-        // ── 3. Capturar evento de instalação ─────────────────────────────────────
-        const onPrompt = (e) => {
-            e.preventDefault();
-            setInstallPrompt(e);
-
-            // Só mostra o banner se o usuário ainda não dispensou
-            const dismissed = sessionStorage.getItem("pwa-banner-dismissed");
-            if (!dismissed) setShowBanner(true);
-        };
-        window.addEventListener("beforeinstallprompt", onPrompt);
-
-        // Esconde o banner se o app já foi instalado
-        window.addEventListener("appinstalled", () => {
-            setShowBanner(false);
-            setInstallPrompt(null);
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").then((registration) => {
+        if (registration.waiting) { setWaitingWorker(registration.waiting); setShowUpdate(true); }
+        registration.addEventListener("updatefound", () => {
+          const worker = registration.installing;
+          worker?.addEventListener("statechange", () => {
+            if (worker.state === "installed" && navigator.serviceWorker.controller) {
+              setWaitingWorker(worker); setShowUpdate(true);
+            }
+          });
         });
+      }).catch((error) => console.warn("[PWA] Falha ao registrar service worker:", error));
+      navigator.serviceWorker.addEventListener("controllerchange", controllerChanged);
+    }
 
-        return () => {
-            window.removeEventListener("beforeinstallprompt", onPrompt);
-        };
-    }, []);
+    const beforeInstall = (event) => { event.preventDefault(); setPrompt(event); };
+    const installed = () => { setShowInstall(false); setPrompt(null); };
+    window.addEventListener("beforeinstallprompt", beforeInstall);
+    window.addEventListener("appinstalled", installed);
 
-    // ── Instalar ──────────────────────────────────────────────────────────────
-    const handleInstall = async () => {
-        if (!installPrompt) return;
-        await installPrompt.prompt();
-        const result = await installPrompt.userChoice;
-        if (result.outcome === "accepted") {
-            setShowBanner(false);
-            setInstallPrompt(null);
-        }
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("beforeinstallprompt", beforeInstall);
+      window.removeEventListener("appinstalled", installed);
+      navigator.serviceWorker?.removeEventListener("controllerchange", controllerChanged);
     };
+  }, []);
 
-    const dismissBanner = () => {
-        setShowBanner(false);
-        sessionStorage.setItem("pwa-banner-dismissed", "1");
-    };
+  const dismiss = () => {
+    sessionStorage.setItem(DISMISSED_KEY, "1");
+    setShowInstall(false);
+  };
 
-    // ── Atualizar ─────────────────────────────────────────────────────────────
-    const handleUpdate = () => {
-        if (waitingSW) {
-            waitingSW.postMessage({ type: "SKIP_WAITING" });
-        }
-        setShowToast(false);
-    };
+  const install = async () => {
+    if (!prompt) { setShowFallback(true); return; }
+    await prompt.prompt();
+    await prompt.userChoice;
+    setPrompt(null);
+    setShowInstall(false);
+  };
 
-    const dismissToast = () => setShowToast(false);
+  const update = () => {
+    waitingWorker?.postMessage({ type: "SKIP_WAITING" });
+    setShowUpdate(false);
+  };
 
-    return (
-        <>
-            {/* ── Toast: nova versão disponível ── */}
-            {showToast && (
-                <div style={S.toast} role="alert" aria-live="polite">
-                    <span style={S.badge}>●</span>
-                    <span>Nova versão disponível!</span>
-                    <button style={S.btnUpdate} onClick={handleUpdate}>
-                        Atualizar
-                    </button>
-                    <button style={S.btnDismiss} onClick={dismissToast} aria-label="Fechar">
-                        ×
-                    </button>
-                </div>
-            )}
+  return <>
+    <style>{css}</style>
+    {showUpdate && <div className="pwa-toast" role="alert" aria-live="polite">
+      <span>Nova versão disponível!</span>
+      <button type="button" className="pwa-update" onClick={update}>Atualizar</button>
+      <button type="button" className="pwa-toast-close" onClick={() => setShowUpdate(false)} aria-label="Fechar">×</button>
+    </div>}
 
-            {/* ── Banner: instalar app ── */}
-            {showBanner && (
-                <div style={S.banner} role="complementary" aria-label="Instalar aplicativo">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/icons/icon-192.png" alt="CCB Agenda" style={S.icon} />
-                    <div style={S.texts}>
-                        <p style={S.title}>Instale o CCB Agenda</p>
-                        <p style={S.sub}>Acesse offline, direto do celular</p>
-                    </div>
-                    <button style={S.btnInstall} onClick={handleInstall}>
-                        Instalar
-                    </button>
-                    <button style={S.btnClose} onClick={dismissBanner} aria-label="Fechar">
-                        ×
-                    </button>
-                </div>
-            )}
-        </>
-    );
+    {showInstall && platform && <div className="pwa-overlay" role="dialog" aria-modal="true" aria-labelledby="install-title" onClick={(event) => event.target === event.currentTarget && dismiss()}>
+      <section className="pwa-card">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/icons/icon-192.png" alt="" className="pwa-icon" />
+        <p className="pwa-eyebrow">ACESSO RÁPIDO</p>
+        <h2 id="install-title" className="pwa-title">Instale o CCB Agenda</h2>
+        <p className="pwa-description">Use como aplicativo, direto pela tela inicial do celular.</p>
+
+        {platform === "ios" && <div className="pwa-instructions">No Safari, toque em <strong>Compartilhar</strong> <span aria-hidden="true">□↑</span> e depois em <strong>Adicionar à Tela de Início</strong>.</div>}
+        {platform === "android" && showFallback && <div className="pwa-instructions">Abra o menu do navegador e escolha <strong>Instalar app</strong> ou <strong>Adicionar à tela inicial</strong>.</div>}
+
+        <div className="pwa-actions">
+          {platform === "android" && <button type="button" className="pwa-primary" onClick={install}>Instalar aplicativo</button>}
+          <button type="button" className="pwa-secondary" onClick={dismiss}>Agora não</button>
+        </div>
+      </section>
+    </div>}
+  </>;
 }
