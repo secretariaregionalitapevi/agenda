@@ -10,8 +10,40 @@
   <link rel="apple-touch-icon" href="/icons/icon-180.png">
   <link rel="icon" href="/icons/icon-192.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <link rel="stylesheet" href="/styles/install-prompt.css?v=1.2.0">
-  <script defer src="/scripts/install-prompt.js?v=1.2.0"></script>
+  <style>
+    .install-overlay{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:22px;background:rgba(15,23,42,.72);backdrop-filter:blur(5px)}
+    .install-card{width:min(100%,390px);box-sizing:border-box;padding:28px 24px 22px;border-radius:24px;background:#fff;color:#183153;box-shadow:0 24px 70px rgba(0,0,0,.3);text-align:center;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    .install-icon{display:grid;place-items:center;width:76px;height:76px;margin:auto;border-radius:18px;background:#1a3a5c;color:#fff;font-size:36px}.install-eyebrow{margin:14px 0 5px;color:#1a3a5c;font-size:11px;font-weight:800;letter-spacing:.12em}.install-card h2{margin:0;font-size:24px;line-height:1.2}.install-description{margin:10px auto 16px;color:#64748b;line-height:1.45}.install-instructions{padding:13px;border-radius:13px;background:#eef4fb;color:#334155;font-size:14px;line-height:1.45}.install-actions{display:grid;gap:9px;margin-top:18px}.install-actions button{min-height:46px;border:0;border-radius:12px;font:inherit;font-weight:750;cursor:pointer}.install-primary{background:#1a3a5c;color:#fff}.install-secondary{background:transparent;color:#64748b}
+  </style>
+  <script>
+    (() => {
+      const SEEN_KEY = "ccb-agenda-install-invitation-inline-v2";
+      let deferredPrompt = null;
+      const isStandalone = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+      const isIos = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      const isMobile = () => isIos() || /android/i.test(navigator.userAgent);
+      addEventListener("beforeinstallprompt", event => { event.preventDefault(); deferredPrompt = event; });
+      addEventListener("appinstalled", () => { localStorage.setItem(SEEN_KEY, "installed"); document.querySelector(".install-overlay")?.remove(); });
+      addEventListener("DOMContentLoaded", () => setTimeout(() => {
+        if (!isMobile() || isStandalone() || localStorage.getItem(SEEN_KEY)) return;
+        const ios = isIos();
+        const overlay = document.createElement("div");
+        overlay.className = "install-overlay";
+        overlay.setAttribute("role", "dialog");
+        overlay.setAttribute("aria-modal", "true");
+        overlay.innerHTML = `<section class="install-card"><div class="install-icon" aria-hidden="true">▣</div><p class="install-eyebrow">ACESSO RÁPIDO</p><h2>Instale o CCB Agenda</h2><p class="install-description">Use como aplicativo, direto pela tela inicial do celular.</p>${ios ? '<div class="install-instructions">No Safari, toque em <strong>Compartilhar</strong> <span aria-hidden="true">□↑</span> e depois em <strong>Adicionar à Tela de Início</strong>.</div>' : '<div class="install-instructions install-fallback" hidden>Abra o menu do navegador e escolha <strong>Instalar app</strong> ou <strong>Adicionar à tela inicial</strong>.</div>'}<div class="install-actions">${ios ? '' : '<button type="button" class="install-primary">Instalar aplicativo</button>'}<button type="button" class="install-secondary">Agora não</button></div></section>`;
+        const close = () => { localStorage.setItem(SEEN_KEY, "dismissed"); overlay.remove(); };
+        overlay.querySelector(".install-secondary").addEventListener("click", close);
+        overlay.addEventListener("click", event => { if (event.target === overlay) close(); });
+        overlay.querySelector(".install-primary")?.addEventListener("click", async event => {
+          if (!deferredPrompt) { overlay.querySelector(".install-fallback").hidden = false; event.currentTarget.hidden = true; return; }
+          deferredPrompt.prompt(); const choice = await deferredPrompt.userChoice; deferredPrompt = null;
+          localStorage.setItem(SEEN_KEY, choice.outcome); overlay.remove();
+        });
+        document.body.appendChild(overlay);
+      }, 1200));
+    })();
+  </script>
 
   <style>
     :root {
